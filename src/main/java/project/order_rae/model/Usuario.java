@@ -1,0 +1,56 @@
+package project.order_rae.model;
+
+import java.time.LocalDateTime;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import jakarta.persistence.*;
+import lombok.*;
+
+@Entity
+@Table(name = "usuario")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class Usuario {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "Nombres", nullable = false)
+    private String nombre;
+
+    @Column(name = "Apellidos", nullable = false)
+    private String apellidos;
+
+    @Column(name = "Documento", unique = true, nullable = false)
+    private String documento;
+
+    @Column(name = "Correo_usuario", unique = true, nullable = false)
+    private String correo;  // "username" lógico
+
+    @Column(name = "password", nullable = false)
+    private String password;
+
+    @Column(name = "Genero")
+    private String genero;
+
+    @Column(name = "Telefono")
+    private String telefono;
+
+    @Column(name = "Estado")
+    private String estado;
+
+    @Column(name = "created_at", updatable = false, nullable = false)
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at", nullable = false)
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
+
+    @Column(name = "rol", nullable = false)
+    private String rol; // "ADMINISTRADOR", "CLIENTE", "ASESOR", "JEFE LOGISTICO"
+}

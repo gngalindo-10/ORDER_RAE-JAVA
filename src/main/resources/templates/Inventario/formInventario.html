@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${inventario.id == null ? 'Registrar Inventario' : 'Editar Inventario'}">Formulario Inventario</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+<body class="bg-light">
+    <div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+        <div class="card p-4 shadow-sm" style="width: 100%; max-width: 550px; background-color: #FFF9F0;">
+            <div class="text-center mb-3">
+                <img th:src="@{/images/logo.png}" src="/images/logo.png" alt="Logo" style="width:120px;">
+            </div>
+            <h2 class="text-center mb-4" th:text="${inventario.id == null ? 'Registrar Inventario' : 'Editar Inventario'}">
+                INVENTARIO
+            </h2>
+
+            <form th:action="@{${inventario.id == null} ? '/inventario/guardar' : '/inventario/actualizar/' + ${inventario.id}}"
+                    th:object="${inventario}" method="post">
+
+                <!-- Producto -->
+                <div class="mb-3">
+                    <label for="producto.id" class="form-label">Producto:</label>
+                    <select th:field="*{producto.id}" id="producto.id" class="form-select" required>
+                        <option value="">-- Selecciona producto --</option>
+                        <option th:each="p : ${productos}" th:value="${p.id}" th:text="${p.nombre}">Producto</option>
+                    </select>
+                </div>
+
+                <!-- Usuario -->
+                <div class="mb-3">
+                    <label for="usuario.id" class="form-label">Usuario:</label>
+                    <select th:field="*{usuario.id}" id="usuario.id" class="form-select" required>
+                        <option value="">-- Selecciona usuario --</option>
+                        <option th:each="u : ${usuarios}" th:value="${u.id}" th:text="${u.nombre}">Usuario</option>
+                    </select>
+                </div>
+
+                <!-- Cantidad -->
+                <div class="mb-3">
+                    <label for="cantidad" class="form-label">Cantidad:</label>
+                    <input type="number" th:field="*{cantidad}" id="cantidad" class="form-control" required min="0">
+                </div>
+
+                <div class="d-flex justify-content-center gap-2 mt-3">
+                    <a th:href="@{/inventario}" class="btn btn-cafe btn-md w-100">Volver</a>
+                    <button type="submit" class="btn btn-cafe btn-md w-100">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
