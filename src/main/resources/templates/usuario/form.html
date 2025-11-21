@@ -78,12 +78,11 @@
                     <label for="updated_at" class="form-label">Fecha de Actualización:</label>
                 </div>
 
-                <div th:if="${#authorization.expression('hasRole(''ADMIN'')')}" class="mb-3">
-                    <label for="rol" class="form-label">Rol:</label>
-                    <select th:field="*{rol}" id="rol" class="form-select">
-                        <option value="">-- Seleccione --</option>
-                        <option value="ADMIN">ADMIN</option>
-                        <option value="USER">USER</option>
+                <div class="mb-3">
+                    <label for="rol.id" class="form-label">Rol:</label>
+                    <select th:field="*{rol.id}" id="rol.id" class="form-select" required>
+                        <option value="">-- Selecciona rol --</option>
+                        <option th:each="r : ${roles}" th:value="${r.id}" th:text="${r.nombreRol}">Rol</option>
                     </select>
                 </div>
 

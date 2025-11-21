@@ -2,6 +2,8 @@ package project.order_rae.controller;
 
 import project.order_rae.model.Usuario;
 import project.order_rae.repository.UsuarioRepository;
+import project.order_rae.service.RolService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -37,9 +39,13 @@ public class UsuarioController {
         return "usuarios";
     }
 
+    @Autowired
+    private RolService rolService;
+
     @GetMapping("/usuarios/nuevo")
     public String nuevo(Model model) {
         model.addAttribute("usuario", new Usuario());
+        model.addAttribute("roles", rolService.listar());
         return "form";
     }
 

@@ -9,7 +9,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "usuario")
+@Table(name = "usuarios")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,6 +17,7 @@ public class Usuario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ID_USUARIO")
     private Long id;
 
     @Column(name = "Nombres", nullable = false)
@@ -29,7 +30,7 @@ public class Usuario {
     private String documento;
 
     @Column(name = "Correo_usuario", unique = true, nullable = false)
-    private String correo;  // "username" lógico
+    private String correo;
 
     @Column(name = "password", nullable = false)
     private String password;
@@ -51,6 +52,8 @@ public class Usuario {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    @Column(name = "rol", nullable = false)
-    private String rol; // "ADMINISTRADOR", "CLIENTE", "ASESOR", "JEFE LOGISTICO"
+    // Relación con Rol
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "roles_id", nullable = false)
+    private Rol rol;
 }

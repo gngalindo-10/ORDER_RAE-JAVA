@@ -13,7 +13,6 @@ import java.util.Collections;
 import project.order_rae.model.Usuario;
 import project.order_rae.repository.UsuarioRepository;
 
-
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
@@ -22,15 +21,19 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    // Buscar por correo (si es tu campo de login)
-    Usuario usuario = usuarioRepository.findByCorreo(username)
+
+        Usuario usuario = usuarioRepository.findByCorreo(username)
             .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado: " + username));
 
-    // Crear autoridad con el rol del usuario
-    SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + usuario.getRol());
+        // El rol
+        String nombreRol = usuario.getRol().getNombreRol(); 
 
-    return new User(
-            usuario.getCorreo(), // ← Aquí usas el campo que usas para login
+        String rolNormalizado = "ROLE_" + nombreRol.trim().toUpperCase().replace(" ", "_");
+
+        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(rolNormalizado);
+
+        return new User(
+            usuario.getCorreo(),
             usuario.getPassword(),
             Collections.singletonList(authority)
         );

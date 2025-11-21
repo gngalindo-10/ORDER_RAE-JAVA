@@ -17,17 +17,18 @@ public class SecurityConfig {
         http
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/login", "/css/**", "/js/**", "/img/**").permitAll() // Público
-                .requestMatchers("/usuarios/**").hasRole("ADMIN") // Solo ADMIN
-                .requestMatchers("/perfil/**").authenticated() // Usuarios autenticados
-                .anyRequest().authenticated() // Todo lo demás requiere login
+                .requestMatchers("/usuarios/**").hasRole("ADMINISTRADOR")
+                .requestMatchers("/inventario/**").hasAnyRole("ADMINISTRADOR", "JEFE_LOGISTICO")
+                .requestMatchers("/perfil/**").authenticated() 
+                .anyRequest().authenticated() 
             )
             .formLogin(form -> form
-                .loginPage("/login") // Página de login personalizada
-                .defaultSuccessUrl("/home", true) // Redirige al home tras login exitoso
-                .permitAll() // Todos pueden acceder al login
+                .loginPage("/login") 
+                .defaultSuccessUrl("/home", true) 
+                .permitAll() 
             )
             .logout(logout -> logout
-                .logoutSuccessUrl("/login?logout") // Redirige al login tras cerrar sesión
+                .logoutSuccessUrl("/login?logout") 
                 .permitAll()
             );
 
