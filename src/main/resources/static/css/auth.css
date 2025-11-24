@@ -1,0 +1,87 @@
+/* Fondo moderno con degradado */
+.auth-container {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #f5efe6, #e8d8c4);
+    padding: 20px;
+}
+
+/* Tarjeta moderna */
+.auth-card {
+    background: #ffffff;
+    width: 100%;
+    max-width: 450px;
+    padding: 35px;
+    border-radius: 18px;
+    box-shadow: 0 12px 35px rgba(0,0,0,0.12);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Ilustración */
+.auth-illustration {
+    width: 140px;
+    margin: 0 auto 20px;
+}
+.auth-illustration img {
+    width: 100%;
+}
+
+/* Inputs modernos */
+.input-modern {
+    height: 48px;
+    border-radius: 10px;
+    border: 1px solid #c9c9c9;
+    transition: .3s;
+}
+.input-modern:focus {
+    border-color: #8B5E3C;
+    box-shadow: 0 0 8px rgba(139, 94, 60, 0.3);
+}
+
+/* Botón café */
+.btn-modern {
+    background-color: #8B5E3C;
+    color: white;
+    border-radius: 10px;
+    height: 48px;
+    font-weight: 600;
+    transition: .3s;
+}
+.btn-modern:hover {
+    background-color: #6f482f;
+    color: white;
+}
+
+/* Botón outline */
+.btn-outline-modern {
+    border-radius: 10px;
+    height: 48px;
+    font-weight: 600;
+    border: 2px solid #8B5E3C;
+    color: #8B5E3C;
+}
+.btn-outline-modern:hover {
+    background-color: #8B5E3C;
+    color: white;
+}
+
+/* Animaciones */
+.animate-fade {
+    animation: fadeIn .7s ease;
+}
+.animate-up {
+    animation: slideUp .8s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(.97); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
