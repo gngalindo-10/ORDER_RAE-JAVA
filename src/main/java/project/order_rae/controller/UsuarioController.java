@@ -17,15 +17,8 @@ public class UsuarioController {
     @Autowired
     private UsuarioRepository repo;
 
-    @GetMapping("/")
-    public String redireccionRaiz() {
-        return "redirect:/login";
-    }
-
-    @GetMapping("/login")
-    public String login() {
-        return "login";
-    }
+    @Autowired
+    private RolService rolService;
 
     @GetMapping("/home")
     public String home(Model model, Authentication auth) {
@@ -39,9 +32,6 @@ public class UsuarioController {
         return "usuarios";
     }
 
-    @Autowired
-    private RolService rolService;
-
     @GetMapping("/usuarios/nuevo")
     public String nuevo(Model model) {
         model.addAttribute("usuario", new Usuario());
@@ -51,9 +41,7 @@ public class UsuarioController {
 
     @PostMapping("/usuarios/guardar")
     public String guardar(@ModelAttribute Usuario usuario) {
-        // Codificar la contraseña
         usuario.setPassword(new BCryptPasswordEncoder().encode(usuario.getPassword()));
-        // Guardar directamente (el correo ya es único y actúa como username)
         repo.save(usuario);
         return "redirect:/usuarios";
     }
@@ -61,6 +49,7 @@ public class UsuarioController {
     @GetMapping("/usuarios/editar/{id}")
     public String editar(@PathVariable Long id, Model model) {
         model.addAttribute("usuario", repo.findById(id).orElseThrow());
+        model.addAttribute("roles", rolService.listar());
         return "form";
     }
 
@@ -73,7 +62,7 @@ public class UsuarioController {
     // Perfil del usuario logueado
     @GetMapping("/perfil")
     public String perfil(Model model, Authentication auth) {
-        String correo = auth.getName(); // Spring Security usa el correo como username
+        String correo = auth.getName();
         Usuario usuario = repo.findByCorreo(correo)
             .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
         model.addAttribute("usuario", usuario);
@@ -86,7 +75,6 @@ public class UsuarioController {
         Usuario actual = repo.findByCorreo(correoActual)
             .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
-        // Actualizar campos editables (NO el correo, por seguridad)
         actual.setNombre(usuario.getNombre());
         actual.setApellidos(usuario.getApellidos());
         actual.setTelefono(usuario.getTelefono());

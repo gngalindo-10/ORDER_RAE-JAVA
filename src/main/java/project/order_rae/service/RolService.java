@@ -1,39 +1,19 @@
 package project.order_rae.service;
 
-import project.order_rae.model.Rol;
-import project.order_rae.repository.RolRepository;
-import org.springframework.stereotype.Service;
 import java.util.List;
+import project.order_rae.model.Rol;
 
-@Service
-public class RolService {
+public interface RolService {
 
-    private final RolRepository repo;
+    List<Rol> listar();
 
-    public RolService(RolRepository repo) {
-        this.repo = repo;
-    }
+    Rol guardar(Rol rol);
 
-    public List<Rol> listar() {
-        return repo.findAll();
-    }
+    Rol obtenerPorId(Long id);
 
-    public Rol guardar(Rol rol) {
-        return repo.save(rol);
-    }
+    Rol actualizar(Long id, Rol rolActualizado);
 
-    public Rol actualizar(Long id, Rol rol) {
-        Rol existente = obtenerPorId(id);
-        existente.setNombreRol(rol.getNombreRol());;
-        return repo.save(existente);
-    }
-
-    public void eliminar(Long id) {
-        repo.deleteById(id);
-    }
-
-    public Rol obtenerPorId(Long id) {
-        return repo.findById(id)
-            .orElseThrow(() -> new RuntimeException("Rol no encontrado con ID: " + id));
-    }
+    void eliminar(Long id);
 }
+
+
