@@ -2,81 +2,59 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lista de Productos</title>
-
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Estilos personalizados -->
     <link rel="stylesheet" th:href="@{/css/estilos.css}">
 </head>
 <body class="bg-light">
-
-    <div class="container mt-5">
-        <div class="text-center mb-4">
-        
-        <div class="text-center mb-3">
-                <img 
-                    th:src="@{/images/logo.png}" 
-                    src="/images/logo.png" 
-                    alt="Logo de ORDER RAE" 
-                    style="width:120px;"
-                >
-        </div> 
-
-        <h1>GESTIÓN DE PRODUCTOS</h1>
-        
+    <div th:replace="inicioDinamico :: menu"></div>
+<div class="container mt-5">
+    <div class="text-center mb-4">
+        <img th:src="@{/images/logo.png}" src="/images/logo.png" alt="Logo" style="width:120px;">
+        <h1 class="mt-2">GESTIÓN DE PRODUCTOS</h1>
         <div class="text-end">
-            <a th:href="@{/productos/nuevo}" class="btn btn-cafe"> Nuevo Producto </a>
+            <a th:href="@{/productos/nuevo}" class="btn btn-cafe">Nuevo Producto</a>
         </div>
     </div>
 
     <div class="table-responsive">
-            <!-- Reemplaza tu tabla actual en listar.html con esto -->
-
-<table class="table table-bordered table-hover align-middle">
-    <thead class="table-dark">
-        <tr>
-            <th>ID</th>
-            <th>Código</th>
-            <th>Referencia</th>
-            <th>Nombre</th>
-            <th>Color</th>
-            <th>Precio</th>
-            <th>Stock</th>
-            <th>Estado</th>
-            <th>Usuario</th>
-            <th>Categoría</th>
-            <th>Acciones</th>
-    </tr>
-    </thead>
-    <tbody>
-        <tr th:each="producto : ${productos}">
-            <td th:text="${producto.id}">1</td>
-            <td th:text="${producto.codigoProducto}">MUEBLES-001</td>
-            <td th:text="${producto.referenciaProducto}">Mesa de comedor 6 puestos</td>
-            <td th:text="${producto.nombre}">Mesa</td>
-            <td th:text="${producto.color}">Roble natural</td>
-            <td th:text="${producto.precio}">850000.00</td>
-            <td th:text="${producto.stock}">10</td>
-            <td th:text="${producto.estadoProducto}">activo</td>
-            <td th:text="${producto.usuario?.nombre}">Juan Pérez</td>
-            <td th:text="${producto.categoria?.nombre}">Muebles</td>
-            <td>
-                <a th:href="@{/productos/editar/{id}(id=${producto.id})}" class="btn btn-sm btn-outline-warning me-2">Editar</a>
-                <a th:href="@{/productos/eliminar/{id}(id=${producto.id})}" class="btn btn-sm btn-outline-danger">Eliminar</a>
-            </td>
-        </tr>
-        <tr th:if="${#lists.isEmpty(productos)}">
-            <td colspan="11" class="text-center text-muted">No hay productos registrados.</td>
-        </tr>
-    </tbody>
-    </table>
+        <table class="table table-bordered table-hover align-middle">
+            <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Código</th>
+                <th>Referencia</th>
+                <th>Color</th>
+                <th>Precio</th>
+                <th>Estado</th>
+                <th>Usuario</th>
+                <th>Categoría</th>
+                <th>Acciones</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="producto : ${productos}">
+                <td th:text="${producto.id}"></td>
+                <td th:text="${producto.codigoProducto}"></td>
+                <td th:text="${producto.referenciaProducto}"></td>
+                <td th:text="${producto.color}"></td>
+                <td th:text="${producto.precio}"></td>
+                <td th:text="${producto.estadoProducto}"></td>
+                <td th:text="${producto.usuario?.nombres + ' ' + producto.usuario?.apellidos}"></td>
+                <td th:text="${producto.categoria?.nombreCategoria}"></td>
+                <td>
+                    <a th:href="@{/productos/editar/{id}(id=${producto.id})}" class="btn btn-sm btn-outline-warning me-2">Editar</a>
+                    <a th:href="@{/productos/eliminar/{id}(id=${producto.id})}" class="btn btn-sm btn-outline-danger"
+                       onclick="return confirm('¿Eliminar este producto?')">Eliminar</a>
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(productos)}">
+                <td colspan="9" class="text-center text-muted">No hay productos registrados.</td>
+            </tr>
+            </tbody>
+        </table>
     </div>
-    </div>
-
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

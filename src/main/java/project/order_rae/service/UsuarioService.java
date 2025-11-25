@@ -23,11 +23,15 @@ public class UsuarioService {
         usuarioRepository.save(usuario);
     }
 
-    public Usuario buscarPorId(Long id) {
-        return usuarioRepository.findById(id).orElse(null);
+    public Usuario obtenerPorId(Long id) {
+        return usuarioRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado con ID: " + id));
     }
 
     public void eliminar(Long id) {
+        if (!usuarioRepository.existsById(id)) {
+            throw new IllegalArgumentException("No se puede eliminar: Usuario con ID " + id + " no existe.");
+        }
         usuarioRepository.deleteById(id);
     }
 }

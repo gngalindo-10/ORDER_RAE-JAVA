@@ -36,20 +36,20 @@ public class RolController {
 
     @GetMapping("/editar/{id}")
     public String editar(@PathVariable Long id, Model modelo) {
-        Rol rol = servicio.obtenerPorId(id);
+        Rol rol = servicio.obtenerPorId(String.valueOf(id));
         modelo.addAttribute("rol", rol);
         return "formulario-rol";
     }
 
     @PostMapping("/actualizar/{id}")
     public String actualizar(@PathVariable Long id, @ModelAttribute Rol rol) {
-        servicio.actualizar(id, rol);
+        servicio.actualizar(String.valueOf(id), rol);
         return "redirect:/roles";
     }
 
     @GetMapping("/eliminar/{id}")
     public String eliminar(@PathVariable Long id) {
-        servicio.eliminar(id);
+        servicio.eliminar(String.valueOf(id));
         return "redirect:/roles";
     }
 }

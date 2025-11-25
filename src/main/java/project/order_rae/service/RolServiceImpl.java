@@ -25,20 +25,20 @@ public class RolServiceImpl implements RolService {
     }
 
     @Override
-    public Rol obtenerPorId(Long id) {
+    public Rol obtenerPorId(String id) {
         return rolRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Rol no encontrado con ID: " + id));
+                .orElseThrow(() -> new RuntimeException("Rol no encontrado: " + id));
     }
 
     @Override
-    public Rol actualizar(Long id, Rol rolActualizado) {
+    public Rol actualizar(String id, Rol rolActualizado) {
         Rol rol = obtenerPorId(id);
         rol.setNombreRol(rolActualizado.getNombreRol());
         return rolRepository.save(rol);
     }
 
     @Override
-    public void eliminar(Long id) {
+    public void eliminar(String id) {
         rolRepository.deleteById(id);
     }
 }

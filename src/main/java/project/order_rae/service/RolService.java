@@ -9,11 +9,11 @@ public interface RolService {
 
     Rol guardar(Rol rol);
 
-    Rol obtenerPorId(Long id);
+    Rol obtenerPorId(String id);
 
-    Rol actualizar(Long id, Rol rolActualizado);
+    Rol actualizar(String id, Rol rolActualizado);
 
-    void eliminar(Long id);
+    void eliminar(String id);
 }
 
 

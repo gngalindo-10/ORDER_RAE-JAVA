@@ -47,4 +47,9 @@ public class ProductoService {
         return repo.findById(id).orElseThrow(() -> 
             new RuntimeException("Producto no encontrado con ID: " + id));
     }
+
+    // Método corregido para reportes
+    public List<Producto> findFiltered(String estado, Double precioMin, Double precioMax, String busqueda) {
+        return repo.findByFilters(estado, precioMin, precioMax, busqueda);
+    }
 }

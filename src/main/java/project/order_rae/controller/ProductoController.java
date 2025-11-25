@@ -6,6 +6,7 @@ import project.order_rae.service.UsuarioService;
 import project.order_rae.service.CategoriaService; // Debes crearlo
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.stereotype.Controller;
 
 
@@ -24,9 +25,9 @@ public class ProductoController {
     }
 
     @GetMapping
-    public String listar(Model modelo) {
-        modelo.addAttribute("productos", servicio.listar());
-        return "listar";
+    public String listar(Model model) {
+        model.addAttribute("productos", servicio.listar());
+        return "producto/listarProducto";
     }
 
     @GetMapping("/nuevo")
@@ -34,12 +35,21 @@ public class ProductoController {
         modelo.addAttribute("producto", new Producto());
         modelo.addAttribute("usuarios", usuarioService.listar());
         modelo.addAttribute("categorias", categoriaService.listar());
-        return "formulario";
+        return "producto/formProducto";
     }
 
     @PostMapping("/guardar")
-    public String guardar(@ModelAttribute Producto producto) {
+    public String guardar(
+            @RequestParam Long usuarioId,
+            @RequestParam Long categoriaId,
+            @ModelAttribute Producto producto,
+            RedirectAttributes redirectAttrs) {
+
+        producto.setUsuario(usuarioService.obtenerPorId(usuarioId));
+        producto.setCategoria(categoriaService.obtenerPorId(categoriaId));
+
         servicio.insertar(producto);
+        redirectAttrs.addFlashAttribute("mensaje", "Producto creado exitosamente.");
         return "redirect:/productos";
     }
 
@@ -49,18 +59,30 @@ public class ProductoController {
         modelo.addAttribute("producto", producto);
         modelo.addAttribute("usuarios", usuarioService.listar());
         modelo.addAttribute("categorias", categoriaService.listar());
-        return "formulario";
+        return "producto/formProducto";
     }
 
     @PostMapping("/actualizar/{id}")
-    public String actualizar(@PathVariable Long id, @ModelAttribute Producto producto) {
+    public String actualizar(
+            @PathVariable Long id,
+            @RequestParam Long usuarioId,
+            @RequestParam Long categoriaId,
+            @ModelAttribute Producto producto,
+            RedirectAttributes redirectAttrs) {
+
+        producto.setId(id);
+        producto.setUsuario(usuarioService.obtenerPorId(usuarioId));
+        producto.setCategoria(categoriaService.obtenerPorId(categoriaId));
+
         servicio.actualizar(id, producto);
+        redirectAttrs.addFlashAttribute("mensaje", "Producto actualizado exitosamente.");
         return "redirect:/productos";
     }
 
     @GetMapping("/eliminar/{id}")
-    public String eliminar(@PathVariable Long id) {
+    public String eliminar(@PathVariable Long id, RedirectAttributes redirectAttrs) {
         servicio.eliminar(id);
+        redirectAttrs.addFlashAttribute("mensaje", "Producto eliminado exitosamente.");
         return "redirect:/productos";
     }
 }
