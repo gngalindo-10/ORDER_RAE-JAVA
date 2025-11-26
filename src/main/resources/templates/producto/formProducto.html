@@ -53,10 +53,10 @@
             <div class="mb-3">
                 <label for="usuarioId" class="form-label">Usuario:</label>
                 <select name="usuarioId" class="form-select" required>
-                    <option value="">-- Selecciona usuario --</option>
-                    <option th:each="u : ${usuarios}" th:value="${u.id}" 
-                            th:text="${u.Nombres + ' ' + u.Apellidos}"
-                            th:selected="${u.id == producto.usuario?.id}">
+                    <option th:each="u : ${usuarios}" 
+                        th:value="${u.id}" 
+                        th:text="${u.nombre + ' ' + u.apellidos}"
+                        th:selected="${u.id == producto.usuario?.id}">
                     </option>
                 </select>
             </div>
@@ -64,10 +64,10 @@
             <div class="mb-3">
                 <label for="categoriaId" class="form-label">Categoría:</label>
                 <select name="categoriaId" class="form-select" required>
-                    <option value="">-- Selecciona categoría --</option>
-                    <option th:each="c : ${categorias}" th:value="${c.id}" 
-                            th:text="${c.Nombre_categoria}"
-                            th:selected="${c.id == producto.categoria?.id}">
+                    <option th:each="c : ${categorias}" 
+                        th:value="${c.id}" 
+                        th:text="${c.nombreCategoria}"
+                        th:selected="${c.id == producto.categoria?.id}">
                     </option>
                 </select>
             </div>

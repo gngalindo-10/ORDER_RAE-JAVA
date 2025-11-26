@@ -40,7 +40,7 @@
                 <td th:text="${producto.color}"></td>
                 <td th:text="${producto.precio}"></td>
                 <td th:text="${producto.estadoProducto}"></td>
-                <td th:text="${producto.usuario?.nombres + ' ' + producto.usuario?.apellidos}"></td>
+                <td th:text="${producto.usuario?.nombre + ' ' + producto.usuario?.apellidos}"></td>
                 <td th:text="${producto.categoria?.nombreCategoria}"></td>
                 <td>
                     <a th:href="@{/productos/editar/{id}(id=${producto.id})}" class="btn btn-sm btn-outline-warning me-2">Editar</a>
