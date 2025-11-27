@@ -33,7 +33,7 @@ public class RolServiceImpl implements RolService {
     @Override
     public Rol actualizar(String id, Rol rolActualizado) {
         Rol rol = obtenerPorId(id);
-        rol.setNombreRol(rolActualizado.getNombreRol());
+        rol.setCargo(rolActualizado.getCargo());
         return rolRepository.save(rol);
     }
 

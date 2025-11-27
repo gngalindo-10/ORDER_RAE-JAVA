@@ -26,7 +26,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado: " + username));
 
         // El rol
-        String nombreRol = usuario.getRol().getNombreRol(); 
+        String nombreRol = usuario.getRol().getCargo(); 
 
         String rolNormalizado = "ROLE_" + nombreRol.trim().toUpperCase().replace(" ", "_");
 

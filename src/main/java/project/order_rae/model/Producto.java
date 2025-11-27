@@ -29,7 +29,13 @@ public class Producto {
     private Double precio;
 
     @Column(name = "Estado_producto", nullable = false)
-    private String estadoProducto; 
+    private String estadoProducto;
+    
+    @Column(name = "Cantidad_producto", nullable = false)
+    private String cantidadProducto;
+
+    @Column(name = "Tipo_De_Madera", nullable = false, length = 45)
+    private String tipoDeMadera;
 
     @Column(name = "Created_at", updatable = false)
     private LocalDateTime createdAt;
@@ -41,6 +47,11 @@ public class Producto {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "usuarios_id", nullable = false)
     private Usuario usuario;
+
+    // Relación con Inventario
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "inventario_id", nullable = false)
+    private Inventario inventario;
 
     // Relación con Categoria
     @ManyToOne(fetch = FetchType.LAZY)

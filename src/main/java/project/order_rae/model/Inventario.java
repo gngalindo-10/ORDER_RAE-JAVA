@@ -18,7 +18,7 @@ public class Inventario {
 
     // Relación con Producto
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ID_PRODUCTO", nullable = false)
+    @JoinColumn(name = "producto_id", nullable = false)
     private Producto producto;
 
     // Relación con Usuario 

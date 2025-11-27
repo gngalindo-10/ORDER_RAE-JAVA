@@ -20,10 +20,10 @@ public class DataInitializer {
         return args -> {
             if (usuarioRepo.findByCorreo("admin@example.com").isEmpty()) {
 
-                Rol rolAdmin = rolRepo.findByNombreRol("ADMINISTRADOR")
+                Rol rolAdmin = rolRepo.findByCargo("ADMINISTRADOR") 
                     .orElseGet(() -> {
                         Rol nuevoRol = new Rol();
-                        nuevoRol.setNombreRol("ADMINISTRADOR");
+                        nuevoRol.setCargo("ADMINISTRADOR");
                         return rolRepo.save(nuevoRol);
                     });
 

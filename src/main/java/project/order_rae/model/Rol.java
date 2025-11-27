@@ -15,6 +15,6 @@ public class Rol {
     @Column(name = "ID_ROL")
     private String id;
 
-    @Column(name = "Nombre_rol", nullable = false, unique = true)
-    private String nombreRol; 
+    @Column(name = "Cargo", nullable = false, unique = true)
+    private String cargo; 
 }

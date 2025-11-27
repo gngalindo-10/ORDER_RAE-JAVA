@@ -29,6 +29,9 @@
                         <a class="nav-link" th:href="@{/productos}" style="color: #5D3A24; font-weight: 500;">Productos</a>
                     </li>
                     <li class="nav-item" th:if="${#authentication != null and #authentication.authenticated}">
+                        <a class="nav-link" th:href="@{/produccion}" style="color: #5D3A24; font-weight: 500;">Producción</a>
+                    </li>
+                    <li class="nav-item" th:if="${#authentication != null and #authentication.authenticated}">
                         <a class="nav-link" th:href="@{/reportes}" style="color: #5D3A24; font-weight: 500;">Reportes</a>
                     </li>
                 </ul>
