@@ -30,7 +30,19 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
 
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/", "/login", "/registro", "/css/**", "/images/**").permitAll()
+                .requestMatchers(
+                    "/",
+                    "/productos",
+                    "/promociones",
+                    "/contacto",
+                    "/cotiza",
+                    "/carrito-compra",
+                    "/login",
+                    "/registro",
+                    "/css/**",
+                    "/js/**",
+                    "/images/**"
+                ).permitAll()
                 .anyRequest().authenticated()
             )
 
@@ -62,5 +74,3 @@ public class SecurityConfig {
             .build();
     }
 }
-
-
