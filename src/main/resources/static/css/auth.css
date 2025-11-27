@@ -1,3 +1,14 @@
+/* Logo principal: más grande y redondeado */
+.logo_principal {
+    height: 120px;
+    width: auto;
+    border-radius: 20px; /* redondeo suave */
+    transition: var(--transition);
+}
+.logo_principal:hover {
+    transform: scale(1.03);
+}
+
 /* Fondo moderno con degradado */
 .auth-container {
     min-height: 100vh;
