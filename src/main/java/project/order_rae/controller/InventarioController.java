@@ -25,7 +25,7 @@ public class InventarioController {
     @GetMapping
     public String listar(Model modelo) {
         modelo.addAttribute("inventarios", servicio.listar());
-        return "listar-inventario";
+        return "inventario/listarInventario";
     }
 
     @GetMapping("/nuevo")
@@ -33,7 +33,7 @@ public class InventarioController {
         modelo.addAttribute("inventario", new Inventario());
         modelo.addAttribute("productos", productoService.listar());
         modelo.addAttribute("usuarios", usuarioService.listar());
-        return "formulario-inventario";
+        return "inventario/formInventario";
     }
 
     @PostMapping("/guardar")
@@ -48,7 +48,7 @@ public class InventarioController {
         modelo.addAttribute("inventario", inventario);
         modelo.addAttribute("productos", productoService.listar());
         modelo.addAttribute("usuarios", usuarioService.listar());
-        return "formulario-inventario";
+        return "inventario/formInventario";
     }
 
     @PostMapping("/actualizar/{id}")

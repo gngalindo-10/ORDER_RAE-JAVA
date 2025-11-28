@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+
 public class Inventario {
 
     @Id
@@ -16,24 +17,24 @@ public class Inventario {
     @Column(name = "ID_INVENTARIO")
     private Long id;
 
-    // Relación con Producto
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ID_PRODUCTO", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "ID_PRODUCTO") 
     private Producto producto;
 
-    // Relación con Usuario 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "usuarios_id", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "usuarios_id")  
     private Usuario usuario;
 
-    @Column(name = "Cantidad", nullable = false)
+    @Column(name = "Cantidad")
     private Integer cantidad;
 
-    @Column(name = "Created_at", updatable = false)
+    @Column(name = "Created_at")
     private LocalDateTime createdAt;
 
     @Column(name = "Updated_at")
     private LocalDateTime updatedAt;
+
+    // getters y setters
 
     // Auto-generar fechas
     @PrePersist
@@ -45,5 +46,5 @@ public class Inventario {
     @PreUpdate
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
-    }
+    }   
 }

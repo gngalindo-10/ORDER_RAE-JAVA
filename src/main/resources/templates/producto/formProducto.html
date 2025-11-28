@@ -17,7 +17,7 @@
 
         <!-- Formulario sin th:object para evitar problemas con relaciones -->
         <form th:action="@{${producto.id == null} ? '/productos/guardar' : '/productos/actualizar/' + ${producto.id}}"
-              method="post">
+                method="post">
 
             <input type="hidden" th:if="${producto.id != null}" th:name="id" th:value="${producto.id}" />
 
@@ -73,8 +73,8 @@
             </div>
 
             <div class="d-flex justify-content-center gap-2 mt-3">
-                <a th:href="@{/productos}" class="btn btn-cafe btn-md w-100">Volver</a>
-                <button type="submit" class="btn btn-cafe btn-md w-100">Guardar</button>
+                <a th:href="@{/productos}" class="btn btn-cafe w-100">Volver</a>
+                <button type="submit" class="btn btn-cafe w-100">Guardar</button>
             </div>
         </form>
     </div>

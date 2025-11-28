@@ -19,7 +19,7 @@
 
     <div class="table-responsive">
         <table class="table table-bordered table-hover align-middle">
-            <thead class="table-dark">
+            <thead class="table-header-cafe">
             <tr>
                 <th>ID</th>
                 <th>Código</th>
@@ -39,13 +39,18 @@
                 <td th:text="${producto.referenciaProducto}"></td>
                 <td th:text="${producto.color}"></td>
                 <td th:text="${producto.precio}"></td>
-                <td th:text="${producto.estadoProducto}"></td>
+                <td>
+                    <span th:class="${producto.estadoProducto == 'activo' ? 'badge bg-success' : 'badge bg-danger'}"
+                        th:text="${producto.estadoProducto == 'activo' ? 'Activo' : 'Inactivo'}">
+                        Activo
+                    </span>
+                </td>
                 <td th:text="${producto.usuario?.nombre + ' ' + producto.usuario?.apellidos}"></td>
                 <td th:text="${producto.categoria?.nombreCategoria}"></td>
                 <td>
                     <a th:href="@{/productos/editar/{id}(id=${producto.id})}" class="btn btn-sm btn-outline-warning me-2">Editar</a>
                     <a th:href="@{/productos/eliminar/{id}(id=${producto.id})}" class="btn btn-sm btn-outline-danger"
-                       onclick="return confirm('¿Eliminar este producto?')">Eliminar</a>
+                        onclick="return confirm('¿Eliminar este producto?')">Eliminar</a>
                 </td>
             </tr>
             <tr th:if="${#lists.isEmpty(productos)}">

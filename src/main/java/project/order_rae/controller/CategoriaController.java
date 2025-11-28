@@ -7,7 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("/categorias")
+@RequestMapping("/categoria")
 public class CategoriaController {
 
     private final CategoriaService servicio;
@@ -19,37 +19,43 @@ public class CategoriaController {
     @GetMapping
     public String listar(Model modelo) {
         modelo.addAttribute("categorias", servicio.listar());
-        return "listar-categorias";
+        return "categoria/listarCategoria";
     }
 
     @GetMapping("/nuevo")
     public String nuevoFormulario(Model modelo) {
         modelo.addAttribute("categoria", new Categoria());
-        return "formulario-categoria";
+        return "categoria/formCategoria";
     }
 
     @PostMapping("/guardar")
     public String guardar(@ModelAttribute Categoria categoria) {
         servicio.insertar(categoria);
-        return "redirect:/categorias";
+        return "redirect:/categoria";
     }
 
     @GetMapping("/editar/{id}")
     public String editar(@PathVariable Long id, Model modelo) {
         Categoria categoria = servicio.obtenerPorId(id);
         modelo.addAttribute("categoria", categoria);
-        return "formulario-categoria";
+        return "categoria/formCategoria";
     }
 
     @PostMapping("/actualizar/{id}")
     public String actualizar(@PathVariable Long id, @ModelAttribute Categoria categoria) {
         servicio.actualizar(id, categoria);
-        return "redirect:/categorias";
+        return "redirect:/categoria";
     }
 
     @GetMapping("/eliminar/{id}")
     public String eliminar(@PathVariable Long id) {
         servicio.eliminar(id);
-        return "redirect:/categorias";
+        return "redirect:/categoria";
+    }
+
+    @GetMapping("/reportes")
+    public String reporte(Model modelo) {
+    modelo.addAttribute("categorias", servicio.listar());
+    return "categoria/reporteCategoria";
     }
 }
