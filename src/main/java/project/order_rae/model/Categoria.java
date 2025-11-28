@@ -15,9 +15,9 @@ public class Categoria {
     @Column(name = "ID_CATEGORIA")
     private Long id;
 
-    @Column(name = "Nombre_categoria", nullable = false)
+    @Column(name = "nombre_categoria", nullable = false)
     private String nombreCategoria;
 
-    @Column(name = "Estado_categoria")
+    @Column(name = "estado_categoria")
     private String estadoCategoria;
 }

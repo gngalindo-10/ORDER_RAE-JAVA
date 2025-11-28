@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${produccion.idProduccion == null ? 'Registrar Producción' : 'Editar Producción'}">Formulario Producción</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+<body class="bg-light">
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+    <div class="card p-4 shadow-sm" style="width: 100%; max-width: 500px; background-color: #FFF9F0;">
+        <div class="text-center mb-3">
+            <img th:src="@{/images/logo.png}" src="/images/logo.png" alt="Logo de ORDER RAE" style="width:120px;">
+        </div>
+        <h2 class="text-center mb-4" th:text="${produccion.idProduccion == null ? 'Registrar Producción' : 'Editar Producción'}"></h2>
+
+        <form th:action="@{${produccion.idProduccion == null} ? '/produccion/guardar' : '/produccion/actualizar/' + ${produccion.idProduccion}}"
+              method="post">
+
+            <input type="hidden" th:if="${produccion.idProduccion != null}" th:name="idProduccion" th:value="${produccion.idProduccion}" />
+
+            <!-- Código Producto -->
+            <div class="mb-3">
+                <label for="codigoProducto" class="form-label">Código producto:</label>
+                <input type="text" name="codigoProducto" th:value="${produccion.codigoProducto}" class="form-control" required>
+            </div>
+
+            <!-- Categoría Producto -->
+            <div class="mb-3">
+                <label for="categoriaProducto" class="form-label">Categoría producto:</label>
+                <input type="text" name="categoriaProducto" th:value="${produccion.categoriaProducto}" class="form-control" required>
+            </div>
+
+            <!-- Nombre Producto -->
+            <div class="mb-3">
+                <label for="nombreProducto" class="form-label">Nombre producto:</label>
+                <input type="text" name="nombreProducto" th:value="${produccion.nombreProducto}" class="form-control" required>
+            </div>
+
+            <!-- Color Producto -->
+            <div class="mb-3">
+                <label for="colorProducto" class="form-label">Color producto:</label>
+                <input type="text" name="colorProducto" th:value="${produccion.colorProducto}" class="form-control" required>
+            </div>
+
+            <!-- Cantidad Producto -->
+            <div class="mb-3">
+                <label for="cantidadProducto" class="form-label">Cantidad:</label>
+                <input type="number" name="cantidadProducto" th:value="${produccion.cantidadProducto}" class="form-control" min="1" required>
+            </div>
+
+            <!-- Estado Producto -->
+            <div class="mb-3">
+                <label for="estadoProducto" class="form-label">Estado:</label>
+                <select name="estadoProducto" class="form-select" required>
+                    <option value="">-- Selecciona --</option>
+                    <option value="activo" th:selected="${produccion.estadoProducto == 'activo'}">Activo</option>
+                    <option value="inactivo" th:selected="${produccion.estadoProducto == 'inactivo'}">Inactivo</option>
+                </select>
+            </div>
+
+            <!-- Usuario -->
+            <div class="mb-3">
+                <label for="usuariosId" class="form-label">Usuario:</label>
+                <select name="usuariosId" class="form-select" required>
+                    <option value="">-- Selecciona --</option>
+                    <option th:each="u : ${usuarios}" 
+                            th:value="${u.idUsuario}" 
+                            th:text="${u.nombres + ' ' + u.apellidos}"
+                            th:selected="${u.idUsuario == produccion.usuario?.idUsuario}">
+                    </option>
+                </select>
+            </div>
+
+            <!-- Producto (opcional) -->
+            <div class="mb-3">
+                <label for="productoId" class="form-label">Producto (opcional):</label>
+                <select name="productoId" class="form-select">
+                    <option value="">-- Ninguno --</option>
+                    <option th:each="p : ${productos}" 
+                            th:value="${p.idProducto}" 
+                            th:text="${p.referenciaProducto}"
+                            th:selected="${p.idProducto == produccion.producto?.idProducto}">
+                    </option>
+                </select>
+            </div>
+
+            <div class="d-flex justify-content-center gap-2 mt-3">
+                <a th:href="@{/produccion}" class="btn btn-cafe btn-md w-100">Volver</a>
+                <button type="submit" class="btn btn-cafe btn-md w-100">Guardar</button>
+            </div>
+        </form>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

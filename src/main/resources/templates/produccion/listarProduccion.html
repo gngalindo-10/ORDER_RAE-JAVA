@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Producción</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+    <body class="bg-light">
+    <div th:replace="inicioDinamico :: menu"></div>
+    <div class="container py-4">
+    <div class="text-center mb-4">
+        <img th:src="@{/images/logo.png}" src="/images/logo.png" alt="Logo de ORDER RAE" style="width:120px;">
+        <h1 class="mt-2">LISTA DE PRODUCCIÓN</h1>
+    </div>
+
+    <!-- Botón Volver al Dashboard -->
+    <div class="d-flex justify-content-between mb-3">
+        <a th:href="@{/dashboard}" class="btn btn-outline-secondary">Volver al Dashboard</a>
+        <a th:href="@{/produccion/nuevo}" class="btn btn-cafe">Nueva Producción</a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Código</th>
+                    <th>Categoría</th>
+                    <th>Nombre</th>
+                    <th>Color</th>
+                    <th>Cant.</th>
+                    <th>Estado</th>
+                    <th>Usuario</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:if="${producciones.empty}">
+                    <td colspan="9" class="text-center">No hay registros de producción.</td>
+                </tr>
+                <tr th:each="p : ${producciones}">
+                    <td th:text="${p.idProduccion}"></td>
+                    <td th:text="${p.codigoProducto}"></td>
+                    <td th:text="${p.categoriaProducto}"></td>
+                    <td th:text="${p.nombreProducto}"></td>
+                    <td th:text="${p.colorProducto}"></td>
+                    <td th:text="${p.cantidadProducto}"></td>
+                    <td th:text="${p.estadoProducto}"></td>
+                    <td th:text="${p.usuario?.nombre + ' ' + p.usuario?.apellidos} ?: 'N/A'"></td>
+                    <td>
+                        <!-- Botones Editar y Eliminar en línea -->
+                        <div class="d-flex gap-1">
+                            <a th:href="@{/produccion/editar/{id}(id=${p.idProduccion})}" 
+                               class="btn btn-sm btn-warning">Editar</a>
+                            <form th:action="@{/produccion/eliminar/{id}(id=${p.idProduccion})}" 
+                                  method="post" 
+                                  style="display:inline;" 
+                                  onsubmit="return confirm('¿Eliminar registro?')">
+                                <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
