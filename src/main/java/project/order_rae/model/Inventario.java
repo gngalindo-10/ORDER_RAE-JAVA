@@ -26,6 +26,14 @@ public class Inventario {
     @JoinColumn(name = "usuarios_id", nullable = false)
     private Usuario usuario;
 
+    // Nuevo campo: Bodega donde se encuentra el producto
+    @Column(name = "Bodega", nullable = false, length = 100)
+    private String bodega;
+
+    // Nuevo campo: Estado del producto en esta ubicación (Ej: Disponible, Reservado, Dañado)
+    @Column(name = "Estado", nullable = false, length = 50)
+    private String estado; 
+
     @Column(name = "Cantidad", nullable = false)
     private Integer cantidad;
 
@@ -35,7 +43,6 @@ public class Inventario {
     @Column(name = "Updated_at")
     private LocalDateTime updatedAt;
 
-    // Auto-generar fechas
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();

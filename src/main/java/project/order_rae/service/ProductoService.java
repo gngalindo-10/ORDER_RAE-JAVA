@@ -25,6 +25,20 @@ public class ProductoService {
         return repo.save(p);
     }
 
+    // Método para actualizar SOLO desde el formulario de inventario
+    public Producto actualizarDesdeInventario(Long id, Producto datosActualizados) {
+        Producto existente = obtenerPorId(id);
+        
+        // Solo actualizamos los campos que el usuario puede editar en el formulario
+        existente.setReferenciaProducto(datosActualizados.getReferenciaProducto());
+        existente.setPrecio(datosActualizados.getPrecio());
+        existente.setColor(datosActualizados.getColor());
+        existente.setTipoDeMadera(datosActualizados.getTipoDeMadera());
+        
+        return repo.save(existente);
+    }
+
+    // Método para actualizar TODO el producto
     public Producto actualizar(Long id, Producto p) {
         Producto existente = obtenerPorId(id);
         
@@ -33,8 +47,10 @@ public class ProductoService {
         existente.setColor(p.getColor());
         existente.setPrecio(p.getPrecio());
         existente.setEstadoProducto(p.getEstadoProducto());
-        existente.setUsuario(p.getUsuario());     // Asigna usuario
-        existente.setCategoria(p.getCategoria()); // Asigna categoría
+        existente.setCantidadProducto(p.getCantidadProducto());
+        existente.setTipoDeMadera(p.getTipoDeMadera());
+        existente.setUsuario(p.getUsuario());
+        existente.setCategoria(p.getCategoria());
         
         return repo.save(existente);
     }
@@ -48,8 +64,13 @@ public class ProductoService {
             new RuntimeException("Producto no encontrado con ID: " + id));
     }
 
-    // Método corregido para reportes
+    // Método para reportes
     public List<Producto> findFiltered(String estado, Double precioMin, Double precioMax, String busqueda) {
         return repo.findByFilters(estado, precioMin, precioMax, busqueda);
+    }
+
+    // Buscar producto por referencia (nombre)
+    public Producto findByReferencia(String referencia) {
+        return repo.findByReferenciaProducto(referencia).orElse(null);
     }
 }
