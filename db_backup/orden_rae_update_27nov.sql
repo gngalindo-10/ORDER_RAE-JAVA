@@ -59,16 +59,20 @@ CREATE TABLE `inventario` (
   `Cantidad` int(11) NOT NULL,
   `Created_at` datetime NOT NULL DEFAULT current_timestamp(),
   `Updated_at` datetime DEFAULT NULL ON UPDATE current_timestamp(),
+  `Bodega` varchar(100) NOT NULL DEFAULT 'BODEGA_PRINCIPAL',
+  `Estado` varchar(50) NOT NULL DEFAULT 'DISPONIBLE',
   PRIMARY KEY (`ID_INVENTARIO`),
   KEY `producto_id` (`producto_id`),
   KEY `usuarios_id` (`usuarios_id`),
   CONSTRAINT `inventario_ibfk_1` FOREIGN KEY (`producto_id`) REFERENCES `producto` (`ID_PRODUCTO`),
   CONSTRAINT `inventario_ibfk_2` FOREIGN KEY (`usuarios_id`) REFERENCES `usuarios` (`ID_USUARIO`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `inventario` */
 
 LOCK TABLES `inventario` WRITE;
+
+insert  into `inventario`(`ID_INVENTARIO`,`producto_id`,`usuarios_id`,`Cantidad`,`Created_at`,`Updated_at`,`Bodega`,`Estado`) values (1,1,1,50,'2025-11-28 12:19:21','2025-11-28 12:19:21','BODEGA_PRINCIPAL','DISPONIBLE'),(2,10,2,20,'2025-11-28 12:19:21','2025-11-28 12:19:21','BODEGA_SECUNDARIA','RESERVADO');
 
 UNLOCK TABLES;
 
@@ -248,7 +252,7 @@ CREATE TABLE `roles` (
 
 LOCK TABLES `roles` WRITE;
 
-insert  into `roles`(`ID_ROL`,`Cargo`) values (1,'Asesor Comercial'),(2,'Gerente'),(3,'Jefe Logistico'),(4,'Cliente'),(5,'ADMINISTRADOR');
+insert  into `roles`(`ID_ROL`,`Cargo`) values (1,'ASESOR COMERCIAL'),(2,'GERENTE'),(3,'JEFE LOGISTICO'),(4,'CLIENTE'),(5,'ADMINISTRADOR');
 
 UNLOCK TABLES;
 
@@ -279,32 +283,6 @@ insert  into `soporte_pago`(`ID_SOPORTE_PAGO`,`Hora_pago`,`Fecha_pago`,`Total_pa
 
 UNLOCK TABLES;
 
-/*Table structure for table `usuario` */
-
-CREATE TABLE `usuario` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `apellidos` varchar(255) NOT NULL,
-  `correo_usuario` varchar(255) NOT NULL,
-  `created_at` datetime(6) NOT NULL,
-  `documento` varchar(255) NOT NULL,
-  `estado` varchar(255) DEFAULT NULL,
-  `genero` varchar(255) DEFAULT NULL,
-  `nombres` varchar(255) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `rol` varchar(255) NOT NULL,
-  `telefono` varchar(255) DEFAULT NULL,
-  `updated_at` datetime(6) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `UKdo5kjb0haqlicn34eexyuy1e3` (`correo_usuario`),
-  UNIQUE KEY `UKsqdsrgo7yd5nlfxh382v44rj9` (`documento`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-/*Data for the table `usuario` */
-
-LOCK TABLES `usuario` WRITE;
-
-UNLOCK TABLES;
-
 /*Table structure for table `usuarios` */
 
 CREATE TABLE `usuarios` (
@@ -329,7 +307,7 @@ CREATE TABLE `usuarios` (
 
 LOCK TABLES `usuarios` WRITE;
 
-insert  into `usuarios`(`ID_USUARIO`,`Nombres`,`Apellidos`,`Documento`,`Correo_usuario`,`Contrase_usuario`,`Genero`,`Telefono`,`Estado`,`Created_at`,`Updated_at`,`roles_id`) values (1,'Carlos','Perez',1000785214,'carlos.P123@gmail.com','B','M','3151204562','1','2025-08-22 22:12:23','2025-08-22 22:12:23',4),(2,'Duvan','Uribe',1000745236,'duban.uribe50@gmail.com','$2a$10$Evrhi7G.aMD8dH9aV/MkC.QhotdZO8fO0OdM.LaY4oTP3VO5HPQsO','M','3115248596','1','2025-08-22 22:12:23','2025-08-22 22:12:23',2),(3,'Laura Andrea','Torres Ríos',1042356789,'laura.torres@example.com','$2a$10$Evrhi7G.aMD8dH9aV/MkC.QhotdZO8fO0OdM.LaY4oTP3VO5HPQsO','F','3104567890','1','2025-08-22 22:12:23','2025-08-22 22:12:23',1),(4,'Juan Sebastián','Ramírez Pérez',1023456781,'juan.ramirez@example.com','$2a$10$Evrhi7G.aMD8dH9aV/MkC.QhotdZO8fO0OdM.LaY4oTP3VO5HPQsO','M','3001234567','1','2025-08-22 22:12:23','2025-08-22 22:12:23',1),(5,'Camila Sofía','Vargas Gómez',1098765432,'camila.vargas@example.com','$2a$10$Evrhi7G.aMD8dH9aV/MkC.QhotdZO8fO0OdM.LaY4oTP3VO5HPQsO','F','3123456789','1','2025-08-22 22:12:23','2025-08-22 22:12:23',1),(6,'Andrés Felipe','Morales López',1032984567,'andres.morales@example.com','$2a$10$Evrhi7G.aMD8dH9aV/MkC.QhotdZO8fO0OdM.LaY4oTP3VO5HPQsO','M','3119876543','1','2025-08-22 22:12:23','2025-08-22 22:12:23',3),(7,'Mariana Isabel','Castro Ruiz',1012345678,'mariana.castro@example.com','$2a$10$Evrhi7G.aMD8dH9aV/MkC.QhotdZO8fO0OdM.LaY4oTP3VO5HPQsO','F','3012345678','1','2025-08-22 22:12:23','2025-08-22 22:12:23',3),(8,'Diego Alejandro','Paredes León',1087654321,'diego.paredes@example.com','$2a$10$Evrhi7G.aMD8dH9aV/MkC.QhotdZO8fO0OdM.LaY4oTP3VO5HPQsO','M','3176543210','1','2025-08-22 22:12:23','2025-08-22 22:12:23',3),(9,'Valentina María','Herrera Díaz',1056789123,'valentina.herrera@correo.com','$2a$10$Evrhi7G.aMD8dH9aV/MkC.QhotdZO8fO0OdM.LaY4oTP3VO5HPQsO','F','3187654321','1','2025-08-22 22:12:23','2025-08-22 22:12:23',4),(10,'Carlos Eduardo','Mejía Rincón',1065432198,'carlos.mejia@example.com','$2a$10$Evrhi7G.aMD8dH9aV/MkC.QhotdZO8fO0OdM.LaY4oTP3VO5HPQsO','M','3208765432','1','2025-08-22 22:12:23','2025-08-22 22:12:23',4),(11,'Juliana Fernanda','Ortega Salazar',1076543289,'juliana.ortega@example.com','$2a$10$Evrhi7G.aMD8dH9aV/MkC.QhotdZO8fO0OdM.LaY4oTP3VO5HPQsO','F','3192345678','1','2025-08-22 22:12:23','2025-08-22 22:12:23',4),(12,'Nicolás David','Cárdenas Prieto',1009876543,'nicolas.cardenas@example.com','clave123','M','3140987654','1','2025-08-22 22:12:23','2025-08-22 22:12:23',4),(13,'Admin','System',0,'admin@example.com','$2a$10$M/q3UHbi861B6OJbBJ3L9eoDG2FCU0e4VFmkhIjmvx5MuKq2Ns7fu','M','0000000000','Activo','2025-11-27 16:00:12','2025-11-27 16:00:12',5);
+insert  into `usuarios`(`ID_USUARIO`,`Nombres`,`Apellidos`,`Documento`,`Correo_usuario`,`Contrase_usuario`,`Genero`,`Telefono`,`Estado`,`Created_at`,`Updated_at`,`roles_id`) values (1,'Carlos Andres','Perez',1000785214,'carlos.P123@gmail.com','B','M','3151204562','1','2025-08-22 22:12:23','2025-08-22 22:12:23',1),(2,'Duvan Felipe','Uribe',1000745236,'duvan.uribe97@gmail.com','$2a$10$Evrhi7G.aMD8dH9aV/MkC.QhotdZO8fO0OdM.LaY4oTP3VO5HPQsO','M','3115248596','1','2025-08-22 22:12:23','2025-08-22 22:12:23',2),(3,'Laura Andrea','Torres Ríos',1042356789,'laura.torres@hotmail.com','$2a$10$Evrhi7G.aMD8dH9aV/MkC.QhotdZO8fO0OdM.LaY4oTP3VO5HPQsO','F','3104567890','1','2025-08-22 22:12:23','2025-08-22 22:12:23',1),(4,'Juan Sebastián','Ramírez Pérez',1023456781,'juan.ramirez@outlook.com','$2a$10$Evrhi7G.aMD8dH9aV/MkC.QhotdZO8fO0OdM.LaY4oTP3VO5HPQsO','M','3001234567','1','2025-08-22 22:12:23','2025-08-22 22:12:23',1),(5,'Camila Sofía','Vargas Gómez',1098765432,'camila.vargas@gmail.com','$2a$10$Evrhi7G.aMD8dH9aV/MkC.QhotdZO8fO0OdM.LaY4oTP3VO5HPQsO','F','3123456789','1','2025-08-22 22:12:23','2025-08-22 22:12:23',1),(6,'Andrés Felipe','Morales López',1032984567,'andres.morales@hotmail.com','$2a$10$Evrhi7G.aMD8dH9aV/MkC.QhotdZO8fO0OdM.LaY4oTP3VO5HPQsO','M','3119876543','1','2025-08-22 22:12:23','2025-08-22 22:12:23',3),(7,'Mariana Isabel','Castro Ruiz',1012345678,'mariana.castro@gmail.com','$2a$10$Evrhi7G.aMD8dH9aV/MkC.QhotdZO8fO0OdM.LaY4oTP3VO5HPQsO','F','3012345678','1','2025-08-22 22:12:23','2025-08-22 22:12:23',4),(8,'Diego Alejandro','Paredes León',1087654321,'diego.paredes@hotmail.com','$2a$10$Evrhi7G.aMD8dH9aV/MkC.QhotdZO8fO0OdM.LaY4oTP3VO5HPQsO','M','3176543210','1','2025-08-22 22:12:23','2025-08-22 22:12:23',4),(9,'Valentina María','Herrera Díaz',1056789123,'valentina.herrera@gmail.com','$2a$10$Evrhi7G.aMD8dH9aV/MkC.QhotdZO8fO0OdM.LaY4oTP3VO5HPQsO','F','3187654321','1','2025-08-22 22:12:23','2025-08-22 22:12:23',4),(10,'Carlos Eduardo','Mejía Rincón',1065432198,'carlos.mejia@gmail.com','$2a$10$Evrhi7G.aMD8dH9aV/MkC.QhotdZO8fO0OdM.LaY4oTP3VO5HPQsO','M','3208765432','1','2025-08-22 22:12:23','2025-08-22 22:12:23',4),(11,'Juliana Fernanda','Ortega Salazar',1076543289,'juliana.ortega@hotmail.com','$2a$10$Evrhi7G.aMD8dH9aV/MkC.QhotdZO8fO0OdM.LaY4oTP3VO5HPQsO','F','3192345678','1','2025-08-22 22:12:23','2025-08-22 22:12:23',4),(12,'Nicolás David','Cárdenas Prieto',1009876543,'nicolas.cardenas@gmail.com','$2a$10$Evrhi7G.aMD8dH9aV/MkC.QhotdZO8fO0OdM.LaY4oTP3VO5HPQsO','M','3140987654','1','2025-08-22 22:12:23','2025-08-22 22:12:23',4),(13,'Admin','System',0,'admin@example.com','$2a$10$M/q3UHbi861B6OJbBJ3L9eoDG2FCU0e4VFmkhIjmvx5MuKq2Ns7fu','M','0000000000','Activo','2025-11-27 16:00:12','2025-11-27 16:00:12',5);
 
 UNLOCK TABLES;
 
