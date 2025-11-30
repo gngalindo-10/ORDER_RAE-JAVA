@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${pedido.idPedido == null ? 'Registrar Pedido' : 'Editar Pedido'}">Formulario Pedido</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+<body class="bg-light">
+    <div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+        <div class="card p-4 shadow-sm" style="width: 100%; max-width: 550px; background-color: #FFF9F0;">
+            <div class="text-center mb-3">
+                <img th:src="@{/images/logo.png}" src="/images/logo.png" alt="Logo" style="width:120px;">
+            </div>
+            <h2 class="text-center mb-4" th:text="${pedido.idPedido == null ? 'Registrar Pedido' : 'Editar Pedido'}">
+                PEDIDO
+            </h2>
+
+            <form th:action="@{${pedido.idPedido == null} ? '/pedidos/guardar' : '/pedidos/actualizar/' + ${pedido.idPedido}}"
+                th:object="${pedido}" method="post">
+
+                    
+                <!-- Fecha de compra -->
+            <div class="mb-3">
+                <label for="fechaCompra" class="form-label">Fecha de compra:</label>
+                <input type="date"id="fechaCompra" name="fechaCompra"
+                th:value="${#temporals.format(pedido.fechaCompra, 'yyyy-MM-dd')}"class="form-control" required>
+                required>
+            </div>
+
+<!-- Fecha de entrega -->
+            <div class="mb-3">
+                <label for="fechaEntrega" class="form-label">Fecha de entrega:</label>
+                <input type="date"id="fechaEntrega"name="fechaEntrega"
+                th:value="${#temporals.format(pedido.fechaEntrega, 'yyyy-MM-dd')}"class="form-control" required>
+            </div>
+
+                <!-- Método de pago -->
+                <div class="mb-3">
+                    <label for="metodoPago" class="form-label">Método de pago:</label>
+                    <select th:field="*{metodoPago}" id="metodoPago" class="form-select" required>
+                        <option value="">-- Selecciona método --</option>
+                        <option value="tarjeta">Tarjeta</option>
+                        <option value="transferencia">Transferencia</option>
+                        <option value="efectivo">Efectivo</option>
+                        <option value="pago_movil">Pago móvil</option>
+                        <option value="credito">Crédito</option>
+                    </select>
+                </div>
+
+                <!-- Total de pago -->
+                <div class="mb-3">
+                    <label for="totalDePago" class="form-label">Total de pago:</label>
+                    <input type="number" step="0.01" th:field="*{totalDePago}" id="totalDePago" class="form-control" required min="0">
+                </div>
+
+                <!-- Estado del pedido -->
+                <div class="mb-3">
+                    <label for="estadoPedido" class="form-label">Estado del pedido:</label>
+                    <select th:field="*{estadoPedido}" id="estadoPedido" class="form-select" required>
+                        <option value="">-- Selecciona estado --</option>
+                        <option value="Pendiente">Pendiente</option>
+                        <option value="En proceso">En proceso</option>
+                        <option value="Entregado">Entregado</option>
+                        <option value="Enviado">Enviado</option>
+                        <option value="Cancelado">Cancelado</option>
+                    </select>
+                </div>
+
+                <div class="d-flex justify-content-center gap-2 mt-3">
+                    <a th:href="@{/pedidos}" class="btn btn-cafe btn-md w-100">Volver</a>
+                    <button type="submit" class="btn btn-cafe btn-md w-100" 
+                            th:text="${pedido.idPedido == null ? 'Registrar' : 'Actualizar'}">
+                        Guardar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

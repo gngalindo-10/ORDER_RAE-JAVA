@@ -31,6 +31,16 @@
                     <li class="nav-item" th:if="${#authentication != null and #authentication.authenticated}">
                         <a class="nav-link" th:href="@{/reportes}" style="color: #5D3A24; font-weight: 500;">Reportes</a>
                     </li>
+                    <li class="nav-item" th:if="${#authentication != null and #authentication.authenticated}">
+                        <a class="nav-link" th:href="@{/pedidos}" style="color: #5D3A24; font-weight: 500;">Pedidos</a>
+                    </li>
+                    <li class="nav-item" th:if="${#authentication != null and #authentication.authenticated}">
+                        <a class="nav-link" th:href="@{/fidelizacion}" style="color: #5D3A24; font-weight: 500;">Fidelización</a>
+                    </li>
+                    <li class="nav-item" th:if="${#authentication != null and #authentication.authenticated}">
+                        <a class="nav-link" th:href="@{/ventas}" style="color: #5D3A24; font-weight: 500;">Ventas</a>
+                    </li>
+
                 </ul>
                 <ul class="navbar-nav">
                     <!-- Mostrar "Cerrar sesión" solo si el usuario está autenticado -->
