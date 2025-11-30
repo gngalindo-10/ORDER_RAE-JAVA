@@ -19,33 +19,101 @@
 
         <!-- Botón Volver al Dashboard -->
         <div class="d-flex justify-content-between mb-4">
-            <a th:href="@{/dashboard}" class="btn btn-outline-secondary">🏠 Volver al Dashboard</a>
+            <a th:href="@{/dashboard}" class="btn btn-outline-secondary">Volver al Dashboard</a>
         </div>
 
         <!-- Formulario de filtros -->
         <div class="card p-4 mb-4 shadow-sm">
             <form method="get" th:action="@{/reportes}">
                 <div class="row g-3">
-                    <div class="col-md-3">
+                    <!-- Código -->
+                    <div class="col-md-2">
+                        <label for="codigo" class="form-label">Código</label>
+                        <input type="text" class="form-control" id="codigo" name="codigo" th:value="${codigo}" placeholder="Ej: SILLA-001">
+                    </div>
+
+                    <!-- Referencia -->
+                    <div class="col-md-2">
+                        <label for="referencia" class="form-label">Referencia</label>
+                        <input type="text" class="form-control" id="referencia" name="referencia" th:value="${referencia}" placeholder="Ej: BASE CAÑA X4 PUESTOS">
+                    </div>
+
+                    <!-- Categoría -->
+                    <div class="col-md-2">
+                        <label for="categoria" class="form-label">Categoría</label>
+                        <select class="form-select" id="categoria" name="categoria">
+                            <option value="">Todas</option>
+                            <option th:each="cat : ${categorias}" 
+                                    th:value="${cat.id}" 
+                                    th:text="${cat.nombreCategoria}"
+                                    th:selected="${categoria == cat.id}">
+                            </option>
+                        </select>
+                    </div>
+
+                    <!-- Color -->
+                    <div class="col-md-2">
+                        <label for="color" class="form-label">Color</label>
+                        <select class="form-select" id="color" name="color">
+                            <option value="">Todos</option>
+                            <option value="CRUDO" th:selected="${color == 'CRUDO'}">CRUDO</option>
+                            <option value="NATURAL" th:selected="${color == 'NATURAL'}">NATURAL</option>
+                            <option value="CAFE" th:selected="${color == 'CAFE'}">CAFÉ</option>
+                            <option value="BEIGE" th:selected="${color == 'BEIGE'}">BEIGE</option>
+                            <option value="GRIS" th:selected="${color == 'GRIS'}">GRIS</option>
+                            <option value="MARRON" th:selected="${color == 'MARRON'}">MARRÓN</option>
+                            <option value="ROSA-LILA" th:selected="${color == 'ROSA-LILA'}">ROSA-LILA</option>
+                            <option value="AZUL" th:selected="${color == 'AZUL'}">AZUL</option>
+                            <option value="VERDE" th:selected="${color == 'VERDE'}">VERDE</option>
+                            <option value="BLANCO MATE" th:selected="${color == 'BLANCO MATE'}">BLANCO MATE</option>
+                            <option value="PALO DE ROSA" th:selected="${color == 'PALO DE ROSA'}">PALO DE ROSA</option>
+                            <option value="DECAPÉ GRIS" th:selected="${color == 'DECAPÉ GRIS'}">DECAPÉ GRIS</option>
+                            <option value="URAPAN" th:selected="${color == 'URAPAN'}">URAPAN</option>
+                            <option value="ORTOPEDICO" th:selected="${color == 'ORTOPEDICO'}">ORTOPÉDICO</option>
+                        </select>
+                    </div>
+
+                    <!-- Estado -->
+                    <div class="col-md-2">
                         <label for="estado" class="form-label">Estado</label>
                         <select class="form-select" id="estado" name="estado">
                             <option value="">Todos</option>
-                            <option value="activo" th:selected="${estado == 'activo'}">Activo</option>
-                            <option value="inactivo" th:selected="${estado == 'inactivo'}">Inactivo</option>
+                            <option value="EN PRODUCCIÓN" th:selected="${estado == 'EN PRODUCCIÓN'}">EN PRODUCCIÓN</option>
+                            <option value="EN STOCK" th:selected="${estado == 'EN STOCK'}">EN STOCK</option>
+                            <option value="TERMINADO" th:selected="${estado == 'TERMINADO'}">TERMINADO</option>
+                            <option value="POR COMENZAR" th:selected="${estado == 'POR COMENZAR'}">POR COMENZAR</option>
+                            <option value="COMPROMETIDO" th:selected="${estado == 'COMPROMETIDO'}">COMPROMETIDO</option>
+                            <option value="DISPONIBLE" th:selected="${estado == 'DISPONIBLE'}">DISPONIBLE</option>
                         </select>
                     </div>
-                    <div class="col-md-3">
-                        <label for="precioMin" class="form-label">Precio Mínimo</label>
-                        <input type="number" step="0.01" class="form-control" id="precioMin" name="precioMin" th:value="${precioMin}">
+
+                    <!-- Tipo de Madera -->
+                    <div class="col-md-2">
+                        <label for="tipoMadera" class="form-label">Tipo de Madera</label>
+                        <select class="form-select" id="tipoMadera" name="tipoMadera">
+                            <option value="">Todos</option>
+                            <option value="FLOR MORADO" th:selected="${tipoMadera == 'FLOR MORADO'}">FLOR MORADO</option>
+                            <option value="CEDRO" th:selected="${tipoMadera == 'CEDRO'}">CEDRO</option>
+                            <option value="TRIPLEX CEDRO" th:selected="${tipoMadera == 'TRIPLEX CEDRO'}">TRIPLEX CEDRO</option>
+                            <option value="PINO" th:selected="${tipoMadera == 'PINO'}">PINO</option>
+                            <option value="URAPAN" th:selected="${tipoMadera == 'URAPAN'}">URAPAN</option>
+                            <option value="ORTOPEDICO" th:selected="${tipoMadera == 'ORTOPEDICO'}">ORTOPÉDICO</option>
+                        </select>
                     </div>
-                    <div class="col-md-3">
-                        <label for="precioMax" class="form-label">Precio Máximo</label>
-                        <input type="number" step="0.01" class="form-control" id="precioMax" name="precioMax" th:value="${precioMax}">
+
+                    <!-- Bodega -->
+                    <div class="col-md-2">
+                        <label for="bodega" class="form-label">Bodega</label>
+                        <select class="form-select" id="bodega" name="bodega">
+                            <option value="">Todas</option>
+                            <option value="BODEGA_PRINCIPAL" th:selected="${bodega == 'BODEGA_PRINCIPAL'}">BODEGA PRINCIPAL</option>
+                            <option value="BODEGA_SECUNDARIA" th:selected="${bodega == 'BODEGA_SECUNDARIA'}">BODEGA SECUNDARIA</option>
+                            <option value="BODEGA_DE_PRODUCCION" th:selected="${bodega == 'BODEGA_DE_PRODUCCION'}">BODEGA DE PRODUCCIÓN</option>
+                            <option value="BODEGA_COMPROMETIDA" th:selected="${bodega == 'BODEGA_COMPROMETIDA'}">BODEGA COMPROMETIDA</option>
+                        </select>
                     </div>
-                    <div class="col-md-3">
-                        <label for="busqueda" class="form-label">Buscar (Código o Referencia)</label>
-                        <input type="text" class="form-control" id="busqueda" name="busqueda" th:value="${busqueda}" placeholder="Ej: MUEBLES-001">
-                    </div>
+
+                    <!-- Botones -->
                     <div class="col-12 text-end">
                         <button type="submit" class="btn btn-cafe">Filtrar</button>
                         <a href="/reportes" class="btn btn-outline-secondary">Limpiar</a>
@@ -64,31 +132,50 @@
                                 <th>Código</th>
                                 <th>Referencia</th>
                                 <th>Color</th>
-                                <th>Precio</th>
+                                <th>Tipo de Madera</th>
                                 <th>Estado</th>
+                                <th>Bodega</th>
                                 <th>Usuario</th>
                                 <th>Categoría</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr th:if="${productos.empty}">
-                                <td colspan="7" class="text-center">No se encontraron productos.</td>
+                                <td colspan="8" class="text-center">No se encontraron productos.</td>
                             </tr>
                             <tr th:each="producto : ${productos}">
                                 <td th:text="${producto.codigoProducto}"></td>
                                 <td th:text="${producto.referenciaProducto}"></td>
                                 <td th:text="${producto.color}"></td>
-                                <td th:text="${#numbers.formatCurrency(producto.precio)}"></td>
+                                <td th:text="${producto.tipoDeMadera} ?: 'N/A'"></td>
                                 <td>
-                                    <span th:class="${producto.estadoProducto == 'activo' ? 'badge bg-success' : 'badge bg-danger'}"
-                                          th:text="${producto.estadoProducto == 'activo' ? 'Activo' : 'Inactivo'}"></span>
+                                    <span th:class="${producto.estadoProducto == 'EN STOCK' ? 'badge bg-success' : producto.estadoProducto == 'EN PRODUCCIÓN' ? 'badge bg-info' : producto.estadoProducto == 'TERMINADO' ? 'badge bg-secondary' : producto.estadoProducto == 'POR COMENZAR' ? 'badge bg-warning' : producto.estadoProducto == 'COMPROMETIDO' ? 'badge bg-danger' : 'badge bg-dark'}"
+                                        th:text="${producto.estadoProducto}"></span>
                                 </td>
-                                <td th:text="${producto.usuario?.nombre + ' ' + producto.usuario?.apellidos ?: 'N/A'}"></td>
-                                <td th:text="${producto.categoria?.nombreCategoria ?: 'N/A'}"></td>
+                                <td th:text="${producto.bodega} ?: 'Sin bodega'"></td>
+                                <td th:text="${producto.usuarioNombre} ?: 'N/A'"></td>
+                                <td th:text="${producto.categoriaNombre} ?: 'N/A'"></td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
+            </div>
+        </div>
+
+        <!-- Botones de exportación -->
+        <div class="d-flex justify-content-between mt-3">
+            <div>
+                <a th:href="@{/reportes/exportar/pdf(codigo=${codigo},referencia=${referencia},categoria=${categoria},color=${color},estado=${estado},tipoMadera=${tipoMadera},bodega=${bodega})}" 
+                   class="btn btn-outline-primary me-2">
+                    📄 Exportar a PDF
+                </a>
+                <a th:href="@{/reportes/exportar/excel(codigo=${codigo},referencia=${referencia},categoria=${categoria},color=${color},estado=${estado},tipoMadera=${tipoMadera},bodega=${bodega})}" 
+                   class="btn btn-outline-success">
+                    📊 Exportar a Excel
+                </a>
+            </div>
+            <div>
+                <span class="text-muted" th:text="'Mostrando ' + ${productos.size()} + ' productos'"></span>
             </div>
         </div>
     </div>

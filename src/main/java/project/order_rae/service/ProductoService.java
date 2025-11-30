@@ -1,5 +1,8 @@
 package project.order_rae.service;
 
+import java.util.stream.Collectors;
+import project.order_rae.dto.ProductoReporteDTO;
+import project.order_rae.model.Categoria;
 import project.order_rae.model.Producto;
 import project.order_rae.repository.ProductoRepository;
 import org.springframework.stereotype.Service;
@@ -16,6 +19,10 @@ public class ProductoService {
 
     public List<Producto> listar() {
         return repo.findAll();
+    }
+
+    public List<Categoria> listarCategorias() {
+        return repo.findAllCategorias(); // Asumiendo que tu repositorio tiene este método
     }
 
     public Producto insertar(Producto p) {
@@ -38,7 +45,7 @@ public class ProductoService {
         return repo.save(existente);
     }
 
-    // Método para actualizar TODO el producto
+    // Método para actualizar todos los campos del producto
     public Producto actualizar(Long id, Producto p) {
         Producto existente = obtenerPorId(id);
         
@@ -65,8 +72,21 @@ public class ProductoService {
     }
 
     // Método para reportes
-    public List<Producto> findFiltered(String estado, Double precioMin, Double precioMax, String busqueda) {
-        return repo.findByFilters(estado, precioMin, precioMax, busqueda);
+    public List<ProductoReporteDTO> findReporteFiltered(
+        String codigo,
+        String referencia,
+        Long categoria,
+        String color,
+        String estado,
+        String tipoMadera,
+        String bodega) {
+
+        List<Object[]> resultados = repo.findReporteData(
+            codigo, referencia, categoria, color, estado, tipoMadera, bodega);
+
+        return resultados.stream()
+            .map(ProductoReporteDTO::new)
+            .collect(Collectors.toList());
     }
 
     // Buscar producto por referencia (nombre)

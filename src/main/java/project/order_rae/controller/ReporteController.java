@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import project.order_rae.dto.ProductoReporteDTO;
 import project.order_rae.service.ProductoService;
 
 import java.util.List;
@@ -18,20 +19,29 @@ public class ReporteController {
 
     @GetMapping("/reportes")
     public String mostrarReportes(
+        @RequestParam(required = false) String codigo,
+        @RequestParam(required = false) String referencia,
+        @RequestParam(required = false) Long categoria,
+        @RequestParam(required = false) String color,
         @RequestParam(required = false) String estado,
-        @RequestParam(required = false) Double precioMin,
-        @RequestParam(required = false) Double precioMax,
-        @RequestParam(required = false) String busqueda,
+        @RequestParam(required = false) String tipoMadera,
+        @RequestParam(required = false) String bodega,
         Model model) {
 
-        List<?> productosFiltrados = productoService.findFiltered(estado, precioMin, precioMax, busqueda);
-        model.addAttribute("productos", productosFiltrados);
+        List<ProductoReporteDTO> productos = productoService.findReporteFiltered(
+            codigo, referencia, categoria, color, estado, tipoMadera, bodega);
+
+        model.addAttribute("productos", productos);
+        model.addAttribute("categorias", productoService.listarCategorias());
 
         // Pasar los parámetros de filtro para mantenerlos en el formulario
+        model.addAttribute("codigo", codigo);
+        model.addAttribute("referencia", referencia);
+        model.addAttribute("categoria", categoria);
+        model.addAttribute("color", color);
         model.addAttribute("estado", estado);
-        model.addAttribute("precioMin", precioMin);
-        model.addAttribute("precioMax", precioMax);
-        model.addAttribute("busqueda", busqueda);
+        model.addAttribute("tipoMadera", tipoMadera);
+        model.addAttribute("bodega", bodega);
 
         return "reportes";
     }
