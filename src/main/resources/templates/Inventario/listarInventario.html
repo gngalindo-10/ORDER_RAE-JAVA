@@ -20,6 +20,9 @@
 
 <body class="bg-light">
 
+    <!-- Menú dinámico -->
+    <div th:replace="inicioDinamico :: menu"></div>
+
     <div class="container mt-5">
 
         <div class="text-center mb-4">
@@ -63,10 +66,10 @@
 
                         <td class="text-center">
                             <a th:href="@{/inventario/editar/{id}(id=${inv.id})}"
-                                class="btn btn-sm btn-outline-warning me-2">Editar</a>
+                                class="btn btn-sm btn-warning">Editar</a>
 
                             <a th:href="@{/inventario/eliminar/{id}(id=${inv.id})}"
-                                class="btn btn-sm btn-outline-danger"
+                                class="btn btn-sm btn-danger"
                                 onclick="return confirm('¿Está seguro de eliminar este registro?')">
                                 Eliminar
                             </a>

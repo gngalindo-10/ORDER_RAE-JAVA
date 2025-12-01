@@ -48,8 +48,8 @@
                 <td th:text="${producto.usuario?.nombre + ' ' + producto.usuario?.apellidos}"></td>
                 <td th:text="${producto.categoria?.nombreCategoria}"></td>
                 <td>
-                    <a th:href="@{/productos/editar/{id}(id=${producto.id})}" class="btn btn-sm btn-outline-warning me-2">Editar</a>
-                    <a th:href="@{/productos/eliminar/{id}(id=${producto.id})}" class="btn btn-sm btn-outline-danger"
+                    <a th:href="@{/productos/editar/{id}(id=${producto.id})}" class="btn btn-sm btn-warning">Editar</a>
+                    <a th:href="@{/productos/eliminar/{id}(id=${producto.id})}" class="btn btn-sm btn-danger"
                         onclick="return confirm('¿Eliminar este producto?')">Eliminar</a>
                 </td>
             </tr>
