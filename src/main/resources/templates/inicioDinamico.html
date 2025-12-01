@@ -10,7 +10,7 @@
     <link rel="stylesheet" th:href="@{/css/estilos.css}">
 </head>
 <body>
-
+    
 <!-- MENÚ -->
 <nav th:fragment="menu" class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm mb-4">
     <div class="container-fluid">
@@ -52,6 +52,21 @@
                 <!-- CATEGORÍAS -->
                 <li class="nav-item" th:if="${#authentication?.authenticated}">
                     <a class="nav-link" th:href="@{/categoria}" style="color:#5D3A24;">Categoría</a>
+                </li>
+
+                <!-- PEDIDOS -->
+                <li class="nav-item" th:if="${#authentication?.authenticated}">
+                    <a class="nav-link" th:href="@{/pedidos}" style="color:#5D3A24;">Pedidos</a>
+                </li>
+
+                <!-- VENTAS -->
+                <li class="nav-item" th:if="${#authentication?.authenticated}">
+                    <a class="nav-link" th:href="@{/ventas}" style="color:#5D3A24;">Ventas</a>
+                </li>
+
+                <!-- FIDELIZACIÓN -->
+                <li class="nav-item" th:if="${#authentication?.authenticated}">
+                    <a class="nav-link" th:href="@{/fidelizacion}" style="color:#5D3A24;">Fidelización</a>
                 </li>
 
             </ul>
