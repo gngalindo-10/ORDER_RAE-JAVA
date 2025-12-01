@@ -21,7 +21,7 @@
 
         <div class="table-responsive">
             <table class="table table-bordered table-hover align-middle">
-                <thead class="table-dark">
+                <thead class="table-header-cafe">
                     <tr>
                         <th>ID</th>
                         <th>Usuario</th>
@@ -39,9 +39,9 @@
                         <td th:text="${fidelizacion.puntosAcumulados}"></td>
                         <td th:text="${fidelizacion.nivelFidelizacion}"></td>
                         <td>
-                            <a th:href="@{/fidelizacion/editar/{id}(id=${fidelizacion.id})}" class="btn btn-sm btn-outline-warning me-2">Editar</a>
-                            <a th:href="@{/fidelizacion/eliminar/{id}(id=${fidelizacion.id})}" class="btn btn-sm btn-outline-danger"
-                               onclick="return confirm('¿Eliminar esta fidelización?')">Eliminar</a>
+                            <a th:href="@{/fidelizacion/editar/{id}(id=${fidelizacion.id})}" class="btn btn-sm btn-warning">Editar</a>
+                            <a th:href="@{/fidelizacion/eliminar/{id}(id=${fidelizacion.id})}" class="btn btn-sm btn-danger"
+                                onclick="return confirm('¿Eliminar esta fidelización?')">Eliminar</a>
                         </td>
                     </tr>
                     <tr th:if="${#lists.isEmpty(fidelizaciones)}">

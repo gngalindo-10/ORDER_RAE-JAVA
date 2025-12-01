@@ -23,7 +23,7 @@
 
         <div class="table-responsive">
             <table class="table table-bordered table-hover align-middle">
-                <thead class="table-dark">
+                <thead class="table-header-cafe">
                     <tr>
                         <th>ID</th>
                         <th>Fecha Compra</th>
@@ -44,9 +44,9 @@
                         <td th:text="${p.estadoPedido}">En proceso</td>
                         <td>
                             <a th:href="@{/pedidos/editar/{id}(id=${p.idPedido})}" 
-                            class="btn btn-sm btn-outline-warning me-2">Editar</a>
+                            class="btn btn-sm btn-warning">Editar</a>
                             <a th:href="@{/pedidos/eliminar/{id}(id=${p.idPedido})}" 
-                            class="btn btn-sm btn-outline-danger" 
+                            class="btn btn-sm btn-danger" 
                             onclick="return confirm('¿Estás seguro de eliminar este pedido?');">
                                 Eliminar
                             </a>

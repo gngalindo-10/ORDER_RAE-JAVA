@@ -23,7 +23,7 @@
 
         <div class="table-responsive">
             <table class="table table-bordered table-hover align-middle">
-                <thead class="table-dark">
+                <thead class="table-header-cafe">
                     <tr>
                         <th>ID</th>
                         <th>Fecha Venta</th>
@@ -44,10 +44,10 @@
                         <td th:text="${v.fidelizacionId != null ? v.fidelizacionId : '—'}">3</td>
                         <td>
                             <a th:href="@{/ventas/editar/{id}(id=${v.idVenta})}" 
-                               class="btn btn-sm btn-outline-warning me-2">Editar</a>
+                                class="btn btn-sm btn-warning">Editar</a>
                             <a th:href="@{/ventas/eliminar/{id}(id=${v.idVenta})}" 
-                               class="btn btn-sm btn-outline-danger" 
-                               onclick="return confirm('¿Estás seguro de eliminar esta venta?');">
+                                class="btn btn-sm btn-danger" 
+                                onclick="return confirm('¿Estás seguro de eliminar esta venta?');">
                                 Eliminar
                             </a>
                         </td>
