@@ -83,14 +83,14 @@
 
                 <!-- CERRAR SESIÓN -->
                 <li class="nav-item" th:if="${#authentication?.authenticated}">
-                    <a class="nav-link btn btn-cafe-outline btn-sm ms-2" th:href="@{/logout}">
+                    <a class="nav-link btn btn-cafe-outline btn-sm ms-2" th:href="@{/}">
                         Cerrar sesión
                     </a>
                 </li>
 
                 <!-- INICIAR SESIÓN -->
                 <li class="nav-item" th:if="${#authentication == null or !#authentication.authenticated}">
-                    <a class="nav-link btn btn-cafe btn-sm ms-2" th:href="@{/login}">
+                    <a class="nav-link btn btn-cafe btn-sm ms-2" th:href="@{/}">
                         Iniciar sesión
                     </a>
                 </li>
