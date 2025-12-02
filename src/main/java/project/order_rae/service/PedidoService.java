@@ -30,13 +30,13 @@ public class PedidoService {
 
     public Pedido actualizar(Integer id, Pedido pedidoActualizado) {
         Pedido pedidoExistente = obtenerPorId(id);
-        // Copiamos los campos actualizables (puedes ajustar si hay campos que no deben actualizarse)
+
         pedidoExistente.setFechaCompra(pedidoActualizado.getFechaCompra());
         pedidoExistente.setFechaEntrega(pedidoActualizado.getFechaEntrega());
         pedidoExistente.setMetodoPago(pedidoActualizado.getMetodoPago());
         pedidoExistente.setTotalDePago(pedidoActualizado.getTotalDePago());
         pedidoExistente.setEstadoPedido(pedidoActualizado.getEstadoPedido());
-        // Nota: updatedAt se actualiza automáticamente con @PreUpdate
+
         return pedidoRepository.save(pedidoExistente);
     }
 
