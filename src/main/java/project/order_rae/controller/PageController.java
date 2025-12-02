@@ -2,6 +2,8 @@ package project.order_rae.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 @Controller
@@ -26,6 +28,11 @@ public class PageController {
         return "carrito-compra";
     }
 
+    @GetMapping("/producto")
+    public String producto() {
+        return "producto";
+    }
+
     @GetMapping("/promociones")
     public String promociones() {
         return "promociones";
@@ -40,5 +47,6 @@ public class PageController {
     public String cotiza() {
         return "cotiza";
     }
+    
 }
 
