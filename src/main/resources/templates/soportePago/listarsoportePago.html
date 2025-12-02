@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soportes de Pago</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+<body class="bg-light">
+    <div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+        <div class="card p-4 shadow-sm" style="width: 100%; max-width: 550px; background-color: #FFF9F0;">
+            <div class="text-center mb-3">
+                <img th:src="@{/images/logo.png}" src="/images/logo.png" alt="Logo" style="width:120px;">
+            </div>
+            <h2 class="text-center mb-4">Soportes de Pago</h2>
+
+            <div class="d-flex justify-content-center mb-4">
+                <a th:href="@{/soportePago/nuevo}" class="btn btn-cafe btn-md w-100">➕ Nuevo Soporte</a>
+            </div>
+
+            <div th:each="soporte : ${soportes}" class="mb-3 p-3 border rounded bg-white">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <p class="mb-1"><strong>ID:</strong> <span th:text="${soporte.idSoportePago}">1</span></p>
+                        <p class="mb-1"><strong>Monto:</strong> 
+                            <span th:text="${#numbers.formatDecimal(soporte.totalPago, 1, 'DEFAULT', 2, 'DEFAULT')}">0.00</span>
+                        </p>
+                        <p class="mb-1"><strong>Fecha:</strong> 
+                            <span th:text="${#temporals.format(soporte.fechaHoraPago, 'dd/MM/yyyy HH:mm')}">01/01/2025 10:00</span>
+                        </p>
+                        <p class="mb-1"><strong>Estado:</strong> 
+                            <span th:text="${soporte.estadoSoporte ?: '—'}"
+                                  th:class="${soporte.estadoSoporte == 'verificado' ? 'text-success' : 
+                                          soporte.estadoSoporte == 'rechazado' ? 'text-danger' : 'text-warning'}">
+                                —
+                            </span>
+                        </p>
+                        <p class="mb-1"><strong>Usuario:</strong> <span th:text="${soporte.usuariosId ?: '—'}">—</span></p>
+                        <p class="mb-1"><strong>Venta:</strong> <span th:text="${soporte.ventaId ?: '—'}">—</span></p>
+                    </div>
+                    <div class="d-flex flex-column gap-1">
+                        <a th:href="@{/soportePago/editar/{id}(id=${soporte.idSoportePago})}" class="btn btn-sm btn-outline-warning">✏️</a>
+                        <form th:action="@{/soportePago/eliminar/{id}(id=${soporte.idSoportePago})}" method="post" onsubmit="return confirm('¿Eliminar?');">
+                            <button type="submit" class="btn btn-sm btn-outline-danger">🗑️</button>
+                        </form>
+                    </div>
+                </div>
+                <div th:if="${soporte.soporteUrl}" class="mt-2">
+                    <a th:href="@{'/uploads/' + ${soporte.soporteUrl}}" target="_blank" class="btn btn-sm btn-outline-primary w-100">
+                        📎 Ver comprobante
+                    </a>
+                </div>
+            </div>
+
+            <div th:if="${soportes.isEmpty()}" class="text-center text-muted mt-3">
+                <p>No hay soportes.</p>
+            </div>
+
+            <div class="d-flex justify-content-center mt-3">
+                <a th:href="@{/}" class="btn btn-cafe btn-md w-100">🏠 Volver</a>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

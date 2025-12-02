@@ -17,22 +17,18 @@
                 VENTA
             </h2>
 
-            <!-- ✅ Mensaje de error (si existe) -->
-            <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
-                <strong>❌ Error:</strong> <span th:text="${error}"></span>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <!-- ✅ MENSAJE DE ERROR (¡NO LO BORRES!) -->
+            <div th:if="${error}" class="alert alert-danger">
+                <strong>❌ ERROR:</strong> <span th:text="${error}"></span>
             </div>
 
             <form th:action="@{${venta.idVenta == null} ? '/ventas/guardar' : '/ventas/actualizar/' + ${venta.idVenta}}"
                   th:object="${venta}" method="post">
 
-                <!-- ✅ Fecha de venta: se muestra correctamente al editar -->
+                <!-- Fecha de venta -->
                 <div class="mb-3">
                     <label for="fechaVenta" class="form-label">Fecha de venta:</label>
-                    <input type="date" 
-                           th:value="${venta.fechaVenta != null ? #temporals.format(venta.fechaVenta, 'yyyy-MM-dd') : ''}"
-                           name="fechaVenta"
-                           class="form-control" required>
+                    <input type="date" th:field="*{fechaVenta}" class="form-control" required>
                 </div>
 
                 <!-- Total de venta -->
@@ -41,29 +37,18 @@
                     <input type="number" step="0.01" th:field="*{totalVenta}" class="form-control" required min="0">
                 </div>
 
-                <!-- ✅ Estado de venta: se preselecciona correctamente -->
+                <!-- Estado de venta -->
                 <div class="mb-3">
                     <label for="estadoVenta" class="form-label">Estado de venta:</label>
-                    <select name="estadoVenta" class="form-select">
+                    <select th:field="*{estadoVenta}" class="form-select" required>
                         <option value="">-- Selecciona estado --</option>
-                        <option value="Completada" th:selected="${venta.estadoVenta == 'Completada'}">Completada</option>
-                        <option value="Pendiente" th:selected="${venta.estadoVenta == 'Pendiente'}">Pendiente</option>
-                        <option value="Cancelada" th:selected="${venta.estadoVenta == 'Cancelada'}">Cancelada</option>
+                        <option value="Completada">Completada</option>
+                        <option value="Pendiente">Pendiente</option>
+                        <option value="Cancelada">Cancelada</option>
                     </select>
                 </div>
 
-                <!-- Pedido ID -->
-                <div class="mb-3">
-                    <label for="pedidoId" class="form-label">ID del Pedido (opcional):</label>
-                    <input type="number" th:field="*{pedidoId}" class="form-control" min="1">
-                </div>
-
-                <!-- Fidelización ID -->
-                <div class="mb-3">
-                    <label for="fidelizacionId" class="form-label">ID de Fidelización (opcional):</label>
-                    <input type="number" th:field="*{fidelizacionId}" class="form-control" min="1">
-                </div>
-
+                <!-- Botones -->
                 <div class="d-flex justify-content-center gap-2 mt-3">
                     <a th:href="@{/ventas}" class="btn btn-cafe btn-md w-100">Volver</a>
                     <button type="submit" class="btn btn-cafe btn-md w-100"

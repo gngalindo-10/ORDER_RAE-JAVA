@@ -9,6 +9,7 @@
 </head>
 <body>
 
+<<<<<<< Updated upstream
     <!-- Menú de navegación -->
     <nav th:fragment="menu" class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm mb-4">
         <div class="container-fluid">
@@ -40,6 +41,101 @@
                     <li class="nav-item" th:if="${#authentication != null and #authentication.authenticated}">
                         <a class="nav-link" th:href="@{/ventas}" style="color: #5D3A24; font-weight: 500;">Ventas</a>
                     </li>
+=======
+        <a class="navbar-brand d-flex align-items-center" th:href="@{/dashboard}">
+            <img th:src="@{/images/logo.png}" alt="Logo" style="width:30px; height:30px;" class="me-2">
+            <span class="fw-semibold" style="color:#5D3A24;">ORDER RAE</span>
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+
+            <ul class="navbar-nav me-auto">
+
+                <!-- DASHBOARD -->
+                <li class="nav-item" th:if="${#authentication?.authenticated}">
+                    <a class="nav-link" th:href="@{/dashboard}" style="color:#5D3A24;">Dashboard</a>
+                </li>
+
+                <!-- USUARIOS -->
+                <li class="nav-item" th:if="${#authentication?.authenticated}">
+                    <a class="nav-link" th:href="@{/usuarios}" style="color:#5D3A24;">Usuarios</a>
+                </li>
+
+                <!-- PRODUCTOS -->
+                <li class="nav-item" th:if="${#authentication?.authenticated}">
+                    <a class="nav-link" th:href="@{/productos}" style="color:#5D3A24;">Productos</a>
+                </li>
+
+                <!-- INVENTARIO -->
+                <li class="nav-item" th:if="${#authentication?.authenticated}">
+                    <a class="nav-link" th:href="@{/inventario}" style="color:#5D3A24;">Inventario</a>
+                </li>
+
+                <!-- CATEGORÍAS -->
+                <li class="nav-item" th:if="${#authentication?.authenticated}">
+                    <a class="nav-link" th:href="@{/categoria}" style="color:#5D3A24;">Categoría</a>
+                </li>
+
+                <!-- PEDIDOS -->
+                <li class="nav-item" th:if="${#authentication?.authenticated}">
+                    <a class="nav-link" th:href="@{/pedidos}" style="color:#5D3A24;">Pedidos</a>
+                </li>
+
+                <!-- VENTAS -->
+                <li class="nav-item" th:if="${#authentication?.authenticated}">
+                    <a class="nav-link" th:href="@{/ventas}" style="color:#5D3A24;">Ventas</a>
+                </li>
+
+                <!-- FIDELIZACIÓN -->
+                <li class="nav-item" th:if="${#authentication?.authenticated}">
+                    <a class="nav-link" th:href="@{/fidelizacion}" style="color:#5D3A24;">Fidelización</a>
+                </li>
+
+                <!-- SOPORTE DE PAGO -->
+                <li class="nav-item" th:if="${#authentication?.authenticated}">
+                    <a class="nav-link" th:href="@{/soportePago}" style="color:#5D3A24;">Soporte de pago</a>
+                </li>
+
+            </ul>
+
+            <!-- DERECHA -->
+            <ul class="navbar-nav">
+
+                <!-- CERRAR SESIÓN -->
+                <li class="nav-item" th:if="${#authentication?.authenticated}">
+                    <a class="nav-link btn btn-cafe-outline btn-sm ms-2" th:href="@{/logout}">
+                        Cerrar sesión
+                    </a>
+                </li>
+
+                <!-- INICIAR SESIÓN -->
+                <li class="nav-item" th:if="${#authentication == null or !#authentication.authenticated}">
+                    <a class="nav-link btn btn-cafe btn-sm ms-2" th:href="@{/login}">
+                        Iniciar sesión
+                    </a>
+                </li>
+
+                <!-- REGISTRO -->
+                <li class="nav-item" th:if="${#authentication == null or !#authentication.authenticated}">
+                    <a class="nav-link btn btn-cafe-outline btn-sm ms-2" th:href="@{/registro}">
+                        Registrarme
+                    </a>
+                </li>
+
+                <!-- NOMBRE DEL USUARIO -->
+                <li class="nav-item" th:if="${#authentication?.authenticated}">
+                    <span class="nav-link disabled fw-semibold" style="color:#5D3A24;"
+                            th:text="${#authentication.name}">
+                    </span>
+                </li>
+
+            </ul>
+>>>>>>> Stashed changes
 
                 </ul>
                 <ul class="navbar-nav">

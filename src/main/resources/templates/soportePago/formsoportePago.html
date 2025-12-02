@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${soportePago.idSoportePago == null ? 'Registrar Soporte de Pago' : 'Editar Soporte de Pago'}">Formulario Soporte de Pago</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+<body class="bg-light">
+    <div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+        <div class="card p-4 shadow-sm" style="width: 100%; max-width: 600px; background-color: #FFF9F0;">
+            <div class="text-center mb-3">
+                <img th:src="@{/images/logo.png}" src="/images/logo.png" alt="Logo" style="width:120px;">
+            </div>
+            <h2 class="text-center mb-4" th:text="${soportePago.idSoportePago == null ? 'Registrar Soporte de Pago' : 'Editar Soporte de Pago'}">
+                SOPORTE DE PAGO
+            </h2>
+
+            <!-- ✅ Mensaje de error (si existe) -->
+            <div th:if="${error}" class="alert alert-danger text-center">
+                <strong>⚠️ Error:</strong> <span th:text="${error}"></span>
+            </div>
+
+            <!-- ✅ Mensaje de éxito -->
+            <div th:if="${mensaje}" class="alert alert-success text-center">
+                <span th:text="${mensaje}"></span>
+            </div>
+
+            <form th:action="@{${soportePago.idSoportePago == null} ? '/soportePago/guardar' : '/soportePago/actualizar/' + ${soportePago.idSoportePago}}" method="post">
+
+                <!-- Fecha y hora de pago -->
+                <div class="mb-3">
+                    <label for="fechaHoraPago" class="form-label">Fecha y hora de pago:</label>
+                    <input type="datetime-local" 
+                           name="fechaHoraPago"
+                           th:value="${soportePago.fechaHoraPago != null ? 
+                               #strings.replace(#strings.substring(soportePago.fechaHoraPago.toString(), 0, 16), ' ', 'T') : ''}"
+                           class="form-control"
+                           required>
+                </div>
+
+                <!-- Total de pago -->
+                <div class="mb-3">
+                    <label for="totalPago" class="form-label">Total de pago:</label>
+                    <input type="number" step="0.01" 
+                           name="totalPago"
+                           th:value="${soportePago.totalPago}"
+                           class="form-control" 
+                           required min="0">
+                </div>
+
+                <!-- Referencia del soporte -->
+                <div class="mb-3">
+                    <label for="soporteUrl" class="form-label">Referencia del soporte:</label>
+                    <input type="text" 
+                           name="soporteUrl"
+                           th:value="${soportePago.soporteUrl}"
+                           class="form-control" 
+                           placeholder="Ej: Transferencia #123">
+                </div>
+
+                <!-- Estado del soporte -->
+                <div class="mb-3">
+                    <label for="estadoSoporte" class="form-label">Estado del soporte:</label>
+                    <select name="estadoSoporte" class="form-select">
+                        <option value="">-- Selecciona --</option>
+                        <option value="verificado" th:selected="${soportePago.estadoSoporte == 'verificado'}">Verificado</option>
+                        <option value="pendiente" th:selected="${soportePago.estadoSoporte == 'pendiente'}">Pendiente</option>
+                        <option value="rechazado" th:selected="${soportePago.estadoSoporte == 'rechazado'}">Rechazado</option>
+                    </select>
+                </div>
+
+                <!-- ✅ OCULTAR LOS CAMPOS DE ID (el sistema los asigna solo) -->
+                <!--
+                <div class="mb-3">
+                    <label for="usuariosId" class="form-label">Usuario (ID):</label>
+                    <input type="number" 
+                           name="usuariosId"
+                           th:value="${soportePago.usuariosId}"
+                           class="form-control" readonly>
+                </div>
+
+                <div class="mb-3">
+                    <label for="ventaId" class="form-label">Venta (ID):</label>
+                    <input type="number" 
+                           name="ventaId"
+                           th:value="${soportePago.ventaId}"
+                           class="form-control" readonly>
+                </div>
+                -->
+
+                <!-- Botones -->
+                <div class="d-flex justify-content-center gap-2 mt-3">
+                    <a th:href="@{/soportePago}" class="btn btn-cafe w-100">Volver</a>
+                    <button type="submit" class="btn btn-cafe w-100" 
+                            th:text="${soportePago.idSoportePago == null ? 'Registrar' : 'Actualizar'}">
+                        Guardar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
