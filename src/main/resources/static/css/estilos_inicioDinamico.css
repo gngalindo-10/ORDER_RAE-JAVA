@@ -5,12 +5,6 @@ body {
     background-color: #faf7f3;
 }
 
-/* Contenedor general */
-.container {
-    display: flex;
-    height: 100vh;
-}
-
 /* Sección izquierda con imagen */
 .side-image {
     width: 45%;
