@@ -14,10 +14,34 @@
             <div class="text-center mb-3">
                 <img th:src="@{/images/logo.png}" src="/images/logo.png" alt="Logo" style="width:120px;">
             </div>
-            <h1>GESTIÓN DE PRODUCCIÓN</h1>
-            <div class="text-end">
-                <a th:href="@{/produccion/nuevo}" class="btn btn-cafe">Nueva Producción</a>
+            <h1>LISTA DE PRODUCCIÓN</h1>
+            <!-- Mensaje de éxito -->
+            <div th:if="${mensajeExito}" class="alert alert-success alert-dismissible fade show" role="alert">
+                <strong>¡Éxito!</strong> <span th:text="${mensajeExito}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
+            <!-- Barra de búsqueda y botones -->
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <form th:action="@{/produccion}" method="get" class="d-flex">
+                        <input type="text" name="termino" 
+                            class="form-control me-2" 
+                            placeholder="Buscar por código, referencia o categoría..."
+                            th:value="${termino}"/>
+                        <button type="submit" class="btn btn-cafe">Buscar</button>
+                    </form>
+                </div>
+                <div class="col-md-6 text-end">
+                    <a th:href="@{/produccion/exportar/excel(termino=${termino})}" class="btn btn-success btn-sm me-2">
+                        <i class="fas fa-file-excel"></i> Excel
+                    </a>
+                    <a th:href="@{/produccion/exportar/pdf(termino=${termino})}" class="btn btn-danger btn-sm">
+                        <i class="fas fa-file-pdf"></i> PDF
+                    </a>
+                    <a th:href="@{/produccion/nuevo}" class="btn btn-cafe ms-2">Nueva Producción</a>
+                </div>
+            </div>
+        </div>
         </div>
 
         <div class="table-responsive">
@@ -49,11 +73,11 @@
                         <td th:text="${p.materialProducto}"></td>
                         <td th:text="${p.cantidadProducto}"></td>
                         <td>
-                            <span th:switch="${p.estadoProducto}">
-                                <span th:case="'Entregado'" class="badge bg-success">Entregado</span>
-                                <span th:case="'En Fabricación'" class="badge bg-warning text-dark">En Fabricación</span>
-                                <span th:case="'Cancelado'" class="badge bg-danger">Cancelado</span>
-                                <span th:case="'Pendiente'" class="badge bg-primary">Pendiente</span>
+                            <span th:switch="${p.estadoProducto?.trim().toLowerCase()}">
+                                <span th:case="'entregado'" class="badge bg-success">Entregado</span>
+                                <span th:case="'en proceso'" class="badge bg-warning text-dark">En Proceso</span>
+                                <span th:case="'cancelado'" class="badge bg-danger">Cancelado</span>
+                                <span th:case="'pendiente'" class="badge bg-primary">Pendiente</span>
                             </span>
                         </td>
                         <td th:text="${p.usuario?.nombre + ' ' + p.usuario?.apellidos} ?: 'N/A'"></td>
