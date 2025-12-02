@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${produccion.idProduccion == null ? 'Registrar Producción' : 'Editar Producción'}">Formulario Producción</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+<body class="bg-light">
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+    <div class="card p-4 shadow-sm" style="width: 100%; max-width: 500px; background-color: #FFF9F0;">
+        <div class="text-center mb-3">
+            <img th:src="@{/images/logo.png}" src="/images/logo.png" alt="Logo de ORDER RAE" style="width:120px;">
+        </div>
+        <h2 class="text-center mb-4" th:text="${produccion.idProduccion == null ? 'Registrar Producción' : 'Editar Producción'}"></h2>
+
+        <form th:action="@{${produccion.idProduccion == null} ? '/produccion/guardar' : '/produccion/actualizar/' + ${produccion.idProduccion}}"
+                method="post">
+
+            <input type="hidden" th:if="${produccion.idProduccion != null}" th:name="idProduccion" th:value="${produccion.idProduccion}" />
+
+            <!-- Código Producto -->
+            <div class="mb-3">
+                <label for="codigoProducto" class="form-label">Código producto:</label>
+                <input type="text" id="codigoProducto" name="codigoProducto" th:value="${produccion.codigoProducto}" class="form-control" required>
+            </div>
+
+            <!-- Categoría Producto -->
+            <div class="mb-3">
+                <label for="categoriaProducto" class="form-label">Categoría producto:</label>
+                <input type="text" id="categoriaProducto" name="categoriaProducto" th:value="${produccion.categoriaProducto}" class="form-control" required>
+            </div>
+
+            <!-- Referencia Producto -->
+            <div class="mb-3">
+                <label for="referenciaProducto" class="form-label">Referencia producto:</label>
+                <input type="text" id="referenciaProducto" name="referenciaProducto" th:value="${produccion.referenciaProducto}" class="form-control" required>
+            </div>
+
+            <!-- Color Producto -->
+            <div class="mb-3">
+                <label for="colorProducto" class="form-label">Color producto:</label>
+                <input type="text" id="colorProducto" name="colorProducto" th:value="${produccion.colorProducto}" class="form-control" required>
+            </div>
+
+            <!-- Material Producto -->
+            <div class="mb-3">
+                <label for="materialProducto" class="form-label">Material producto:</label>
+                <input type="text" id="materialProducto" name="materialProducto" th:value="${produccion.materialProducto}" class="form-control" required>
+            </div>
+
+            <!-- Cantidad Producto -->
+            <div class="mb-3">
+                <label for="cantidadProducto" class="form-label">Cantidad:</label>
+                <input type="number" id="cantidadProducto" name="cantidadProducto" th:value="${produccion.cantidadProducto}" class="form-control" min="1" required>
+            </div>
+
+            <!-- Estado Producto -->
+            <div class="mb-3">
+                <label for="estadoProducto" class="form-label">Estado:</label>
+                <select id="estadoProducto" name="estadoProducto" class="form-select" required>
+                    <option value="">-- Selecciona --</option>
+                    <option value="Entregado" th:selected="${produccion.estadoProducto == 'Entregado'}">Entregado</option>
+                    <option value="Pendiente" th:selected="${produccion.estadoProducto == 'Pendiente'}">Pendiente</option>
+                    <option value="En Fabricación" th:selected="${produccion.estadoProducto == 'En Fabricación'}">En Fabricación</option>
+                    <option value="Cancelado" th:selected="${produccion.estadoProducto == 'Cancelado'}">Cancelado</option>
+                </select>
+            </div>
+
+            <!-- Usuario -->
+            <div class="mb-3">
+                <label for="usuariosId" class="form-label">Usuario:</label>
+                <select id="usuariosId" name="usuariosId" class="form-select" required>
+                    <option value="">-- Selecciona --</option>
+                    <option th:each="u : ${usuarios}" 
+                        th:value="${u.id}" 
+                        th:text="${u.nombre + ' ' + u.apellidos}"
+                        th:selected="${u.id == produccion.usuario?.id}">
+                    </option>
+                </select>
+            </div>
+
+            <!-- Producto -->
+            <div class="mb-3">
+                <label for="productoId" class="form-label">Producto:</label>
+                <select id="productoId" name="productoId" class="form-select">
+                    <option value="">-- Ninguno --</option>
+                    <option th:each="p : ${productos}" 
+                        th:value="${p.id}" 
+                        th:text="${p.referenciaProducto}"
+                        th:selected="${p.id == produccion.producto?.id}">
+                    </option>
+                </select>
+            </div>
+
+            <div class="d-flex justify-content-center gap-2 mt-3">
+                <a th:href="@{/produccion}" class="btn btn-cafe btn-md w-100">Volver</a>
+                <button type="submit" class="btn btn-cafe btn-md w-100">Guardar</button>
+            </div>
+        </form>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

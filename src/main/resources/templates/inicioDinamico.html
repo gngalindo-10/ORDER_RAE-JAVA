@@ -49,6 +49,11 @@
                     <a class="nav-link" th:href="@{/inventario}" style="color:#5D3A24;">Inventario</a>
                 </li>
 
+                <!-- PRODUCCIÓN -->
+                <li class="nav-item" th:if="${#authentication?.authenticated}">
+                    <a class="nav-link" th:href="@{/produccion}" style="color:#5D3A24;">Producción</a>
+                </li>
+
                 <!-- CATEGORÍAS -->
                 <li class="nav-item" th:if="${#authentication?.authenticated}">
                     <a class="nav-link" th:href="@{/categoria}" style="color:#5D3A24;">Categoría</a>
@@ -68,6 +73,8 @@
                 <li class="nav-item" th:if="${#authentication?.authenticated}">
                     <a class="nav-link" th:href="@{/fidelizacion}" style="color:#5D3A24;">Fidelización</a>
                 </li>
+
+                
 
             </ul>
 
