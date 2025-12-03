@@ -17,11 +17,6 @@
     <link rel="stylesheet" href="/css/estilos.css">
 </head>
 <body class="antialiased">
-    <!-- === BANNER PROMOCIONAL === -->
-    <div class="alert alert-warning text-center mb-0 py-2 fw-bold" role="alert">
-        🚚 ¡ENVÍO GRATIS en compras superiores a $1.000.000!
-    </div>
-
     <!-- Encabezado -->
     <header id="barra_superior" class="bg-white border-bottom">
         <div class="container d-flex flex-column flex-md-row justify-content-between align-items-center py-3">
@@ -33,14 +28,28 @@
             </div>
 
             <div class="botones mt-2 mt-md-0 d-flex align-items-center gap-3">
+                <!-- NOTIFICACIONES MEJORADAS (AHORA A LA IZQUIERDA DEL CARRITO) -->
+                <div class="notifications-bell position-relative" id="notifications-bell">
+                    <i class="fas fa-bell" style="font-size: 28px; color: #333;"></i>
+                    <span class="bell-badge" id="bell-badge">0</span>
+                    <div class="notifications-dropdown" id="notifications-dropdown">
+                        <div class="notifications-header">
+                            Notificaciones
+                            <a href="#" id="clear-notifications">Marcar como leídas</a>
+                        </div>
+                        <div id="notifications-list">
+                            <div class="p-3 text-center text-muted">No tienes notificaciones nuevas.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CARRITO (AHORA A LA DERECHA) -->
                 <a href="/carrito-compra" class="position-relative">
                     <img src="/images/CarritoCompra2.png" alt="Carrito" class="icono-img">
                     <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="contador-carrito">0</span>
                 </a>
-                <a href="/reportes" class="position-relative text-dark" title="Notificaciones">
-                    <i class="fas fa-bell" style="font-size: 28px;"></i>
-                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.65rem;">3</span>
-                </a>
+
+                <!-- USUARIO (último) -->
                 <div class="menu-usuario position-relative">
                     <a href="#"><img src="/images/usuario2.png" alt="Usuario" class="icono-img"></a>
                     <div class="submenu mt-1">
@@ -55,7 +64,7 @@
             <div class="container">
                 <nav class="navegacion d-flex flex-wrap justify-content-center">
                     <a href="/" class="text-dark px-3 py-1">HOME</a>
-                    <a href="/productos" class="text-dark px-3 py-1">PRODUCTOS</a>
+                    <a href="/producto" class="text-dark px-3 py-1">PRODUCTOS</a>
                     <a href="/promociones" class="text-dark px-3 py-1">PROMOCIONES</a>
                     <a href="/contacto" class="text-dark px-3 py-1">CONTACTO</a>
                     <a href="/cotiza" class="boton_rojo ms-3 px-4 py-1">COTICE AQUÍ</a>
@@ -65,10 +74,12 @@
     </header>
 
     <main class="py-5">
-        <hr class="my-0">
-
-        <div class="py-5"></div>
-
+        <div class="py-5">
+            <div class="py-4">
+                <!-- Espacio -->
+            </div>
+        </div>
+        </div>
         <!-- Slideshow -->
         <section class="container my-5">
             <h2 class="text-center mb-4 titulo-seccion">PRODUCTOS DESTACADOS</h2>
@@ -98,7 +109,6 @@
             <div class="container">
                 <h2 class="text-center mb-5 titulo-seccion">NUEVOS PRODUCTOS</h2>
                 <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4 justify-content-center">
-                    <!-- Escritorio -->
                     <div class="col">
                         <div class="card h-100 shadow-sm producto-card" data-nombre="Escritorio Moderno" data-precio="674000">
                             <img src="/images/Escritorio2.jpg" class="card-img-top" style="height: 192px; object-fit: cover;" alt="Escritorio">
@@ -113,8 +123,6 @@
                             </div>
                         </div>
                     </div>
-
-                    <!-- Sofá -->
                     <div class="col">
                         <div class="card h-100 shadow-sm producto-card" data-nombre="Sofá Fatima" data-precio="2229000">
                             <img src="/images/Sofá2.jpg" class="card-img-top" style="height: 192px; object-fit: cover;" alt="Sofá">
@@ -129,8 +137,6 @@
                             </div>
                         </div>
                     </div>
-
-                    <!-- Cama -->
                     <div class="col">
                         <div class="card h-100 shadow-sm producto-card" data-nombre="Cama Alpes" data-precio="1113000">
                             <img src="/images/Cama5.jpg" class="card-img-top" style="height: 192px; object-fit: cover;" alt="Cama">
@@ -145,8 +151,6 @@
                             </div>
                         </div>
                     </div>
-
-                    <!-- Silla -->
                     <div class="col">
                         <div class="card h-100 shadow-sm producto-card" data-nombre="Silla Poltrona" data-precio="539000">
                             <img src="/images/Silla3.jpg" class="card-img-top" style="height: 192px; object-fit: cover;" alt="Silla">
@@ -302,7 +306,6 @@
 
         let tipoActual = null;
 
-        // Abrir modal al hacer clic en "SELECCIONAR OPCIONES"
         document.querySelectorAll('.btn-opciones').forEach(btn => {
             btn.addEventListener('click', () => {
                 tipoActual = btn.dataset.tipo;
@@ -332,7 +335,6 @@
                 contenedor.appendChild(col);
             });
 
-            // Asignar eventos a botones
             contenedor.querySelectorAll('.btn-ver-detalle').forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     e.stopPropagation();
@@ -340,8 +342,7 @@
                     const tipo = btn.dataset.tipo;
                     const slug = nombre.toLowerCase()
                         .normalize('NFD').replace(/[\u0300-\u036f]/g, "")
-                        .replace(/\s+/g, '-')
-                        .replace(/[^a-z0-9-]/g, '');
+                        .replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
                     window.location.href = `/producto/${tipo}/${slug}`;
                 });
             });
@@ -351,23 +352,12 @@
                     e.stopPropagation();
                     const nombre = btn.dataset.nombre;
                     const precio = parseInt(btn.dataset.precio);
-                    
-                    // Actualizar carrito
-                    let contador = parseInt(document.getElementById('contador-carrito').textContent) || 0;
+                    let contador = parseInt(localStorage.getItem('contadorCarrito')) || 0;
                     contador++;
+                    localStorage.setItem('contadorCarrito', contador);
                     document.getElementById('contador-carrito').textContent = contador;
-                    
-                    // Notificación
-                    const notif = document.createElement('div');
-                    notif.className = 'notificacion-carrito';
-                    notif.textContent = `✅ ¡${nombre} añadido al carrito!`;
-                    document.body.appendChild(notif);
-                    setTimeout(() => notif.remove(), 2500);
-                    
-                    // Cerrar modal después de 1.2s
-                    setTimeout(() => {
-                        cerrarModalOpciones();
-                    }, 1200);
+                    guardarNotificacion(`¡${nombre} añadido al carrito!`);
+                    setTimeout(() => cerrarModalOpciones(), 1200);
                 });
             });
         }
@@ -377,11 +367,8 @@
             document.body.style.overflow = '';
         }
 
-        // Cerrar modal al hacer clic fuera
         document.getElementById('modalOpciones').addEventListener('click', (e) => {
-            if (e.target.id === 'modalOpciones') {
-                cerrarModalOpciones();
-            }
+            if (e.target.id === 'modalOpciones') cerrarModalOpciones();
         });
 
         // === SLIDESHOW ===
@@ -460,40 +447,86 @@
                 }
             });
 
-            // === CARRITO ===
-            let contador = 0;
+            // === NOTIFICACIONES AVANZADAS ===
+            let notificaciones = JSON.parse(localStorage.getItem('notificaciones')) || [];
+            const notificationsList = document.getElementById('notifications-list');
+            const bellBadge = document.getElementById('bell-badge');
+            const notificationsDropdown = document.getElementById('notifications-dropdown');
+            const notificationsBell = document.getElementById('notifications-bell');
+
+            function guardarNotificacion(mensaje, tipo = 'carrito') {
+                const notif = {
+                    id: Date.now(),
+                    mensaje,
+                    tipo,
+                    leida: false,
+                    fecha: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                };
+                notificaciones.unshift(notif);
+                localStorage.setItem('notificaciones', JSON.stringify(notificaciones));
+                actualizarNotificaciones();
+            }
+
+            function actualizarNotificaciones() {
+                const nuevas = notificaciones.filter(n => !n.leida);
+                bellBadge.textContent = nuevas.length || '';
+                bellBadge.style.display = nuevas.length ? 'block' : 'none';
+
+                if (notificaciones.length === 0) {
+                    notificationsList.innerHTML = '<div class="p-3 text-center text-muted">No tienes notificaciones nuevas.</div>';
+                    return;
+                }
+
+                notificationsList.innerHTML = notificaciones.map(n => `
+                    <div class="notification-item ${n.leida ? '' : 'new'}">
+                        <span class="notification-icon">${n.tipo === 'carrito' ? '🛒' : '📣'}</span>
+                        <div class="notification-content">
+                            <strong>${n.mensaje}</strong>
+                            <span class="notification-time">${n.fecha}</span>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            notificationsBell.addEventListener('click', (e) => {
+                e.stopPropagation();
+                notificationsDropdown.classList.toggle('show');
+                notificaciones.forEach(n => n.leida = true);
+                actualizarNotificaciones();
+                localStorage.setItem('notificaciones', JSON.stringify(notificaciones));
+            });
+
+            document.addEventListener('click', (e) => {
+                if (!notificationsBell.contains(e.target)) {
+                    notificationsDropdown.classList.remove('show');
+                }
+            });
+
+            document.getElementById('clear-notifications').addEventListener('click', (e) => {
+                e.preventDefault();
+                notificaciones = [];
+                localStorage.removeItem('notificaciones');
+                actualizarNotificaciones();
+            });
+
+            // Recuperar contador del carrito
+            let contadorCarrito = parseInt(localStorage.getItem('contadorCarrito')) || 0;
+            document.getElementById('contador-carrito').textContent = contadorCarrito;
+
+            // Botones del carrito en vista principal
             document.querySelectorAll('.btn-carrito').forEach(btn => {
                 btn.addEventListener('click', () => {
-                    contador++;
-                    document.getElementById('contador-carrito').textContent = contador;
-                    const notif = document.createElement('div');
-                    notif.className = 'notificacion-carrito';
-                    notif.textContent = '✅ ¡Añadido al carrito!';
-                    document.body.appendChild(notif);
-                    setTimeout(() => notif.remove(), 2000);
+                    contadorCarrito++;
+                    localStorage.setItem('contadorCarrito', contadorCarrito);
+                    document.getElementById('contador-carrito').textContent = contadorCarrito;
+                    const card = btn.closest('.producto-card');
+                    const nombre = card?.dataset.nombre || 'Producto';
+                    guardarNotificacion(`¡${nombre} añadido al carrito!`);
                 });
             });
 
-            // Estilo para notificación
-            if (!document.querySelector('#estilo-notif')) {
-                const style = document.createElement('style');
-                style.id = 'estilo-notif';
-                style.textContent = `
-                    .notificacion-carrito {
-                        position: fixed; top: 20px; right: 20px;
-                        background: #d4edda; color: #155724;
-                        padding: 12px 20px; border-radius: 8px;
-                        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-                        z-index: 9999; font-weight: 600;
-                        animation: slideIn 0.3s ease;
-                    }
-                    @keyframes slideIn {
-                        from { transform: translateX(100%); opacity: 0; }
-                        to { transform: translateX(0); opacity: 1; }
-                    }
-                `;
-                document.head.appendChild(style);
-            }
+            // Inicializar notificaciones
+            actualizarNotificaciones();
         });
     </script>
 </body>

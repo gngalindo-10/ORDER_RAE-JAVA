@@ -30,7 +30,7 @@
 
             <ul class="navbar-nav me-auto">
 
-                <!-- DASHBOARD: Todos los roles internos (excluye Cliente) -->
+                <!-- DASHBOARD: Todos los roles internos -->
                 <li class="nav-item" sec:authorize="!hasAuthority('ROLE_Cliente')">
                     <a class="nav-link" th:href="@{/dashboard}" style="color:#5D3A24;">Dashboard</a>
                 </li>
@@ -80,19 +80,19 @@
             <!-- DERECHA -->
             <ul class="navbar-nav">
 
-                <!-- CERRAR SESIÓN -->
-                <li class="nav-item" sec:authorize="authenticated">
-                    <a class="nav-link btn btn-cafe-outline btn-sm ms-2" th:href="@{/logout}">
-                        Cerrar sesión
-                    </a>
-                </li>
+            <!-- CERRAR SESIÓN -->
+            <li class="nav-item" sec:authorize="authenticated">
+                <a class="nav-link btn btn-cafe-outline btn-sm ms-2" th:href="@{/logout}">
+                    Cerrar sesión
+                </a>
+            </li>
 
-                <!-- INICIAR SESIÓN -->
-                <li class="nav-item" sec:authorize="!authenticated">
-                    <a class="nav-link btn btn-cafe btn-sm ms-2" th:href="@{/login}">
-                        Iniciar sesión
-                    </a>
-                </li>
+            <!-- INICIAR SESIÓN -->
+            <li class="nav-item" sec:authorize="!authenticated">
+                <a class="nav-link btn btn-cafe btn-sm ms-2" th:href="@{/login}">
+                    Iniciar sesión
+                </a>
+            </li>
 
                 <!-- REGISTRO -->
                 <li class="nav-item" sec:authorize="!authenticated">

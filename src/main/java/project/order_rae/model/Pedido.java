@@ -16,21 +16,22 @@ public class Pedido {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID_PEDIDO")
-    private Integer idPedido; 
+    private Integer idPedido;
 
     @Column(name = "Fecha_de_compra", nullable = false)
-    private LocalDate fechaCompra; 
+    private LocalDate fechaCompra;
+
     @Column(name = "Fecha_de_entrega", nullable = false)
-    private LocalDate fechaEntrega; 
+    private LocalDate fechaEntrega;
 
     @Column(name = "Metodo_pago", nullable = false)
-    private String metodoPago; // 
+    private String metodoPago;
 
     @Column(name = "Total_de_pago", nullable = false, precision = 10, scale = 2)
-    private BigDecimal totalDePago; 
+    private BigDecimal totalDePago;
 
     @Column(name = "Estado_pedido", nullable = false)
-    private String estadoPedido; 
+    private String estadoPedido;
 
     @Column(name = "Created_at", updatable = false)
     private LocalDateTime createdAt;
@@ -38,7 +39,6 @@ public class Pedido {
     @Column(name = "Updated_at")
     private LocalDateTime updatedAt;
 
-    // Auto-generar fechas
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();

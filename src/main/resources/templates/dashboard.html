@@ -3,35 +3,274 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
+    <title>Panel de Control</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Estilos personalizados -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
+    <!-- Tu CSS -->
     <link rel="stylesheet" th:href="@{/css/estilos.css}">
+    <link rel="stylesheet" th:href="@{/css/estilos_dashboard.css}">
+    
+    <style>
+        .metric-card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease;
+            height: 100%;
+        }
+        .metric-card:hover {
+            transform: translateY(-5px);
+        }
+        .metric-icon {
+            width: 56px;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            border-radius: 16px;
+        }
+        .bg-sales { background: linear-gradient(135deg, #8B5E3C, #7A4B32); }
+        .text-sales { color: #8B5E3C; }
+        .bg-products { background: linear-gradient(135deg, #28a745, #218838); }
+        .text-products { color: #28a745; }
+        .bg-clients { background: linear-gradient(135deg, #ffc107, #e0a800); }
+        .text-clients { color: #ffc107; }
+        .bg-orders { background: linear-gradient(135deg, #17a2b8, #138496); }
+        .text-orders { color: #17a2b8; }
+        
+        .section-title {
+            color: #7A4B32;
+            font-weight: 700;
+            margin: 2rem 0 1.5rem;
+            padding-bottom: 0.5rem;
+            position: relative;
+        }
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: #8B5E3C;
+            border-radius: 2px;
+        }
+        
+        #chartContainer {
+            height: 300px;
+            position: relative;
+        }
+    </style>
 </head>
-<body class="bg-efe7dd">
-
-    <!-- Incluir el menú de navegación -->
+<body>
+    
+    <!-- Menú en la parte superior -->
     <div th:replace="~{inicioDinamico :: menu}"></div>
-
-    <!-- Contenido principal -->
-    <div class="container mt-4">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card p-4 shadow-sm animate-up">
-                    <div class="text-center mb-4">
-                        <h1 class="display-5" style="color: #5D3A24;">¡Bienvenido al Dashboard!</h1>
-                        <p class="lead" style="color: #5D3A24;">Has iniciado sesión correctamente.</p>
+    
+    <!-- Contenido principal (debajo del menú) -->
+    <main class="container-fluid py-4">
+        <div class="row mb-5">
+            <div class="col-12 text-center">
+                <h1 class="titulo-seccion mb-3">Panel de Administración</h1>
+                <p class="text-muted">Gestiona tu tienda de muebles ORDER RAE</p>
+            </div>
+        </div>
+        
+        <!-- Métricas -->
+        <div class="row g-4 mb-5">
+            <div class="col-md-3">
+                <div class="card shadow-sm h-100 metric-card">
+                    <div class="card-body text-center">
+                        <div class="icono-resumen bg-primary text-white rounded-circle mx-auto mb-3">
+                            <i class="fas fa-file-invoice-dollar"></i>
+                        </div>
+                        <h5 class="card-title">Ventas</h5>
+                        <p class="display-6 fw-bold text-primary mb-0" th:text="${totalVentas} ?: '0'">0</p>
+                        <small class="text-muted">Activas</small>
                     </div>
-                    <div class="text-center">
-                        <a th:href="@{/logout}" class="btn btn-cafe-outline">Cerrar sesión</a>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card shadow-sm h-100 metric-card">
+                    <div class="card-body text-center">
+                        <div class="icono-resumen bg-success text-white rounded-circle mx-auto mb-3">
+                            <i class="fas fa-couch"></i>
+                        </div>
+                        <h5 class="card-title">Productos</h5>
+                        <p class="display-6 fw-bold text-success mb-0" th:text="${totalProductos} ?: '0'">0</p>
+                        <small class="text-muted">En catálogo</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card shadow-sm h-100 metric-card">
+                    <div class="card-body text-center">
+                        <div class="icono-resumen bg-warning text-white rounded-circle mx-auto mb-3">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h5 class="card-title">Clientes</h5>
+                        <p class="display-6 fw-bold text-warning mb-0" th:text="${totalClientes} ?: '0'">0</p>
+                        <small class="text-muted">Registrados</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card shadow-sm h-100 metric-card">
+                    <div class="card-body text-center">
+                        <div class="icono-resumen bg-info text-white rounded-circle mx-auto mb-3">
+                            <i class="fas fa-shopping-cart"></i>
+                        </div>
+                        <h5 class="card-title">Pedidos</h5>
+                        <p class="display-6 fw-bold text-info mb-0" th:text="${totalPedidos} ?: '0'">0</p>
+                        <small class="text-muted">Totales</small>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-
-    <!-- Bootstrap JS -->
+        
+        <!-- Gráfico de ventas -->
+        <div class="row mb-5">
+            <div class="col-12">
+                <h2 class="titulo-seccion mb-4">Ventas Mensuales</h2>
+                <div class="card shadow-sm border-0">
+                    <div class="card-body">
+                        <div id="chartContainer">
+                            <canvas id="salesChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Últimas ventas -->
+        <div class="row">
+            <div class="col-12">
+                <h2 class="titulo-seccion mb-4">Últimas Ventas</h2>
+                <div class="card shadow-sm border-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>ID Venta</th>
+                                    <th>Pedido</th>
+                                    <th>Fecha</th>
+                                    <th>Total</th>
+                                    <th>Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="venta : ${ultimasVentas}">
+                                    <td th:text="${venta.idVenta}">1</td>
+                                    <td th:text="'#' + ${venta.pedidoId} ?: 'N/A'">#123</td>
+                                    <td th:text="${#temporals.format(venta.fechaVenta, 'dd/MM/yyyy')}">15/05/2025</td>
+                                    <td th:text="${#numbers.formatCurrency(venta.totalVenta)}">$0</td>
+                                    <td>
+                                        <span th:class="${venta.estadoVenta == 'Pendiente' ? 'badge bg-warning' : 
+                                                        venta.estadoVenta == 'Enviado' ? 'badge bg-info' : 
+                                                        venta.estadoVenta == 'Completada' ? 'badge bg-success' : 
+                                                        venta.estadoVenta == 'Cancelada' ? 'badge bg-danger' : 
+                                                        'badge bg-secondary'}"
+                                                th:text="${venta.estadoVenta ?: 'Pendiente'}">
+                                            Pendiente
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr th:if="${ultimasVentas.empty}">
+                                    <td colspan="5" class="text-center text-muted">No hay ventas recientes</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Footer -->
+    <div th:replace="~{inicioDinamico :: footer}"></div>
+    
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script th:inline="javascript">
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('salesChart').getContext('2d');
+            const labels = /*[[${meses}]]*/ [];
+            const dataVentas = /*[[${ventas}]]*/ [];
+            
+            // Validar datos
+            if (labels.length > 0 && dataVentas.length > 0) {
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {  // ✅ CORRECCIÓN: se añade "data"
+                        labels: labels,
+                        datasets: [{
+                            label: 'Ventas (COP)',
+                            data: dataVentas, 
+                            borderColor: '#8B5E3C',
+                            backgroundColor: 'rgba(139, 94, 60, 0.1)',
+                            borderWidth: 3,
+                            tension: 0.3,
+                            fill: true,
+                            pointBackgroundColor: '#FFFFFF',
+                            pointBorderWidth: 3,
+                            pointRadius: 5,
+                            pointHoverRadius: 7
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                                titleColor: '#333',
+                                bodyColor: '#333',
+                                borderColor: '#e0d8d0',
+                                borderWidth: 1,
+                                padding: 12,
+                                callbacks: {
+                                    label: function(context) {
+                                        return new Intl.NumberFormat('es-CO', {
+                                            style: 'currency',
+                                            currency: 'COP',
+                                            minimumFractionDigits: 0
+                                        }).format(context.parsed.y);
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                grid: { color: 'rgba(0,0,0,0.05)' },
+                                ticks: {
+                                    callback: function(value) {
+                                        return value >= 1000000 
+                                            ? (value / 1000000).toFixed(1) + 'M' 
+                                            : value.toLocaleString();
+                                    },
+                                    color: '#666'
+                                }
+                            },
+                            x: {
+                                grid: { display: false },
+                                ticks: { color: '#666' }
+                            }
+                        }
+                    }
+                });
+            } else {
+                // Mostrar mensaje si no hay datos
+                const container = document.getElementById('chartContainer');
+                container.innerHTML = '<div class="text-center py-5 text-muted">No hay datos de ventas para mostrar</div>';
+            }
+        });
+    </script>
 </body>
 </html>

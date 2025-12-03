@@ -1,0 +1,86 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #faf7f3;
+}
+
+/* Sección izquierda con imagen */
+.side-image {
+    width: 45%;
+    background-color: #71492e;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.side-image img {
+    width: 90%;
+    height: auto;
+}
+
+/* Sección derecha */
+.main-content {
+    width: 55%;
+    padding: 20px;
+}
+
+/* ENCABEZADO */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+}
+
+.brand h2 {
+    margin: 0;
+    font-weight: bold;
+}
+
+/* NAV */
+.nav {
+    display: flex;
+    gap: 20px;
+}
+
+.nav a {
+    text-decoration: none;
+    color: #333;
+    font-weight: 600;
+}
+
+.nav a:hover {
+    text-decoration: underline;
+}
+
+/* USUARIO */
+.user-info {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.logout-btn {
+    background-color: #8b5a3a;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.logout-btn:hover {
+    background-color: #6d432a;
+}
+
+/* CONTENIDO */
+.content {
+    padding: 20px;
+}
+
+.content h1 {
+    color: #5c3a26;
+    font-size: 26px;
+    margin-top: 20px;
+}

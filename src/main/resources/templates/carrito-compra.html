@@ -19,24 +19,43 @@
 <body class="bg-light">
 
     <!-- Encabezado -->
-    <header id="barra_superior" class="mb-4">
+    <header id="barra_superior" class="bg-white border-bottom">
         <div class="container d-flex flex-column flex-md-row justify-content-between align-items-center py-3">
             <a href="/"><img src="/images/Logo3-orden.png" class="logo_principal" alt="Logo Orden Rae" /></a>
 
             <div class="w-100 mt-2 mt-md-0" style="max-width: 400px;">
-                <input type="text" class="form-control busqueda" placeholder="¿Qué producto deseas buscar?" />
+                <input type="text" class="busqueda form-control" id="Buscador" placeholder="¿Qué producto deseas buscar?" />
+                <div id="sugerencias-busqueda" class="list-group position-absolute w-100" style="z-index: 1000; display: none;"></div>
             </div>
 
             <div class="botones mt-2 mt-md-0 d-flex align-items-center gap-3">
-                <a href="/carro-compra" class="position-relative">
+                <!-- NOTIFICACIONES MEJORADAS (AHORA A LA IZQUIERDA DEL CARRITO) -->
+                <div class="notifications-bell position-relative" id="notifications-bell">
+                    <i class="fas fa-bell" style="font-size: 28px; color: #333;"></i>
+                    <span class="bell-badge" id="bell-badge">0</span>
+                    <div class="notifications-dropdown" id="notifications-dropdown">
+                        <div class="notifications-header">
+                            Notificaciones
+                            <a href="#" id="clear-notifications">Marcar como leídas</a>
+                        </div>
+                        <div id="notifications-list">
+                            <div class="p-3 text-center text-muted">No tienes notificaciones nuevas.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CARRITO (AHORA A LA DERECHA) -->
+                <a href="/carrito-compra" class="position-relative">
                     <img src="/images/CarritoCompra2.png" alt="Carrito" class="icono-img">
-                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">1</span>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="contador-carrito">0</span>
                 </a>
+
+                <!-- USUARIO (último) -->
                 <div class="menu-usuario position-relative">
                     <a href="#"><img src="/images/usuario2.png" alt="Usuario" class="icono-img"></a>
                     <div class="submenu mt-1">
                         <a href="/login">Iniciar sesión</a> |
-                        <a href="/register">Registrarse</a>
+                        <a href="/registro">Registrarse</a>
                     </div>
                 </div>
             </div>
@@ -46,7 +65,7 @@
             <div class="container">
                 <nav class="navegacion d-flex flex-wrap justify-content-center">
                     <a href="/" class="text-dark px-3 py-1">HOME</a>
-                    <a href="/productos" class="text-dark px-3 py-1">PRODUCTOS</a>
+                    <a href="/producto" class="text-dark px-3 py-1">PRODUCTOS</a>
                     <a href="/promociones" class="text-dark px-3 py-1">PROMOCIONES</a>
                     <a href="/contacto" class="text-dark px-3 py-1">CONTACTO</a>
                     <a href="/cotiza" class="boton_rojo ms-3 px-4 py-1">COTICE AQUÍ</a>
@@ -58,7 +77,7 @@
     <main class="container py-5">
         <div class="py-5">
             <div class="py-5">
-                <!-- Espacio superior para separar del header -->
+                <!-- Espacio -->
             </div>
         </div>
         <h1 class="titulo-seccion text-center">TU CARRITO DE COMPRAS</h1>
@@ -107,7 +126,7 @@
         <div class="bg-white rounded shadow-sm p-5 text-center d-none" id="carrito-vacio">
             <i class="fas fa-shopping-cart text-muted mb-3" style="font-size: 3rem;"></i>
             <h4 class="text-muted">Tu carrito está vacío</h4>
-            <a href="/productos" class="btn btn-primary mt-3">Ver productos</a>
+            <a href="/producto" class="btn btn-primary mt-3">Ver productos</a>
         </div>
 
         <!-- Resumen -->

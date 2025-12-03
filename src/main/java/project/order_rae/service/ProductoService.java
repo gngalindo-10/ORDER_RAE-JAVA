@@ -1,8 +1,10 @@
+// src/main/java/project/order_rae/service/ProductoService.java
 package project.order_rae.service;
 
 import project.order_rae.model.Producto;
 import project.order_rae.repository.ProductoRepository;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
@@ -27,15 +29,15 @@ public class ProductoService {
 
     public Producto actualizar(Long id, Producto p) {
         Producto existente = obtenerPorId(id);
-        
+
         existente.setCodigoProducto(p.getCodigoProducto());
         existente.setReferenciaProducto(p.getReferenciaProducto());
         existente.setColor(p.getColor());
         existente.setPrecio(p.getPrecio());
         existente.setEstadoProducto(p.getEstadoProducto());
-        existente.setUsuario(p.getUsuario());     // Asigna usuario
-        existente.setCategoria(p.getCategoria()); // Asigna categoría
-        
+        existente.setUsuario(p.getUsuario());
+        existente.setCategoria(p.getCategoria());
+
         return repo.save(existente);
     }
 
@@ -44,12 +46,17 @@ public class ProductoService {
     }
 
     public Producto obtenerPorId(Long id) {
-        return repo.findById(id).orElseThrow(() -> 
-            new RuntimeException("Producto no encontrado con ID: " + id));
+        return repo.findById(id)
+                .orElseThrow(() ->
+                        new RuntimeException("Producto no encontrado con ID: " + id));
     }
 
-    // Método corregido para reportes
     public List<Producto> findFiltered(String estado, Double precioMin, Double precioMax, String busqueda) {
         return repo.findByFilters(estado, precioMin, precioMax, busqueda);
+    }
+
+    // MÉTODO NUEVO PARA EL DASHBOARD
+    public Long contarProductos() {
+        return repo.count();
     }
 }

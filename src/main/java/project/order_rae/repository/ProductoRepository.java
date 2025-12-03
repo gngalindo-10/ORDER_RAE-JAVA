@@ -13,13 +13,12 @@ import java.util.List;
 public interface ProductoRepository extends JpaRepository<Producto, Long> {
 
     // Consulta nativa para filtrar productos
-    @Query(value = """
-        SELECT * FROM producto p 
-        WHERE (:estado IS NULL OR p.Estado_producto = :estado)
-        AND (:precioMin IS NULL OR p.Precio_producto >= :precioMin)
-        AND (:precioMax IS NULL OR p.Precio_producto <= :precioMax)
-        AND (:busqueda IS NULL OR p.Referencia_producto LIKE %:busqueda% OR p.Codigo_producto LIKE %:busqueda%)
-        """, nativeQuery = true)
+    @Query(value = "SELECT * FROM producto p \n" +
+                "WHERE (:estado IS NULL OR p.Estado_producto = :estado) \n" +
+                "AND (:precioMin IS NULL OR p.Precio_producto >= :precioMin) \n" +
+                "AND (:precioMax IS NULL OR p.Precio_producto <= :precioMax) \n" +
+                "AND (:busqueda IS NULL OR p.Referencia_producto LIKE CONCAT('%', :busqueda, '%') OR p.Codigo_producto LIKE CONCAT('%', :busqueda, '%'))",
+        nativeQuery = true)
     List<Producto> findByFilters(
         @Param("estado") String estado,
         @Param("precioMin") Double precioMin,

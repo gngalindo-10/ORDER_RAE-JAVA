@@ -62,6 +62,6 @@ public class VentaService {
         if (!ventaRepository.existsById(id)) {
             throw new RuntimeException("Venta no encontrada con ID: " + id);
         }
-        ventaRepository.deleteByIdCustom(id);
+        ventaRepository.deleteById(id);
     }
 }
