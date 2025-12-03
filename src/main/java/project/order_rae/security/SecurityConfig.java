@@ -24,11 +24,14 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler() {
+        return new CustomAuthenticationSuccessHandler();
+    }
 
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .csrf(csrf -> csrf.disable())
-
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
                     "/",
@@ -45,15 +48,13 @@ public class SecurityConfig {
                 ).permitAll()
                 .anyRequest().authenticated()
             )
-
             .formLogin(login -> login
                 .loginPage("/login")
                 .loginProcessingUrl("/login")
-                .defaultSuccessUrl("/dashboard", true)
+                .successHandler(customAuthenticationSuccessHandler()) // ← Usar el bean
                 .failureUrl("/login?error=true")
                 .permitAll()
             )
-
             .logout(logout -> logout
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/login?logout=true")

@@ -40,5 +40,6 @@ public class PageController {
     public String cotiza() {
         return "cotiza";
     }
+    
 }
 

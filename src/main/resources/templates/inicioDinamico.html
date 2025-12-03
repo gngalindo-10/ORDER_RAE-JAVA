@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+        xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <title>Menú de Navegación</title>
 
@@ -29,52 +30,50 @@
 
             <ul class="navbar-nav me-auto">
 
-                <!-- DASHBOARD -->
-                <li class="nav-item" th:if="${#authentication?.authenticated}">
+                <!-- DASHBOARD: Todos los roles internos (excluye Cliente) -->
+                <li class="nav-item" sec:authorize="!hasAuthority('ROLE_Cliente')">
                     <a class="nav-link" th:href="@{/dashboard}" style="color:#5D3A24;">Dashboard</a>
                 </li>
 
-                <!-- USUARIOS -->
-                <li class="nav-item" th:if="${#authentication?.authenticated}">
+                <!-- USUARIOS: ADMIN, Gerente, Asesor, Jefe Logístico -->
+                <li class="nav-item" sec:authorize="hasAnyAuthority('ROLE_ADMIN', 'ROLE_Gerente', 'ROLE_Asesor Comercial', 'ROLE_Jefe Logistico')">
                     <a class="nav-link" th:href="@{/usuarios}" style="color:#5D3A24;">Usuarios</a>
                 </li>
 
-                <!-- PRODUCTOS -->
-                <li class="nav-item" th:if="${#authentication?.authenticated}">
+                <!-- PRODUCTOS: Todos los roles internos -->
+                <li class="nav-item" sec:authorize="!hasAuthority('ROLE_Cliente')">
                     <a class="nav-link" th:href="@{/productos}" style="color:#5D3A24;">Productos</a>
                 </li>
 
-                <!-- INVENTARIO -->
-                <li class="nav-item" th:if="${#authentication?.authenticated}">
+                <!-- INVENTARIO: Solo ADMIN y Gerente -->
+                <li class="nav-item" sec:authorize="hasAnyAuthority('ROLE_ADMIN', 'ROLE_Gerente')">
                     <a class="nav-link" th:href="@{/inventario}" style="color:#5D3A24;">Inventario</a>
                 </li>
 
-                <!-- PRODUCCIÓN -->
-                <li class="nav-item" th:if="${#authentication?.authenticated}">
+                <!-- PRODUCCIÓN: ADMIN, Gerente, Jefe Logístico -->
+                <li class="nav-item" sec:authorize="hasAnyAuthority('ROLE_ADMIN', 'ROLE_Gerente', 'ROLE_Jefe Logistico')">
                     <a class="nav-link" th:href="@{/produccion}" style="color:#5D3A24;">Producción</a>
                 </li>
 
-                <!-- CATEGORÍAS -->
-                <li class="nav-item" th:if="${#authentication?.authenticated}">
+                <!-- CATEGORÍAS: ADMIN, Gerente, Jefe Logístico -->
+                <li class="nav-item" sec:authorize="hasAnyAuthority('ROLE_ADMIN', 'ROLE_Gerente', 'ROLE_Jefe Logistico')">
                     <a class="nav-link" th:href="@{/categoria}" style="color:#5D3A24;">Categoría</a>
                 </li>
 
-                <!-- PEDIDOS -->
-                <li class="nav-item" th:if="${#authentication?.authenticated}">
+                <!-- PEDIDOS: ADMIN, Gerente, Asesor, Jefe Logístico -->
+                <li class="nav-item" sec:authorize="hasAnyAuthority('ROLE_ADMIN', 'ROLE_Gerente', 'ROLE_Asesor Comercial', 'ROLE_Jefe Logistico')">
                     <a class="nav-link" th:href="@{/pedidos}" style="color:#5D3A24;">Pedidos</a>
                 </li>
 
-                <!-- VENTAS -->
-                <li class="nav-item" th:if="${#authentication?.authenticated}">
+                <!-- VENTAS: ADMIN, Gerente, Asesor Comercial -->
+                <li class="nav-item" sec:authorize="hasAnyAuthority('ROLE_ADMIN', 'ROLE_Gerente', 'ROLE_Asesor Comercial')">
                     <a class="nav-link" th:href="@{/ventas}" style="color:#5D3A24;">Ventas</a>
                 </li>
 
-                <!-- FIDELIZACIÓN -->
-                <li class="nav-item" th:if="${#authentication?.authenticated}">
+                <!-- FIDELIZACIÓN: ADMIN, Gerente, Asesor Comercial -->
+                <li class="nav-item" sec:authorize="hasAnyAuthority('ROLE_ADMIN', 'ROLE_Gerente', 'ROLE_Asesor Comercial')">
                     <a class="nav-link" th:href="@{/fidelizacion}" style="color:#5D3A24;">Fidelización</a>
                 </li>
-
-                
 
             </ul>
 
@@ -82,28 +81,28 @@
             <ul class="navbar-nav">
 
                 <!-- CERRAR SESIÓN -->
-                <li class="nav-item" th:if="${#authentication?.authenticated}">
+                <li class="nav-item" sec:authorize="authenticated">
                     <a class="nav-link btn btn-cafe-outline btn-sm ms-2" th:href="@{/logout}">
                         Cerrar sesión
                     </a>
                 </li>
 
                 <!-- INICIAR SESIÓN -->
-                <li class="nav-item" th:if="${#authentication == null or !#authentication.authenticated}">
+                <li class="nav-item" sec:authorize="!authenticated">
                     <a class="nav-link btn btn-cafe btn-sm ms-2" th:href="@{/login}">
                         Iniciar sesión
                     </a>
                 </li>
 
                 <!-- REGISTRO -->
-                <li class="nav-item" th:if="${#authentication == null or !#authentication.authenticated}">
+                <li class="nav-item" sec:authorize="!authenticated">
                     <a class="nav-link btn btn-cafe-outline btn-sm ms-2" th:href="@{/registro}">
                         Registrarme
                     </a>
                 </li>
 
                 <!-- NOMBRE DEL USUARIO -->
-                <li class="nav-item" th:if="${#authentication?.authenticated}">
+                <li class="nav-item" sec:authorize="authenticated">
                     <span class="nav-link disabled fw-semibold" style="color:#5D3A24;"
                             th:text="${#authentication.name}">
                     </span>
