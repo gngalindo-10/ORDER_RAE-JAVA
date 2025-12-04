@@ -6,6 +6,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import project.order_rae.model.Usuario;
 import project.order_rae.repository.UsuarioRepository;
@@ -43,23 +44,51 @@ public class UsuarioController {
     }
 
     @PostMapping("/usuarios/guardar")
-    public String guardar(@ModelAttribute Usuario usuario) {
+    public String guardar(@ModelAttribute Usuario usuario, RedirectAttributes redirectAttrs) {
         usuario.setPassword(new BCryptPasswordEncoder().encode(usuario.getPassword()));
         repo.save(usuario);
+        redirectAttrs.addFlashAttribute("mensajeExito", "Usuario registrado exitosamente.");
         return "redirect:/usuarios";
     }
 
     @GetMapping("/usuarios/editar/{id}")
     public String editar(@PathVariable Long id, Model model) {
-        model.addAttribute("usuario",
-                repo.findById(id).orElseThrow(() -> new RuntimeException("Usuario no encontrado")));
+        Usuario usuario = repo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        model.addAttribute("usuario", usuario);
         model.addAttribute("roles", rolService.listar());
         return "usuario/form";
     }
 
-    @GetMapping("/usuarios/eliminar/{id}")
-    public String eliminar(@PathVariable Long id) {
+    @PostMapping("/usuarios/actualizar/{id}")
+    public String actualizar(@PathVariable Long id, @ModelAttribute Usuario usuario, RedirectAttributes redirectAttrs) {
+        Usuario existente = repo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        existente.setNombre(usuario.getNombre());
+        existente.setApellidos(usuario.getApellidos());
+        existente.setDocumento(usuario.getDocumento());
+        existente.setCorreo(usuario.getCorreo());
+        existente.setGenero(usuario.getGenero());
+        existente.setTelefono(usuario.getTelefono());
+        existente.setEstado(usuario.getEstado());
+        existente.setRol(usuario.getRol());
+
+        // Solo encriptar si se proporciona una nueva contraseña
+        if (usuario.getPassword() != null && !usuario.getPassword().trim().isEmpty()) {
+            existente.setPassword(new BCryptPasswordEncoder().encode(usuario.getPassword()));
+        }
+
+        repo.save(existente);
+        redirectAttrs.addFlashAttribute("mensajeExito", "Usuario actualizado exitosamente.");
+        return "redirect:/usuarios";
+    }
+
+    // Eliminación segura con POST
+    @PostMapping("/usuarios/eliminar/{id}")
+    public String eliminar(@PathVariable Long id, RedirectAttributes redirectAttrs) {
         repo.deleteById(id);
+        redirectAttrs.addFlashAttribute("mensajeExito", "Usuario eliminado exitosamente.");
         return "redirect:/usuarios";
     }
 
@@ -74,7 +103,7 @@ public class UsuarioController {
     }
 
     @PostMapping("/perfil/guardar")
-    public String guardarPerfil(@ModelAttribute Usuario usuario, Authentication auth) {
+    public String guardarPerfil(@ModelAttribute Usuario usuario, Authentication auth, RedirectAttributes redirectAttrs) {
         String correoActual = auth.getName();
         Usuario actual = repo.findByCorreo(correoActual)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
@@ -88,7 +117,8 @@ public class UsuarioController {
         }
 
         repo.save(actual);
-        return "dashboardUsuarios";
+        redirectAttrs.addFlashAttribute("mensajeExito", "Perfil actualizado exitosamente.");
+        return "redirect:/perfil"; // Redirige al perfil, no al dashboard
     }
 
     @GetMapping("/dashboard/usuarios")
@@ -112,4 +142,3 @@ public class UsuarioController {
         return "dashboardUsuarios";
     }
 }
-

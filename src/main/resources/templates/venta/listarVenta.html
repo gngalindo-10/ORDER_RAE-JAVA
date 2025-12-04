@@ -15,7 +15,12 @@
             <div class="text-center mb-3">
                 <img th:src="@{/images/logo.png}" src="/images/logo.png" alt="Logo" style="width:120px;">
             </div>
-            <h1>GESTIÓN DE VENTAS</h1>
+            <h1>LISTADO DE VENTAS</h1>
+            <!-- Mensaje de éxito -->
+            <div th:if="${mensajeExito}" class="alert alert-success alert-dismissible fade show" role="alert">
+                <strong>¡Éxito!</strong> <span th:text="${mensajeExito}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
             <div class="text-end">
                 <a th:href="@{/ventas/nuevo}" class="btn btn-cafe">Nuevo Venta</a>
             </div>
@@ -45,11 +50,13 @@
                         <td>
                             <a th:href="@{/ventas/editar/{id}(id=${v.idVenta})}" 
                                 class="btn btn-sm btn-warning">Editar</a>
-                            <a th:href="@{/ventas/eliminar/{id}(id=${v.idVenta})}" 
-                                class="btn btn-sm btn-danger" 
-                                onclick="return confirm('¿Estás seguro de eliminar esta venta?');">
-                                Eliminar
-                            </a>
+                            <!-- Eliminación con POST -->
+                            <form th:action="@{/ventas/eliminar/{id}(id=${v.idVenta})}" 
+                                  method="post" 
+                                  style="display:inline;" 
+                                  onsubmit="return confirm('¿Estás seguro de eliminar esta venta?');">
+                                <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
+                            </form>
                         </td>
                     </tr>
                     <tr th:if="${#lists.isEmpty(ventas)}">

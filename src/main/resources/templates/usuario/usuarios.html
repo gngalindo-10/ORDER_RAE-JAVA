@@ -17,7 +17,14 @@
     <div class="container mt-5">
         <div class="text-center mb-4">
             <img th:src="@{/images/logo.png}" src="/images/logo.png" alt="Logo" style="width:120px;" class="mb-3">
-            <h1 class="mt-2">GESTIÓN DE USUARIOS</h1>
+            <h1 class="mt-2">LISTADO DE USUARIOS</h1>
+            
+            <!-- Mensaje de éxito -->
+            <div th:if="${mensajeExito}" class="alert alert-success alert-dismissible fade show" role="alert">
+                <strong>¡Éxito!</strong> <span th:text="${mensajeExito}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            
             <div class="text-end">
                 <a th:href="@{/usuarios/nuevo}" class="btn btn-cafe">Nuevo Usuario</a>
             </div>
@@ -50,13 +57,19 @@
                         <td th:text="${usuario.telefono}">3151204562</td>
                         <td>
                             <span th:class="${usuario.estado == 'Activo' ? 'badge bg-success' : 'badge bg-danger'}"
-                                th:text="${usuario.estado}">Activo</span>
+                                  th:text="${usuario.estado}">Activo</span>
                         </td>
                         <td th:text="${usuario.rol?.nombreRol ?: 'Sin rol'}">ADMIN</td>
                         <td>
                             <a th:href="@{/usuarios/editar/{id}(id=${usuario.id})}" class="btn btn-sm btn-warning">Editar</a>
-                            <a th:href="@{/usuarios/eliminar/{id}(id=${usuario.id})}" class="btn btn-sm btn-danger"
-                                onclick="return confirm('¿Está seguro de eliminar este usuario?')">Eliminar</a>
+                            
+                            <!-- Eliminación con POST (seguro) -->
+                            <form th:action="@{/usuarios/eliminar/{id}(id=${usuario.id})}" 
+                                  method="post" 
+                                  style="display:inline;" 
+                                  onsubmit="return confirm('¿Está seguro de eliminar este usuario?')">
+                                <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
+                            </form>
                         </td>
                     </tr>
                     <tr th:if="${#lists.isEmpty(usuarios)}">

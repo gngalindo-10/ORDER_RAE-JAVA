@@ -32,7 +32,7 @@ public class PedidoController {
     @PostMapping("/guardar")
     public String guardar(@ModelAttribute Pedido pedido, RedirectAttributes redirectAttrs) {
         pedidoService.insertar(pedido);
-        redirectAttrs.addFlashAttribute("mensaje", "Pedido creado exitosamente.");
+        redirectAttrs.addFlashAttribute("mensajeExito", "Pedido creado exitosamente.");
         return "redirect:/pedidos";
     }
 
@@ -51,16 +51,14 @@ public class PedidoController {
 
         pedido.setIdPedido(id);
         pedidoService.actualizar(id, pedido);
-        redirectAttrs.addFlashAttribute("mensaje", "Pedido actualizado exitosamente.");
+        redirectAttrs.addFlashAttribute("mensajeExito", "Pedido actualizado exitosamente.");
         return "redirect:/pedidos";
     }
 
-    @GetMapping("/eliminar/{id}")
+    @PostMapping("/eliminar/{id}")
     public String eliminar(@PathVariable Integer id, RedirectAttributes redirectAttrs) {
         pedidoService.eliminar(id);
-        redirectAttrs.addFlashAttribute("mensaje", "Pedido eliminado exitosamente.");
+        redirectAttrs.addFlashAttribute("mensajeExito", "Pedido eliminado exitosamente.");
         return "redirect:/pedidos";
-
-        
     }
 }

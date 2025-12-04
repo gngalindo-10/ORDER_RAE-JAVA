@@ -5,6 +5,7 @@ import project.order_rae.service.CategoriaService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/categoria")
@@ -29,8 +30,9 @@ public class CategoriaController {
     }
 
     @PostMapping("/guardar")
-    public String guardar(@ModelAttribute Categoria categoria) {
+    public String guardar(@ModelAttribute Categoria categoria, RedirectAttributes redirectAttrs) {
         servicio.insertar(categoria);
+        redirectAttrs.addFlashAttribute("mensajeExito", "Categoría registrada exitosamente.");
         return "redirect:/categoria";
     }
 
@@ -42,20 +44,22 @@ public class CategoriaController {
     }
 
     @PostMapping("/actualizar/{id}")
-    public String actualizar(@PathVariable Long id, @ModelAttribute Categoria categoria) {
+    public String actualizar(@PathVariable Long id, @ModelAttribute Categoria categoria, RedirectAttributes redirectAttrs) {
         servicio.actualizar(id, categoria);
+        redirectAttrs.addFlashAttribute("mensajeExito", "Categoría actualizada exitosamente.");
         return "redirect:/categoria";
     }
 
     @GetMapping("/eliminar/{id}")
-    public String eliminar(@PathVariable Long id) {
+    public String eliminar(@PathVariable Long id, RedirectAttributes redirectAttrs) {
         servicio.eliminar(id);
+        redirectAttrs.addFlashAttribute("mensajeExito", "Categoría eliminada exitosamente.");
         return "redirect:/categoria";
     }
 
     @GetMapping("/reportes")
     public String reporte(Model modelo) {
-    modelo.addAttribute("categorias", servicio.listar());
-    return "categoria/reporteCategoria";
+        modelo.addAttribute("categorias", servicio.listar());
+        return "categoria/reporteCategoria";
     }
 }

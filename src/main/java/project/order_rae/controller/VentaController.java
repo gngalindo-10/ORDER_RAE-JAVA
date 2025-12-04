@@ -10,7 +10,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/ventas")
-public class VentaController { 
+public class VentaController {
 
     private final VentaService ventaService;
 
@@ -34,7 +34,7 @@ public class VentaController {
     public String guardar(@ModelAttribute Venta venta, RedirectAttributes redirectAttrs) {
         try {
             ventaService.insertar(venta);
-            redirectAttrs.addFlashAttribute("mensaje", "Venta creada exitosamente.");
+            redirectAttrs.addFlashAttribute("mensajeExito", "Venta creada exitosamente.");
             return "redirect:/ventas";
         } catch (DataIntegrityViolationException e) {
             redirectAttrs.addFlashAttribute("error", "Error: Verifique que los IDs de Pedido y Fidelización existan.");
@@ -45,12 +45,9 @@ public class VentaController {
         }
     }
 
-    // ✅ MÉTODO EDITAR CORREGIDO
     @GetMapping("/editar/{id}")
     public String editar(@PathVariable Integer id, Model model) {
         Venta venta = ventaService.obtenerPorId(id);
-        
-        // Normalizar el estado para que coincida con las opciones del <select>
         if (venta.getEstadoVenta() != null) {
             String estado = venta.getEstadoVenta().trim();
             if ("completada".equalsIgnoreCase(estado)) {
@@ -61,7 +58,6 @@ public class VentaController {
                 venta.setEstadoVenta("Cancelada");
             }
         }
-        
         model.addAttribute("venta", venta);
         return "venta/formVenta";
     }
@@ -75,7 +71,7 @@ public class VentaController {
         try {
             venta.setIdVenta(id);
             ventaService.actualizar(id, venta);
-            redirectAttrs.addFlashAttribute("mensaje", "Venta actualizada exitosamente.");
+            redirectAttrs.addFlashAttribute("mensajeExito", "Venta actualizada exitosamente.");
             return "redirect:/ventas";
         } catch (DataIntegrityViolationException e) {
             redirectAttrs.addFlashAttribute("error", "Error: Verifique que los IDs de Pedido y Fidelización existan.");
@@ -86,11 +82,12 @@ public class VentaController {
         }
     }
 
-    @GetMapping("/eliminar/{id}")
+    // Cambiado a @PostMapping
+    @PostMapping("/eliminar/{id}")
     public String eliminar(@PathVariable Integer id, RedirectAttributes redirectAttrs) {
         try {
             ventaService.eliminar(id);
-            redirectAttrs.addFlashAttribute("mensaje", "Venta eliminada exitosamente.");
+            redirectAttrs.addFlashAttribute("mensajeExito", "Venta eliminada exitosamente.");
         } catch (Exception e) {
             redirectAttrs.addFlashAttribute("error", "No se pudo eliminar la venta: " + e.getMessage());
         }
