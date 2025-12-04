@@ -8,6 +8,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.stereotype.Controller;
+import project.order_rae.utils.PdfGenerator;
+import jakarta.servlet.http.HttpServletResponse;
+import java.util.List;
 
 @Controller
 @RequestMapping("/productos")
@@ -16,17 +19,33 @@ public class ProductoController {
     private final ProductoService servicio;
     private final UsuarioService usuarioService;
     private final CategoriaService categoriaService;
+    private final PdfGenerator pdfGenerator;
 
-    public ProductoController(ProductoService servicio, UsuarioService usuarioService, CategoriaService categoriaService) {
+    public ProductoController(ProductoService servicio,
+                          UsuarioService usuarioService,
+                          CategoriaService categoriaService,
+                          PdfGenerator pdfGenerator) {
         this.servicio = servicio;
         this.usuarioService = usuarioService;
         this.categoriaService = categoriaService;
+        this.pdfGenerator = pdfGenerator;
     }
 
+    // Método para listar con búsqueda
     @GetMapping
-    public String listar(Model model) {
-        model.addAttribute("productos", servicio.listar());
+    public String listar(@RequestParam(required = false) String termino, Model model) {
+        List<Producto> productos = servicio.buscarPorTermino(termino);
+        model.addAttribute("productos", productos);
+        model.addAttribute("termino", termino); // Para mantener el valor en el input
         return "producto/listarProducto";
+    }
+
+    // Método para generar PDF (con filtro)
+    @GetMapping("/reporte")
+    public void generarReporte(@RequestParam(required = false) String termino,
+                            HttpServletResponse response) throws Exception {
+        List<Producto> productos = servicio.buscarPorTermino(termino);
+        pdfGenerator.generarPdf("producto_reporte", productos, response);
     }
 
     @GetMapping("/nuevo")

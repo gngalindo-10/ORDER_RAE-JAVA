@@ -11,18 +11,10 @@ import java.util.List;
 
 @Repository
 public interface ProductoRepository extends JpaRepository<Producto, Long> {
-
-    // Consulta nativa para filtrar productos
-    @Query(value = "SELECT * FROM producto p \n" +
-                "WHERE (:estado IS NULL OR p.Estado_producto = :estado) \n" +
-                "AND (:precioMin IS NULL OR p.Precio_producto >= :precioMin) \n" +
-                "AND (:precioMax IS NULL OR p.Precio_producto <= :precioMax) \n" +
-                "AND (:busqueda IS NULL OR p.Referencia_producto LIKE CONCAT('%', :busqueda, '%') OR p.Codigo_producto LIKE CONCAT('%', :busqueda, '%'))",
-        nativeQuery = true)
-    List<Producto> findByFilters(
-        @Param("estado") String estado,
-        @Param("precioMin") Double precioMin,
-        @Param("precioMax") Double precioMax,
-        @Param("busqueda") String busqueda
-    );
+    
+@Query("SELECT p FROM Producto p WHERE " +
+       "LOWER(p.codigoProducto) LIKE LOWER(CONCAT('%', :termino, '%')) OR " +
+       "LOWER(p.referenciaProducto) LIKE LOWER(CONCAT('%', :termino, '%')) OR " +
+       "LOWER(p.color) LIKE LOWER(CONCAT('%', :termino, '%'))")
+List<Producto> buscarPorTermino(@Param("termino") String termino);
 }

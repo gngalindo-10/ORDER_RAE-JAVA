@@ -51,8 +51,11 @@ public class ProductoService {
                         new RuntimeException("Producto no encontrado con ID: " + id));
     }
 
-    public List<Producto> findFiltered(String estado, Double precioMin, Double precioMax, String busqueda) {
-        return repo.findByFilters(estado, precioMin, precioMax, busqueda);
+    public List<Producto> buscarPorTermino(String termino) {
+        if (termino == null || termino.trim().isEmpty()) {
+            return listar();
+        }
+        return repo.buscarPorTermino(termino.trim());
     }
 
     // MÉTODO NUEVO PARA EL DASHBOARD

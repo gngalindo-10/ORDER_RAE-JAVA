@@ -32,25 +32,8 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
 
-            <!-- Barra de búsqueda + Botones -->
-            <div class="row mb-3 mt-4">
-                <!-- BUSCADOR -->
-                <div class="col-md-6">
-                    <form th:action="@{/usuarios}" method="get" class="d-flex">
-                        <input type="text" name="termino"
-                               class="form-control me-2"
-                               placeholder="Buscar por nombre, documento, correo..."
-                               th:value="${termino}"/>
-
-                        <button type="submit" class="btn btn-cafe">Buscar</button>
-                    </form>
-                </div>
-
-                <!-- BOTONES DERECHA -->
-                <div class="col-md-6 text-end">
-                    <a th:href="@{/usuarios/reporte}" class="btn btn-danger btn-sm me-2">
-                        <i class="fas fa-file-pdf"></i> PDF
-                    </a>
+            <div class="d-flex justify-content-center mt-4">
+                <div>
 
                     <a th:href="@{/usuarios/nuevo}" class="btn btn-cafe ms-2">Nuevo Usuario</a>
                 </div>
