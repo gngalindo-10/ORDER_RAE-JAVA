@@ -29,15 +29,15 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         }
 
         String nombreRol = usuario.getRol().getNombreRol().trim();
-// Usa el nombre del rol directamente (sin convertir a mayúsculas o reemplazar espacios)
-String rolNormalizado = "ROLE_" + nombreRol; // ← ¡Clave!
+        
+        String rolNormalizado = "ROLE_" + nombreRol; 
 
-System.out.println("🔍 Rol original: [" + nombreRol + "]");
-System.out.println("🔑 Rol normalizado: [" + rolNormalizado + "]");
+        System.out.println("🔍 Rol original: [" + nombreRol + "]");
+        System.out.println("🔑 Rol normalizado: [" + rolNormalizado + "]");
 
         return User.builder()
             .username(usuario.getCorreo())
-            .password(usuario.getPassword()) // Ya está hasheada en la DB
+            .password(usuario.getPassword()) 
             .authorities(Collections.singletonList(new SimpleGrantedAuthority(rolNormalizado)))
             .build();
     }

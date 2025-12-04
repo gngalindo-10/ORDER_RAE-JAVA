@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es"
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -48,9 +50,21 @@
                     <img src="/images/CarritoCompra2.png" alt="Carrito" class="icono-img">
                     <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="contador-carrito">0</span>
                 </a>
+                
+                <!-- Usuario autenticado -->
+                <div class="menu-usuario position-relative" sec:authorize="isAuthenticated()">
+                    <a href="#" class="d-flex align-items-center text-decoration-none">
+                        <img src="/images/usuario2.png" alt="Usuario" class="icono-img">
+                        <span class="ms-2 d-none d-md-inline text-dark" sec:authentication="principal.username"></span>
+                    </a>
+                    <div class="submenu mt-1">
+                        <a href="/perfil">Mi cuenta</a> 
+                        <a href="/logout">Cerrar sesión</a> 
+                    </div>
+                </div>
 
-                <!-- USUARIO (último) -->
-                <div class="menu-usuario position-relative">
+                <!-- Usuario NO autenticado -->
+                <div class="menu-usuario position-relative" sec:authorize="!isAuthenticated()">
                     <a href="#"><img src="/images/usuario2.png" alt="Usuario" class="icono-img"></a>
                     <div class="submenu mt-1">
                         <a href="/login">Iniciar sesión</a> |
