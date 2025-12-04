@@ -32,16 +32,16 @@ public class ProduccionController {
     private PdfGenerator pdfGenerator;
 
     @GetMapping("/reporte")
-    public void generarReporte(HttpServletResponse response) throws Exception {
-        List<Produccion> producciones = produccionService.listar();
-    
+    public void generarReporte(@RequestParam(required = false) String termino, HttpServletResponse response) throws Exception {
+        List<Produccion> producciones = produccionService.buscarPorTermino(termino);
         pdfGenerator.generarPdf("produccion_reporte", producciones, response);
-        }
+    }
 
     @GetMapping
-    public String listar(Model model) {
-        List<Produccion> producciones = produccionService.listar();
+    public String listar(@RequestParam(required = false) String termino, Model model) {
+        List<Produccion> producciones = produccionService.buscarPorTermino(termino);
         model.addAttribute("producciones", producciones);
+        model.addAttribute("termino", termino); 
         return "produccion/listarProduccion";
     }
 

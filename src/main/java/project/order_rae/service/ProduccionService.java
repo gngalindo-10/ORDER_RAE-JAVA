@@ -29,4 +29,11 @@ public class ProduccionService {
     public void eliminar(Long id) {
         produccionRepository.deleteById(id);
     }
+
+    public List<Produccion> buscarPorTermino(String termino) {
+        if (termino == null || termino.trim().isEmpty()) {
+            return listar();
+        }
+        return produccionRepository.buscarPorTermino(termino.trim());
+    }
 }
