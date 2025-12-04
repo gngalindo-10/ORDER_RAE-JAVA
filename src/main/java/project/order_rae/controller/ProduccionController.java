@@ -10,6 +10,9 @@ import project.order_rae.service.ProduccionService;
 import project.order_rae.service.UsuarioService;
 import project.order_rae.service.ProductoService;
 
+import project.order_rae.utils.PdfGenerator;
+import jakarta.servlet.http.HttpServletResponse;
+
 import java.util.List;
 
 @Controller
@@ -24,6 +27,16 @@ public class ProduccionController {
 
     @Autowired
     private ProductoService productoService;
+
+    @Autowired
+    private PdfGenerator pdfGenerator;
+
+    @GetMapping("/reporte")
+    public void generarReporte(HttpServletResponse response) throws Exception {
+        List<Produccion> producciones = produccionService.listar();
+    
+        pdfGenerator.generarPdf("produccion_reporte", producciones, response);
+        }
 
     @GetMapping
     public String listar(Model model) {

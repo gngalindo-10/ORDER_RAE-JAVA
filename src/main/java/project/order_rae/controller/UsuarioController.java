@@ -11,6 +11,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import project.order_rae.model.Usuario;
 import project.order_rae.repository.UsuarioRepository;
 import project.order_rae.service.RolService;
+import jakarta.servlet.http.HttpServletResponse;
+import project.order_rae.utils.PdfGenerator;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,10 +21,19 @@ import java.util.stream.Collectors;
 public class UsuarioController {
 
     @Autowired
+    private PdfGenerator pdfGenerator;
+
+    @Autowired
     private UsuarioRepository repo;
 
     @Autowired
     private RolService rolService;
+
+    @GetMapping("/usuarios/reporte")
+    public void generarReporteUsuarios(HttpServletResponse response) throws Exception {
+        List<Usuario> usuarios = repo.findAll();
+        pdfGenerator.generarPdf("reports/usuarios_reporte", usuarios, response);
+    }
 
     @GetMapping("/home")
     public String home(Model model, Authentication auth) {

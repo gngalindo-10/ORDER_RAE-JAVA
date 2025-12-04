@@ -17,7 +17,7 @@
             <h1>LISTADO DE PRODUCCIÓN</h1>
             <!-- Mensaje de éxito -->
             <div th:if="${mensajeExito}" class="alert alert-success alert-dismissible fade show" role="alert">
-                <strong>¡Éxitosamente!</strong> <span th:text="${mensajeExito}"></span>
+                <strong>¡Éxito!</strong> <span th:text="${mensajeExito}"></span>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
             <!-- Barra de búsqueda y botones -->
@@ -32,16 +32,12 @@
                     </form>
                 </div>
                 <div class="col-md-6 text-end">
-                    <a th:href="@{/produccion/exportar/excel(termino=${termino})}" class="btn btn-success btn-sm me-2">
-                        <i class="fas fa-file-excel"></i> Excel
-                    </a>
-                    <a th:href="@{/produccion/exportar/pdf(termino=${termino})}" class="btn btn-danger btn-sm">
+                    <a th:href="@{/produccion/reporte}" class="btn btn-danger btn-sm me-2">
                         <i class="fas fa-file-pdf"></i> PDF
                     </a>
                     <a th:href="@{/produccion/nuevo}" class="btn btn-cafe ms-2">Nueva Producción</a>
                 </div>
             </div>
-        </div>
         </div>
 
         <div class="table-responsive">

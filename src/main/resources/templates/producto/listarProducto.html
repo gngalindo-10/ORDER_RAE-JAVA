@@ -56,12 +56,12 @@
                         <td th:text="${producto.usuario?.nombre + ' ' + producto.usuario?.apellidos}"></td>
                         <td th:text="${producto.categoria?.nombreCategoria}"></td>
                         <td>
+                            <div class="d-flex gap-1">
                             <a th:href="@{/productos/editar/{id}(id=${producto.id})}" class="btn btn-sm btn-warning">Editar</a>
                             
                             <!-- Eliminación con POST (seguro) -->
                             <form th:action="@{/productos/eliminar/{id}(id=${producto.id})}" 
                                   method="post" 
-                                  style="display:inline;" 
                                   onsubmit="return confirm('¿Eliminar este producto?')">
                                 <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
                             </form>
