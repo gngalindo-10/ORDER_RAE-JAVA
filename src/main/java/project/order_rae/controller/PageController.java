@@ -16,10 +16,11 @@ public class PageController {
         return "login";
     }
 
-    @GetMapping("/registro")
-    public String registro() {
-        return "registro";
-    }
+    // @GetMapping("/registro")
+    // public String registro() {
+    //     return "registro";
+    //}
+
     @GetMapping("/carrito-compra")
     public String carritoCompra() {
         return "carrito-compra";

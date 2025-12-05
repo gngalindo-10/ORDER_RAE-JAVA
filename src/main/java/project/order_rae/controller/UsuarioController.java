@@ -65,9 +65,10 @@ public class UsuarioController {
     @GetMapping("/usuarios/editar/{id}")
     public String editar(@PathVariable Long id, Model model) {
         Usuario usuario = repo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+            .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
         model.addAttribute("usuario", usuario);
         model.addAttribute("roles", rolService.listar());
+        model.addAttribute("returnUrl", "/usuarios"); // Para administradores, vuelve a la lista
         return "usuario/form";
     }
 
@@ -113,12 +114,18 @@ public class UsuarioController {
         return "usuario/form";
     }
 
+
     @PostMapping("/perfil/guardar")
-    public String guardarPerfil(@ModelAttribute Usuario usuario, Authentication auth, RedirectAttributes redirectAttrs) {
+    public String guardarPerfil(
+        @ModelAttribute Usuario usuario,
+        Authentication auth,
+        RedirectAttributes redirectAttrs) {
+
         String correoActual = auth.getName();
         Usuario actual = repo.findByCorreo(correoActual)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+            .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
+        // Actualizar datos editables
         actual.setNombre(usuario.getNombre());
         actual.setApellidos(usuario.getApellidos());
         actual.setTelefono(usuario.getTelefono());
@@ -129,7 +136,16 @@ public class UsuarioController {
 
         repo.save(actual);
         redirectAttrs.addFlashAttribute("mensajeExito", "Perfil actualizado exitosamente.");
-        return "redirect:/perfil"; // Redirige al perfil, no al dashboard
+
+        // Determinar el rol del usuario autenticado
+        String rol = actual.getRol().getNombreRol(); 
+
+        // Redirección según el rol
+        if ("Cliente".equalsIgnoreCase(rol.trim())) {
+            return "redirect:/"; 
+        } else {
+        return "redirect:/dashboard"; 
+        }
     }
 
     @GetMapping("/dashboard/usuarios")

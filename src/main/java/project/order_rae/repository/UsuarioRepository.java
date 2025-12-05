@@ -10,6 +10,10 @@ import java.util.Optional;
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 
+    boolean existsByCorreo(String correo);
+
+    boolean existsByDocumento(String documento);
+
     @Query("SELECT u FROM Usuario u JOIN FETCH u.rol WHERE u.correo = :correo")
     Optional<Usuario> findByCorreo(@Param("correo") String correo);
 }
