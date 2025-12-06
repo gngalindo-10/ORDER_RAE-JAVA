@@ -148,3 +148,9 @@ body {
   max-width: 100%;
   display: block;
 }
+
+.logo-redondeado {
+    border-radius: 20px; 
+    width: 120px;
+    height: auto;
+}

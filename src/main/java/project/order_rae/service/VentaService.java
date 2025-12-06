@@ -1,3 +1,4 @@
+// src/main/java/project/order_rae/service/VentaService.java
 package project.order_rae.service;
 
 import project.order_rae.model.Venta;
@@ -17,6 +18,7 @@ public class VentaService {
         this.ventaRepository = ventaRepository;
     }
 
+    // === Métodos existentes ===
     public List<Venta> listar() {
         return ventaRepository.findAll();
     }
@@ -27,7 +29,6 @@ public class VentaService {
     }
 
     public Venta insertar(Venta venta) {
-        // Solo validamos campos obligatorios de la propia Venta
         if (venta.getFechaVenta() == null) {
             throw new IllegalArgumentException("La fecha de venta es obligatoria.");
         }
@@ -39,8 +40,6 @@ public class VentaService {
 
     public Venta actualizar(Integer id, Venta ventaActualizada) {
         Venta ventaExistente = obtenerPorId(id);
-
-        // Solo validamos campos obligatorios
         if (ventaActualizada.getFechaVenta() == null) {
             throw new IllegalArgumentException("La fecha de venta es obligatoria.");
         }
@@ -63,5 +62,14 @@ public class VentaService {
             throw new RuntimeException("Venta no encontrada con ID: " + id);
         }
         ventaRepository.deleteById(id);
+    }
+
+    // === NUEVOS MÉTODOS PARA DASHBOARD ===
+    public long countVentasActivas() {
+        return ventaRepository.countByEstadoVenta("Activa");
+    }
+
+    public List<Venta> findTop5ByOrderByFechaVentaDesc() {
+        return ventaRepository.findTop5ByOrderByFechaVentaDesc();
     }
 }

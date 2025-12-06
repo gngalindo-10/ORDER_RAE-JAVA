@@ -15,6 +15,10 @@ public class PedidoService {
         this.pedidoRepository = pedidoRepository;
     }
 
+    public long countPedidos() {
+        return pedidoRepository.count();
+    }
+
     public List<Pedido> listar() {
         return pedidoRepository.findAll();
     }

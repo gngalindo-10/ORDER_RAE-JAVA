@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 public interface VentaRepository extends JpaRepository<Venta, Integer> {
 
-    long countByEstadoVentaNot(String estado);
+    long countByEstadoVenta(String estado); // ← Añadido
 
     @Query("SELECT v FROM Venta v ORDER BY v.fechaVenta DESC")
     List<Venta> findTop5ByOrderByFechaVentaDesc();
