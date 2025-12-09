@@ -29,7 +29,7 @@ public class DashboardService {
     public Map<String, Object> getDashboardData() {
         Map<String, Object> data = new HashMap<>();
         
-        data.put("totalVentas", ventaRepository.countByEstadoVentaNot("Cancelada"));
+        data.put("totalVentas", ventaRepository.countByEstadoVenta("COMPLETADA"));
         data.put("totalProductos", productoRepository.count());
         data.put("totalClientes", usuarioRepository.count());
         data.put("totalPedidos", pedidoRepository.count());

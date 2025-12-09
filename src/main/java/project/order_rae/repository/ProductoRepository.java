@@ -12,9 +12,14 @@ import java.util.List;
 @Repository
 public interface ProductoRepository extends JpaRepository<Producto, Long> {
     
-@Query("SELECT p FROM Producto p WHERE " +
+@Query("SELECT p FROM Producto p JOIN FETCH p.usuario u JOIN FETCH p.categoria c WHERE " +
        "LOWER(p.codigoProducto) LIKE LOWER(CONCAT('%', :termino, '%')) OR " +
        "LOWER(p.referenciaProducto) LIKE LOWER(CONCAT('%', :termino, '%')) OR " +
-       "LOWER(p.color) LIKE LOWER(CONCAT('%', :termino, '%'))")
+       "LOWER(p.color) LIKE LOWER(CONCAT('%', :termino, '%')) OR " +
+       "LOWER(p.estadoProducto) LIKE LOWER(CONCAT('%', :termino, '%')) OR " +
+       "LOWER(CAST(p.precio AS string)) LIKE LOWER(CONCAT('%', :termino, '%')) OR " +
+       "LOWER(u.nombre) LIKE LOWER(CONCAT('%', :termino, '%')) OR " +
+       "LOWER(u.apellidos) LIKE LOWER(CONCAT('%', :termino, '%')) OR " +
+       "LOWER(c.nombreCategoria) LIKE LOWER(CONCAT('%', :termino, '%'))")
 List<Producto> buscarPorTermino(@Param("termino") String termino);
 }
