@@ -32,29 +32,54 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
 
-            <!-- Barra de búsqueda + Botones -->
-            <div class="row mb-3 mt-4">
+            <!-- Barra de búsqueda y controles -->
+            <div class="row mb-4">
+                <div class="col-md-12 d-flex flex-wrap align-items-center gap-2">
 
-                <!-- BUSCADOR -->
-                <div class="col-md-6">
-                    <form th:action="@{/usuarios}" method="get" class="d-flex">
+                    <!-- Campo de búsqueda -->
+                    <form th:action="@{/usuarios}" method="get" class="d-flex flex-grow-1">
                         <input type="text" name="termino"
-                                class="form-control me-2"
-                                placeholder="Buscar por nombre, documento, correo..."
-                                th:value="${termino}"/>
-
+                            class="form-control me-1"
+                            placeholder="Buscar por nombre, documento, correo..."
+                            th:value="${termino}"
+                            style="min-width: 200px;"/>
                         <button type="submit" class="btn btn-cafe">Buscar</button>
                     </form>
-                </div>
 
-                <!-- BOTONES DERECHA -->
-                <div class="col-md-6 text-end">
-                    <a th:href="@{/usuarios/reporte}" class="btn btn-danger btn-sm me-2">
-                        <i class="fas fa-file-pdf"></i> PDF
-                    </a>
+                    <!-- Botones de filtro por estado -->
+                    <a href="/usuarios" class="btn btn-outline-secondary btn-sm">Todos</a>
+                    <a href="/usuarios?estado=Activo" class="btn btn-success btn-sm">Activos</a>
+                    <a href="/usuarios?estado=Inactivo" class="btn btn-danger btn-sm">Inactivos</a>
 
-                    <a th:href="@{/usuarios/nuevo}" class="btn btn-cafe ms-2">Nuevo Usuario</a>
+                    <!-- Filtro por rol -->
+                    <form th:action="@{/usuarios}" method="get" class="d-flex">
+                        <select name="rol" class="form-select form-select-sm me-1" style="min-width: 150px;">
+                            <option value="">Filtrar por Rol</option>
+                            <option th:each="r : ${roles}"
+                                    th:value="${r.nombreRol}"
+                                    th:text="${r.nombreRol}"
+                                    th:selected="${rolFiltro == r.nombreRol}"></option>
+                        </select>
+                        <button type="submit" class="btn btn-cafe btn-sm">Filtrar</button>
+                    </form>
+
+                    <!-- Botones de acción: PDF y Nuevo Usuario -->
+                    <div class="ms-auto d-flex gap-2">
+                        <a th:href="@{/usuarios/excel(termino=${termino}, estado=${estadoFiltro}, rol=${rolFiltro})}"
+                        class="btn btn-success btn-sm d-flex align-items-center">
+                            <i class="fas fa-file-excel me-1"></i> Excel
+                        </a>
+                        <a th:href="@{/usuarios/reporte(termino=${termino}, estado=${estadoFiltro}, rol=${rolFiltro})}"
+                        class="btn btn-danger btn-sm d-flex align-items-center">
+                            <i class="fas fa-file-pdf me-1"></i> PDF
+                        </a>
+                        <a th:href="@{/usuarios/nuevo}" class="btn btn-cafe">
+                            Nuevo Usuario
+                        </a>
+                    </div>
+
                 </div>
+            </div>
 
             </div>
         </div>

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import project.order_rae.model.Fidelizacion;
 import project.order_rae.model.Pedido;
 import project.order_rae.model.Produccion;
+import project.order_rae.model.Usuario;
 import project.order_rae.model.Venta;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -186,4 +187,39 @@ public class ExcelGenerator {
             workbook.write(response.getOutputStream());
         }
     }
+    
+        public void generarExcelUsuarios(List<Usuario> datos, HttpServletResponse response) throws IOException {
+            response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            response.setHeader("Content-Disposition", "attachment; filename=usuarios_" +
+                    LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss")) + ".xlsx");
+
+            try (Workbook workbook = new XSSFWorkbook()) {
+                Sheet sheet = workbook.createSheet("Usuarios");
+
+                Row header = sheet.createRow(0);
+                String[] cols = {"ID", "Nombres", "Apellidos", "Documento", "Correo", "Género", "Teléfono", "Estado", "Rol"};
+                CellStyle headerStyle = createHeaderStyle(workbook);
+                for (int i = 0; i < cols.length; i++) {
+                    header.createCell(i).setCellValue(cols[i]);
+                    header.getCell(i).setCellStyle(headerStyle);
+                }
+
+                int rowIdx = 1;
+                for (Usuario u : datos) {
+                    Row row = sheet.createRow(rowIdx++);
+                    row.createCell(0).setCellValue(u.getId() != null ? u.getId() : 0L);
+                    row.createCell(1).setCellValue(u.getNombre() != null ? u.getNombre() : "");
+                    row.createCell(2).setCellValue(u.getApellidos() != null ? u.getApellidos() : "");
+                    row.createCell(3).setCellValue(u.getDocumento() != null ? u.getDocumento() : "");
+                    row.createCell(4).setCellValue(u.getCorreo() != null ? u.getCorreo() : "");
+                    row.createCell(5).setCellValue(u.getGenero() != null ? u.getGenero() : "");
+                    row.createCell(6).setCellValue(u.getTelefono() != null ? u.getTelefono() : "");
+                    row.createCell(7).setCellValue(u.getEstado() != null ? u.getEstado() : "");
+                    row.createCell(8).setCellValue(u.getRol() != null ? u.getRol().getNombreRol() : "");
+                }
+
+                for (int i = 0; i < cols.length; i++) sheet.autoSizeColumn(i);
+                workbook.write(response.getOutputStream());
+            }
+        }
 }

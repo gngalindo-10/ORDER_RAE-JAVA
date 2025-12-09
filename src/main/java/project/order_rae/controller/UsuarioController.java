@@ -11,7 +11,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import project.order_rae.model.Usuario;
 import project.order_rae.repository.UsuarioRepository;
 import project.order_rae.service.RolService;
+import project.order_rae.service.UsuarioService;
 import jakarta.servlet.http.HttpServletResponse;
+import project.order_rae.utils.ExcelGenerator;
 import project.order_rae.utils.PdfGenerator;
 
 import java.util.List;
@@ -24,16 +26,17 @@ public class UsuarioController {
     private PdfGenerator pdfGenerator;
 
     @Autowired
+    private ExcelGenerator excelGenerator;
+
+    @Autowired
     private UsuarioRepository repo;
 
     @Autowired
     private RolService rolService;
 
-    @GetMapping("/usuarios/reporte")
-    public void generarReporteUsuarios(HttpServletResponse response) throws Exception {
-        List<Usuario> usuarios = repo.findAll();
-        pdfGenerator.generarPdf("reports/usuarios_reporte", usuarios, response);
-    }
+    @Autowired
+    private UsuarioService usuarioService;
+
 
     @GetMapping("/home")
     public String home(Model model, Authentication auth) {
@@ -42,8 +45,29 @@ public class UsuarioController {
     }
 
     @GetMapping("/usuarios")
-    public String listar(Model model) {
-        model.addAttribute("usuarios", repo.findAll());
+    public String listar(
+            @RequestParam(required = false) String termino,
+            @RequestParam(required = false) String estado,
+            @RequestParam(required = false) String rol,
+            Model model) {
+
+        List<Usuario> usuarios;
+
+        if (estado != null && !estado.trim().isEmpty()) {
+            usuarios = usuarioService.findByEstado(estado.trim());
+            model.addAttribute("estadoFiltro", estado.trim());
+        } else if (rol != null && !rol.trim().isEmpty()) {
+            usuarios = usuarioService.findByRol(rol.trim());
+            model.addAttribute("rolFiltro", rol.trim());
+        } else if (termino != null && !termino.trim().isEmpty()) {
+            usuarios = usuarioService.buscarPorTermino(termino.trim());
+            model.addAttribute("termino", termino.trim());
+        } else {
+            usuarios = usuarioService.listar();
+        }
+
+        model.addAttribute("usuarios", usuarios);
+        model.addAttribute("roles", rolService.listar());
         return "usuario/usuarios";
     }
 
@@ -52,6 +76,43 @@ public class UsuarioController {
         model.addAttribute("usuario", new Usuario());
         model.addAttribute("roles", rolService.listar());
         return "usuario/form";
+    }
+
+    // Pdf con filtros
+    @GetMapping("/usuarios/reporte")
+    public void generarReporteUsuarios(
+            @RequestParam(required = false) String termino,
+            @RequestParam(required = false) String estado,
+            @RequestParam(required = false) String rol,
+            HttpServletResponse response) throws Exception {
+
+        List<Usuario> usuarios = filtrarUsuarios(termino, estado, rol);
+        pdfGenerator.generarPdf("reports/usuarios_reporte", usuarios, response);
+    }
+
+    // Excel con filtros
+    @GetMapping("/usuarios/excel")
+    public void exportarExcel(
+            @RequestParam(required = false) String termino,
+            @RequestParam(required = false) String estado,
+            @RequestParam(required = false) String rol,
+            HttpServletResponse response) throws Exception {
+
+        List<Usuario> usuarios = filtrarUsuarios(termino, estado, rol);
+        excelGenerator.generarExcelUsuarios(usuarios, response);
+    }
+
+    // MÉTODO AUXILIAR PARA FILTRAR (reutiliza la lógica)
+    private List<Usuario> filtrarUsuarios(String termino, String estado, String rol) {
+        if (estado != null && !estado.trim().isEmpty()) {
+            return usuarioService.findByEstado(estado.trim());
+        } else if (rol != null && !rol.trim().isEmpty()) {
+            return usuarioService.findByRol(rol.trim());
+        } else if (termino != null && !termino.trim().isEmpty()) {
+            return usuarioService.buscarPorTermino(termino.trim());
+        } else {
+            return usuarioService.listar();
+        }
     }
 
     @PostMapping("/usuarios/guardar")

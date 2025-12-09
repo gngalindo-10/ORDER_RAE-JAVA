@@ -1,4 +1,3 @@
-// src/main/java/project/order_rae/service/UsuarioService.java
 package project.order_rae.service;
 
 import project.order_rae.model.Usuario;
@@ -41,5 +40,20 @@ public class UsuarioService {
     // MÉTODO NUEVO PARA EL DASHBOARD
     public Long contarUsuarios() {
         return usuarioRepository.count();
+    }
+
+    public List<Usuario> findByEstado(String estado) {
+        return usuarioRepository.findByEstadoIgnoreCase(estado);
+    }
+
+    public List<Usuario> findByRol(String rol) {
+        return usuarioRepository.findByRolNombre(rol);
+    }
+
+    public List<Usuario> buscarPorTermino(String termino) {
+        if (termino == null || termino.trim().isEmpty()) {
+            return listar();
+        }
+        return usuarioRepository.buscarPorTermino(termino.trim());
     }
 }
