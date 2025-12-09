@@ -3,14 +3,27 @@ package project.order_rae.controller;
 import project.order_rae.model.Fidelizacion;
 import project.order_rae.service.FidelizacionService;
 import project.order_rae.service.UsuarioService;
+import project.order_rae.utils.ExcelGenerator;
+import project.order_rae.utils.PdfGenerator;
+
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import jakarta.servlet.http.HttpServletResponse;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 @Controller
 @RequestMapping("/fidelizacion")
 public class FidelizacionController {
+
+    @Autowired
+    private PdfGenerator pdfGenerator;
+
+    @Autowired
+    private ExcelGenerator excelGenerator;
 
     private final FidelizacionService servicio;
     private final UsuarioService usuarioService;
@@ -21,8 +34,10 @@ public class FidelizacionController {
     }
 
     @GetMapping
-    public String listar(Model model) {
-        model.addAttribute("fidelizaciones", servicio.listar());
+    public String listar(@RequestParam(required = false) String termino, Model model) {
+        var fidelizaciones = servicio.buscarPorTermino(termino);
+        model.addAttribute("fidelizaciones", fidelizaciones);
+        model.addAttribute("termino", termino);
         return "fidelizacion/listarFidelizacion";
     }
 
@@ -31,6 +46,18 @@ public class FidelizacionController {
         modelo.addAttribute("fidelizacion", new Fidelizacion());
         modelo.addAttribute("usuarios", usuarioService.listar());
         return "fidelizacion/formFidelizacion";
+    }
+
+    @GetMapping("/reporte")
+    public void generarReporte(@RequestParam(required = false) String termino, HttpServletResponse response) throws Exception {
+        var fidelizaciones = servicio.buscarPorTermino(termino);
+        pdfGenerator.generarPdf("fidelizacion_reporte", fidelizaciones, response);
+    }
+
+    @GetMapping("/excel")
+    public void exportarExcel(@RequestParam(required = false) String termino, HttpServletResponse response) throws Exception {
+        var fidelizaciones = servicio.buscarPorTermino(termino);
+        excelGenerator.generarExcelFidelizacion(fidelizaciones, response);
     }
 
     @PostMapping("/guardar")

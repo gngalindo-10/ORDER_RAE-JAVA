@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import java.util.List;
 
 @Controller
 @RequestMapping("/categoria")
@@ -18,8 +19,27 @@ public class CategoriaController {
     }
 
     @GetMapping
-    public String listar(Model modelo) {
-        modelo.addAttribute("categorias", servicio.listar());
+    public String listar(
+            @RequestParam(required = false) String termino,
+            @RequestParam(required = false) String estado,
+            Model modelo) {
+
+        List<Categoria> categorias;
+
+        if (estado != null && !estado.trim().isEmpty()) {
+            // Filtro por estado (activo/inactivo)
+            categorias = servicio.findByEstado(estado.trim());
+            modelo.addAttribute("estadoFiltro", estado.trim());
+        } else if (termino != null && !termino.trim().isEmpty()) {
+            // Búsqueda general
+            categorias = servicio.buscarPorTermino(termino.trim());
+            modelo.addAttribute("termino", termino.trim());
+        } else {
+            // Mostrar todas
+            categorias = servicio.listar();
+        }
+
+        modelo.addAttribute("categorias", categorias);
         return "categoria/listarCategoria";
     }
 

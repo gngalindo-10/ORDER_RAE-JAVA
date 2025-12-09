@@ -37,4 +37,15 @@ public class CategoriaService {
         return repo.findById(id)
             .orElseThrow(() -> new RuntimeException("Categoría no encontrada con ID: " + id));
     }
+
+    public List<Categoria> findByEstado(String estado) {
+        return repo.findByEstadoCategoriaIgnoreCase(estado);
+    }
+    
+    public List<Categoria> buscarPorTermino(String termino) {
+        if (termino == null || termino.trim().isEmpty()) {
+            return listar();
+        }
+        return repo.buscarPorTermino(termino.trim());
+    }
 }

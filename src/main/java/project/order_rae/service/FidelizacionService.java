@@ -21,7 +21,7 @@ public class FidelizacionService {
 
     // Insertar nueva fidelización
     public Fidelizacion insertar(Fidelizacion f) {
-        if (f.getUsuario() == null) { // ✅ Ahora es "usuario", no "cliente"
+        if (f.getUsuario() == null) { // Ahora es "usuario", no "cliente"
             throw new RuntimeException("El usuario es obligatorio");
         }
         return repo.save(f);
@@ -34,7 +34,7 @@ public class FidelizacionService {
         existente.setFechaFidelizacion(f.getFechaFidelizacion());
         existente.setPuntosAcumulados(f.getPuntosAcumulados());
         existente.setNivelFidelizacion(f.getNivelFidelizacion());
-        existente.setUsuario(f.getUsuario()); // ✅ Asigna usuario
+        existente.setUsuario(f.getUsuario());
 
         return repo.save(existente);
     }
@@ -57,5 +57,12 @@ public class FidelizacionService {
 
     public List<Fidelizacion> findByPuntosRange(Integer min, Integer max) {
         return repo.findByPuntosAcumuladosBetween(min, max);
+    }
+
+    public List<Fidelizacion> buscarPorTermino(String termino) {
+        if (termino == null || termino.trim().isEmpty()) {
+            return listar();
+        }
+        return repo.buscarPorTermino(termino.trim());
     }
 }

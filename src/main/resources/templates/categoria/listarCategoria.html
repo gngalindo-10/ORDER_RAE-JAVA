@@ -23,8 +23,26 @@
                 <strong>¡Éxito!</strong> <span th:text="${mensajeExito}"></span>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
-            <div class="text-end">
-                <a th:href="@{/categoria/nuevo}" class="btn btn-cafe">Nueva Categoría</a>
+            <!-- Filtros y búsqueda -->
+            <div class="row mb-3">
+                <!-- Búsqueda general -->
+                <div class="col-md-6">
+                    <form th:action="@{/categoria}" method="get" class="d-flex">
+                        <input type="text" name="termino"
+                            class="form-control me-2"
+                            placeholder="Buscar por ID, nombre o estado..."
+                            th:value="${termino}"/>
+                        <button type="submit" class="btn btn-cafe">Buscar</button>
+                    </form>
+                </div>
+
+                <!-- Filtros rápidos -->
+                <div class="col-md-6 text-end">
+                    <a th:href="@{/categoria}" class="btn btn-outline-secondary btn-sm me-1">Todas</a>
+                    <a th:href="@{/categoria(estado='activo')}" class="btn btn-success btn-sm me-1">Activas</a>
+                    <a th:href="@{/categoria(estado='inactivo')}" class="btn btn-danger btn-sm me-1">Inactivas</a>
+                    <a th:href="@{/categoria/nuevo}" class="btn btn-cafe ms-2">Nueva Categoría</a>
+                </div>
             </div>
         </div>
 
