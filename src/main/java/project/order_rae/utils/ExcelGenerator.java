@@ -1,0 +1,82 @@
+package project.order_rae.utils;
+
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.stereotype.Component;
+
+import project.order_rae.model.Produccion;
+import jakarta.servlet.http.HttpServletResponse;
+
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+
+@Component 
+public class ExcelGenerator {
+
+    public void generarExcelProduccion(List<Produccion> datos, HttpServletResponse response) throws IOException {
+        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        response.setHeader("Content-Disposition", "attachment; filename=produccion_" +
+                LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss")) + ".xlsx");
+
+        try (Workbook workbook = new XSSFWorkbook()) {
+            Sheet sheet = workbook.createSheet("Producción");
+
+            // Encabezados
+            Row headerRow = sheet.createRow(0);
+            String[] headers = {
+                "ID", "Código", "Categoría", "Referencia", "Color", "Material", "Cantidad", "Estado", "Usuario"
+            };
+            for (int i = 0; i < headers.length; i++) {
+                Cell cell = headerRow.createCell(i);
+                cell.setCellValue(headers[i]);
+                cell.setCellStyle(createHeaderStyle(workbook));
+            }
+
+            // Datos
+            int rowNum = 1;
+            for (Produccion produccion : datos) {
+                Row row = sheet.createRow(rowNum++);
+                row.createCell(0).setCellValue(produccion.getIdProduccion());
+                row.createCell(1).setCellValue(produccion.getCodigoProducto());
+                row.createCell(2).setCellValue(produccion.getCategoriaProducto());
+                row.createCell(3).setCellValue(produccion.getReferenciaProducto());
+                row.createCell(4).setCellValue(produccion.getColorProducto());
+                row.createCell(5).setCellValue(produccion.getMaterialProducto());
+                row.createCell(6).setCellValue(produccion.getCantidadProducto() != null ? produccion.getCantidadProducto() : 0);
+
+                String estado = produccion.getEstadoProducto() != null ? produccion.getEstadoProducto() : "";
+                row.createCell(7).setCellValue(estado);
+
+                String usuario = "";
+                if (produccion.getUsuario() != null) {
+                    usuario = produccion.getUsuario().getNombre() + " " + produccion.getUsuario().getApellidos();
+                }
+                row.createCell(8).setCellValue(usuario);
+            }
+
+            // Ajustar ancho de columnas
+            for (int i = 0; i < headers.length; i++) {
+                sheet.autoSizeColumn(i);
+            }
+
+            workbook.write(response.getOutputStream());
+        }
+    }
+
+    private CellStyle createHeaderStyle(Workbook workbook) {
+        CellStyle style = workbook.createCellStyle();
+        Font font = workbook.createFont();
+        font.setBold(true);
+        font.setColor(IndexedColors.WHITE.getIndex());
+        style.setFont(font);
+        style.setFillForegroundColor(IndexedColors.DARK_BLUE.getIndex());
+        style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        style.setBorderTop(BorderStyle.THIN);
+        style.setBorderBottom(BorderStyle.THIN);
+        style.setBorderLeft(BorderStyle.THIN);
+        style.setBorderRight(BorderStyle.THIN);
+        return style;
+    }
+}

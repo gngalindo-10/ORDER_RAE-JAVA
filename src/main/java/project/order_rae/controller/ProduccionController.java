@@ -9,7 +9,7 @@ import project.order_rae.model.Produccion;
 import project.order_rae.service.ProduccionService;
 import project.order_rae.service.UsuarioService;
 import project.order_rae.service.ProductoService;
-
+import project.order_rae.utils.ExcelGenerator;
 import project.order_rae.utils.PdfGenerator;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -31,10 +31,19 @@ public class ProduccionController {
     @Autowired
     private PdfGenerator pdfGenerator;
 
+    @Autowired
+    private ExcelGenerator excelGenerator;
+
     @GetMapping("/reporte")
     public void generarReporte(@RequestParam(required = false) String termino, HttpServletResponse response) throws Exception {
         List<Produccion> producciones = produccionService.buscarPorTermino(termino);
         pdfGenerator.generarPdf("produccion_reporte", producciones, response);
+    }
+
+    @GetMapping("/excel")
+    public void exportarProduccionExcel(@RequestParam(required = false) String termino, HttpServletResponse response) throws Exception {
+        List<Produccion> producciones = produccionService.buscarPorTermino(termino);
+        excelGenerator.generarExcelProduccion(producciones, response);
     }
 
     @GetMapping
