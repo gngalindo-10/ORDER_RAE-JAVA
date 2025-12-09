@@ -50,4 +50,11 @@ public class PedidoService {
         }
         pedidoRepository.deleteById(id);
     }
+
+    public List<Pedido> buscarPorTermino(String termino) {
+        if (termino == null || termino.trim().isEmpty()) {
+            return listar();
+        }
+        return pedidoRepository.buscarPorTermino(termino.trim());
+    }
 }

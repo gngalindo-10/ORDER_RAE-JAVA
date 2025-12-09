@@ -26,10 +26,9 @@
                 <label for="fechaCompra" class="form-label">Fecha de compra:</label>
                 <input type="date"id="fechaCompra" name="fechaCompra"
                 th:value="${#temporals.format(pedido.fechaCompra, 'yyyy-MM-dd')}"class="form-control" required>
-                required>
             </div>
 
-<!-- Fecha de entrega -->
+                <!-- Fecha de entrega -->
             <div class="mb-3">
                 <label for="fechaEntrega" class="form-label">Fecha de entrega:</label>
                 <input type="date"id="fechaEntrega"name="fechaEntrega"

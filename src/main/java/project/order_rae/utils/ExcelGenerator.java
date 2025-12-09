@@ -4,6 +4,7 @@ import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Component;
 
+import project.order_rae.model.Pedido;
 import project.order_rae.model.Produccion;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -78,5 +79,44 @@ public class ExcelGenerator {
         style.setBorderLeft(BorderStyle.THIN);
         style.setBorderRight(BorderStyle.THIN);
         return style;
+    }
+
+        public void generarExcelPedidos(List<Pedido> datos, HttpServletResponse response) throws IOException {
+        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        response.setHeader("Content-Disposition", "attachment; filename=pedidos_" +
+                LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss")) + ".xlsx");
+
+        try (Workbook workbook = new XSSFWorkbook()) {
+            Sheet sheet = workbook.createSheet("Pedidos");
+
+            // Encabezados
+            Row headerRow = sheet.createRow(0);
+            String[] headers = {
+                "ID", "Fecha Compra", "Fecha Entrega", "Método Pago", "Total Pago", "Estado Pedido"
+            };
+            for (int i = 0; i < headers.length; i++) {
+                Cell cell = headerRow.createCell(i);
+                cell.setCellValue(headers[i]);
+                cell.setCellStyle(createHeaderStyle(workbook));
+            }
+
+            // Datos
+            int rowNum = 1;
+            for (Pedido pedido : datos) {
+                Row row = sheet.createRow(rowNum++);
+                row.createCell(0).setCellValue(pedido.getIdPedido());
+                row.createCell(1).setCellValue(pedido.getFechaCompra() != null ? pedido.getFechaCompra().toString() : "");
+                row.createCell(2).setCellValue(pedido.getFechaEntrega() != null ? pedido.getFechaEntrega().toString() : "");
+                row.createCell(3).setCellValue(pedido.getMetodoPago() != null ? pedido.getMetodoPago() : "");
+                row.createCell(4).setCellValue(pedido.getTotalDePago() != null ? pedido.getTotalDePago().doubleValue() : 0.0);
+                row.createCell(5).setCellValue(pedido.getEstadoPedido() != null ? pedido.getEstadoPedido() : "");
+            }
+
+            for (int i = 0; i < headers.length; i++) {
+                sheet.autoSizeColumn(i);
+            }
+
+            workbook.write(response.getOutputStream());
+        }
     }
 }

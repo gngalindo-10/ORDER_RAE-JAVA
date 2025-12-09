@@ -2,14 +2,28 @@ package project.order_rae.controller;
 
 import project.order_rae.model.Pedido;
 import project.order_rae.service.PedidoService;
+import project.order_rae.utils.ExcelGenerator;
+import project.order_rae.utils.PdfGenerator;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import jakarta.servlet.http.HttpServletResponse;
+
 @Controller
 @RequestMapping("/pedidos")
 public class PedidoController {
+
+    @Autowired
+    private PdfGenerator pdfGenerator;
+
+    @Autowired
+    private ExcelGenerator excelGenerator;
 
     private final PedidoService pedidoService;
 
@@ -18,8 +32,10 @@ public class PedidoController {
     }
 
     @GetMapping
-    public String listar(Model model) {
-        model.addAttribute("pedidos", pedidoService.listar());
+    public String listar(@RequestParam(required = false) String termino, Model model) {
+        List<Pedido> pedidos = pedidoService.buscarPorTermino(termino);
+        model.addAttribute("pedidos", pedidos);
+        model.addAttribute("termino", termino);
         return "pedido/listarPedido";
     }
 
@@ -60,5 +76,17 @@ public class PedidoController {
         pedidoService.eliminar(id);
         redirectAttrs.addFlashAttribute("mensajeExito", "Pedido eliminado exitosamente.");
         return "redirect:/pedidos";
+    }
+
+    @GetMapping("/reporte")
+    public void generarReporte(@RequestParam(required = false) String termino, HttpServletResponse response) throws Exception {
+        List<Pedido> pedidos = pedidoService.buscarPorTermino(termino);
+        pdfGenerator.generarPdf("pedido_reporte", pedidos, response);
+    }
+
+    @GetMapping("/excel")
+    public void exportarPedidosExcel(@RequestParam(required = false) String termino, HttpServletResponse response) throws Exception {
+        List<Pedido> pedidos = pedidoService.buscarPorTermino(termino);
+        excelGenerator.generarExcelPedidos(pedidos, response);
     }
 }
