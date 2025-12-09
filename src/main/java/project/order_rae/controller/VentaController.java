@@ -2,15 +2,27 @@ package project.order_rae.controller;
 
 import project.order_rae.model.Venta;
 import project.order_rae.service.VentaService;
+import project.order_rae.utils.ExcelGenerator;
+import project.order_rae.utils.PdfGenerator;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import jakarta.servlet.http.HttpServletResponse;
+
 @Controller
 @RequestMapping("/ventas")
 public class VentaController {
+
+    @Autowired
+    private PdfGenerator pdfGenerator;
+
+    @Autowired
+    private ExcelGenerator excelGenerator;
 
     private final VentaService ventaService;
 
@@ -19,8 +31,10 @@ public class VentaController {
     }
 
     @GetMapping
-    public String listar(Model model) {
-        model.addAttribute("ventas", ventaService.listar());
+    public String listar(@RequestParam(required = false) String termino, Model model) {
+        var ventas = ventaService.buscarPorTermino(termino);
+        model.addAttribute("ventas", ventas);
+        model.addAttribute("termino", termino);
         return "venta/listarVenta";
     }
 
@@ -60,6 +74,18 @@ public class VentaController {
         }
         model.addAttribute("venta", venta);
         return "venta/formVenta";
+    }
+
+    @GetMapping("/reporte")
+    public void generarReporte(@RequestParam(required = false) String termino, HttpServletResponse response) throws Exception {
+        var ventas = ventaService.buscarPorTermino(termino);
+        pdfGenerator.generarPdf("venta_reporte", ventas, response);
+    }
+
+    @GetMapping("/excel")
+    public void exportarExcel(@RequestParam(required = false) String termino, HttpServletResponse response) throws Exception {
+        var ventas = ventaService.buscarPorTermino(termino);
+        excelGenerator.generarExcelVentas(ventas, response);
     }
 
     @PostMapping("/actualizar/{id}")

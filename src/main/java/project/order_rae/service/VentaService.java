@@ -1,4 +1,3 @@
-// src/main/java/project/order_rae/service/VentaService.java
 package project.order_rae.service;
 
 import project.order_rae.model.Venta;
@@ -18,7 +17,7 @@ public class VentaService {
         this.ventaRepository = ventaRepository;
     }
 
-    // === Métodos existentes ===
+    // Métodos existentes
     public List<Venta> listar() {
         return ventaRepository.findAll();
     }
@@ -64,12 +63,19 @@ public class VentaService {
         ventaRepository.deleteById(id);
     }
 
-    // === NUEVOS MÉTODOS PARA DASHBOARD ===
+    // NUEVOS MÉTODOS PARA DASHBOARD
     public long countVentasActivas() {
         return ventaRepository.countByEstadoVenta("Activa");
     }
 
     public List<Venta> findTop5ByOrderByFechaVentaDesc() {
         return ventaRepository.findTop5ByOrderByFechaVentaDesc();
+    }
+
+    public List<Venta> buscarPorTermino(String termino) {
+        if (termino == null || termino.trim().isEmpty()) {
+            return listar();
+        }
+        return ventaRepository.buscarPorTermino(termino.trim());
     }
 }

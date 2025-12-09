@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import project.order_rae.model.Pedido;
 import project.order_rae.model.Produccion;
+import project.order_rae.model.Venta;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
@@ -116,6 +117,36 @@ public class ExcelGenerator {
                 sheet.autoSizeColumn(i);
             }
 
+            workbook.write(response.getOutputStream());
+        }
+    }
+
+        public void generarExcelVentas(List<Venta> datos, HttpServletResponse response) throws IOException {
+        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        response.setHeader("Content-Disposition", "attachment; filename=ventas_" + 
+                LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss")) + ".xlsx");
+
+        try (Workbook workbook = new XSSFWorkbook()) {
+            Sheet sheet = workbook.createSheet("Ventas");
+            Row header = sheet.createRow(0);
+            String[] cols = {"ID", "Fecha Venta", "Total Venta", "Estado", "ID Pedido", "ID Fidelización"};
+            for (int i = 0; i < cols.length; i++) {
+                header.createCell(i).setCellValue(cols[i]);
+                header.getCell(i).setCellStyle(createHeaderStyle(workbook));
+            }
+
+            int rowIdx = 1;
+            for (Venta v : datos) {
+                Row row = sheet.createRow(rowIdx++);
+                row.createCell(0).setCellValue(v.getIdVenta());
+                row.createCell(1).setCellValue(v.getFechaVenta() != null ? v.getFechaVenta().toString() : "");
+                row.createCell(2).setCellValue(v.getTotalVenta() != null ? v.getTotalVenta().doubleValue() : 0.0);
+                row.createCell(3).setCellValue(v.getEstadoVenta() != null ? v.getEstadoVenta() : "");
+                row.createCell(4).setCellValue(v.getPedidoId() != null ? v.getPedidoId() : 0);
+                row.createCell(5).setCellValue(v.getFidelizacionId() != null ? v.getFidelizacionId() : 0);
+            }
+
+            for (int i = 0; i < cols.length; i++) sheet.autoSizeColumn(i);
             workbook.write(response.getOutputStream());
         }
     }

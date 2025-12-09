@@ -21,8 +21,22 @@
                 <strong>¡Éxito!</strong> <span th:text="${mensajeExito}"></span>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
-            <div class="text-end">
-                <a th:href="@{/ventas/nuevo}" class="btn btn-cafe">Nuevo Venta</a>
+            <!-- Barra de búsqueda y botones -->
+            <div class="row mb-3">
+                <div class="col-md-8">
+                    <form th:action="@{/ventas}" method="get" class="d-flex">
+                        <input type="text" name="termino"
+                            class="form-control me-2"
+                            placeholder="Buscar por ID, fecha, total, estado, pedido o fidelización..."
+                            th:value="${termino}"/>
+                        <button type="submit" class="btn btn-cafe">Buscar</button>
+                    </form>
+                </div>
+                <div class="col-md-4 text-end">
+                    <a th:href="@{/ventas/reporte(termino=${termino})}" class="btn btn-danger btn-sm me-2">PDF</a>
+                    <a th:href="@{/ventas/excel(termino=${termino})}" class="btn btn-success btn-sm me-2">Excel</a>
+                    <a th:href="@{/ventas/nuevo}" class="btn btn-cafe">Nuevo Venta</a>
+                </div>
             </div>
         </div>
 
