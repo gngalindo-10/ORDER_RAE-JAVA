@@ -1,149 +1,249 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<html lang="es" 
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Usuarios Registrados</title>
-
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Usuarios - Order Rae</title>
+    
+    <!-- Fuentes -->
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Estilos personalizados -->
-    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+    
+    <!-- Estilos del dashboard -->
+    <link rel="stylesheet" th:href="@{/css/estilos_dashboard.css}">
+    
+    <style>
+        .btn-cafe {
+            background-color: #8B5E3C;
+            border-color: #8B5E3C;
+        }
+        .btn-cafe:hover {
+            background-color: #7A4B32;
+            border-color: #7A4B32;
+        }
+        .badge.bg-success { background-color: #28a745 !important; }
+        .badge.bg-danger { background-color: #dc3545 !important; }
+        .table-header-cafe th {
+            background-color: #8B5E3C;
+            color: white;
+            font-weight: 600;
+        }
+        .card-content {
+            background-color: var(--color-light);
+            border-radius: var(--border-radius);
+            padding: 24px;
+            box-shadow: var(--shadow-light);
+            border: 1px solid var(--border-color);
+        }
+        .search-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+        .search-controls > * {
+            flex: 1;
+            min-width: 150px;
+        }
+        @media (max-width: 768px) {
+            .search-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+    </style>
 </head>
+<body>
 
-<body class="bg-light">
-
-    <!-- Menú dinámico -->
-    <div th:replace="inicioDinamico :: menu"></div>
-
-    <div class="container mt-5">
-
-        <div class="text-center mb-4">
-            <div class="text-center mb-3">
-                <img th:src="@{/images/logo.png}" src="/images/logo.png" alt="Logo" style="width:120px;">
+<!-- === BARRA SUPERIOR === -->
+<header id="barra_superior">
+    <div class="barra-contenido">
+        <img th:src="@{/images/Logo3-orden.png}" alt="Logo Order Rae" class="logo_principal">
+        <div class="user-info">
+            <div class="menu-usuario">
+                <img th:src="@{/images/Usuario2.png}" alt="Usuario" class="icono-img">
+                <div class="submenu">
+                    <a href="#" th:href="@{/perfil}">Mi Perfil</a>
+                    <a href="#" th:href="@{/logout}">Cerrar Sesión</a>
+                </div>
             </div>
+        </div>
+    </div>
+</header>
 
+<!-- === CONTENIDO DEL DASHBOARD === -->
+<div class="container">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="logo-dashboard">
+            <i class="fas fa-box-open"></i>
+            <span>Order Rae</span>
+        </div>
+
+        <a th:href="@{/dashboard}" class="nav-item" sec:authorize="!hasAuthority('ROLE_Cliente')">
+            <i class="fas fa-chart-line"></i>
+            <span class="nav-text">Dashboard</span>
+        </a>
+
+        <a th:href="@{/usuarios}" class="nav-item active" sec:authorize="hasAnyAuthority('ROLE_ADMIN','ROLE_Gerente','ROLE_Asesor Comercial','ROLE_Jefe Logistico')">
+            <i class="fas fa-users"></i>
+            <span class="nav-text">Usuarios</span>
+        </a>
+
+        <a th:href="@{/productos}" class="nav-item" sec:authorize="!hasAuthority('ROLE_Cliente')">
+            <i class="fas fa-boxes"></i>
+            <span class="nav-text">Productos</span>
+        </a>
+
+        <a th:href="@{/inventario}" class="nav-item" sec:authorize="hasAnyAuthority('ROLE_ADMIN','ROLE_Gerente')">
+            <i class="fas fa-warehouse"></i>
+            <span class="nav-text">Inventario</span>
+        </a>
+
+        <a th:href="@{/produccion}" class="nav-item" sec:authorize="hasAnyAuthority('ROLE_ADMIN','ROLE_Gerente','ROLE_Jefe Logistico')">
+            <i class="fas fa-industry"></i>
+            <span class="nav-text">Producción</span>
+        </a>
+
+        <a th:href="@{/categoria}" class="nav-item" sec:authorize="hasAnyAuthority('ROLE_ADMIN','ROLE_Gerente','ROLE_Jefe Logistico')">
+            <i class="fas fa-tags"></i>
+            <span class="nav-text">Categorías</span>
+        </a>
+
+        <a th:href="@{/pedidos}" class="nav-item" sec:authorize="hasAnyAuthority('ROLE_ADMIN','ROLE_Gerente','ROLE_Asesor Comercial','ROLE_Jefe Logistico')">
+            <i class="fas fa-truck"></i>
+            <span class="nav-text">Pedidos</span>
+        </a>
+
+        <a th:href="@{/ventas}" class="nav-item" sec:authorize="hasAnyAuthority('ROLE_ADMIN','ROLE_Gerente','ROLE_Asesor Comercial')">
+            <i class="fas fa-cash-register"></i>
+            <span class="nav-text">Ventas</span>
+        </a>
+
+        <a th:href="@{/fidelizacion}" class="nav-item" sec:authorize="hasAnyAuthority('ROLE_ADMIN','ROLE_Gerente','ROLE_Asesor Comercial')">
+            <i class="fas fa-heart"></i>
+            <span class="nav-text">Fidelización</span>
+        </a>
+    </aside>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="main-content">
+        <div class="header-dashboard">
             <h1>LISTADO DE USUARIOS</h1>
+        </div>
 
-            <!-- Mensaje de éxito -->
-            <div th:if="${mensajeExito}" class="alert alert-success alert-dismissible fade show mt-3" role="alert">
-                <strong>¡Éxito!</strong> <span th:text="${mensajeExito}"></span>
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
+        <!-- Mensaje de éxito -->
+        <div th:if="${mensajeExito}" class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong>¡Éxito!</strong> <span th:text="${mensajeExito}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
 
-            <!-- Barra de búsqueda y controles -->
-            <div class="row mb-4">
-                <div class="col-md-12 d-flex flex-wrap align-items-center gap-2">
-
-                    <!-- Campo de búsqueda -->
-                    <form th:action="@{/usuarios}" method="get" class="d-flex flex-grow-1">
-                        <input type="text" name="termino"
+        <div class="card-content">
+            <!-- Controles de búsqueda y filtros -->
+            <div class="search-controls">
+                <!-- Búsqueda -->
+                <form th:action="@{/usuarios}" method="get" class="d-flex">
+                    <input type="text" name="termino"
                             class="form-control me-1"
                             placeholder="Buscar por nombre, documento, correo..."
                             th:value="${termino}"
                             style="min-width: 200px;"/>
-                        <button type="submit" class="btn btn-cafe">Buscar</button>
-                    </form>
+                    <button type="submit" class="btn btn-cafe">Buscar</button>
+                </form>
 
-                    <!-- Botones de filtro por estado -->
+                <!-- Filtros por estado -->
+                <div class="btn-group" role="group">
                     <a href="/usuarios" class="btn btn-outline-secondary btn-sm">Todos</a>
                     <a href="/usuarios?estado=Activo" class="btn btn-success btn-sm">Activos</a>
                     <a href="/usuarios?estado=Inactivo" class="btn btn-danger btn-sm">Inactivos</a>
+                </div>
 
-                    <!-- Filtro por rol -->
-                    <form th:action="@{/usuarios}" method="get" class="d-flex">
-                        <select name="rol" class="form-select form-select-sm me-1" style="min-width: 150px;">
-                            <option value="">Filtrar por Rol</option>
-                            <option th:each="r : ${roles}"
-                                    th:value="${r.nombreRol}"
-                                    th:text="${r.nombreRol}"
-                                    th:selected="${rolFiltro == r.nombreRol}"></option>
-                        </select>
-                        <button type="submit" class="btn btn-cafe btn-sm">Filtrar</button>
-                    </form>
+                <!-- Filtro por rol -->
+                <form th:action="@{/usuarios}" method="get" class="d-flex">
+                    <select name="rol" class="form-select form-select-sm me-1">
+                        <option value="">Filtrar por Rol</option>
+                        <option th:each="r : ${roles}"
+                                th:value="${r.nombreRol}"
+                                th:text="${r.nombreRol}"
+                                th:selected="${rolFiltro == r.nombreRol}"></option>
+                    </select>
+                    <button type="submit" class="btn btn-cafe btn-sm">Filtrar</button>
+                </form>
 
-                    <!-- Botones de acción: PDF y Nuevo Usuario -->
-                    <div class="ms-auto d-flex gap-2">
-                        <a th:href="@{/usuarios/excel(termino=${termino}, estado=${estadoFiltro}, rol=${rolFiltro})}"
+                <!-- Acciones (PDF, Excel, Nuevo) -->
+                <div class="d-flex gap-1 ms-auto">
+                    <a th:href="@{/usuarios/excel(termino=${termino}, estado=${estadoFiltro}, rol=${rolFiltro})}"
                         class="btn btn-success btn-sm d-flex align-items-center">
-                            <i class="fas fa-file-excel me-1"></i> Excel
-                        </a>
-                        <a th:href="@{/usuarios/reporte(termino=${termino}, estado=${estadoFiltro}, rol=${rolFiltro})}"
+                        <i class="fas fa-file-excel me-1"></i> Excel
+                    </a>
+                    <a th:href="@{/usuarios/reporte(termino=${termino}, estado=${estadoFiltro}, rol=${rolFiltro})}"
                         class="btn btn-danger btn-sm d-flex align-items-center">
-                            <i class="fas fa-file-pdf me-1"></i> PDF
-                        </a>
-                        <a th:href="@{/usuarios/nuevo}" class="btn btn-cafe">
-                            Nuevo Usuario
-                        </a>
-                    </div>
-
+                        <i class="fas fa-file-pdf me-1"></i> PDF
+                    </a>
+                    <a th:href="@{/usuarios/nuevo}" class="btn btn-cafe btn-sm">Nuevo Usuario</a>
                 </div>
             </div>
 
+            <!-- Tabla de usuarios -->
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover align-middle">
+                    <thead class="table-header-cafe">
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombres</th>
+                            <th>Apellidos</th>
+                            <th>Documento</th>
+                            <th>Correo</th>
+                            <th>Género</th>
+                            <th>Teléfono</th>
+                            <th>Estado</th>
+                            <th>Rol</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:if="${usuarios.empty}">
+                            <td colspan="10" class="text-center text-muted py-3">No hay usuarios registrados.</td>
+                        </tr>
+                        <tr th:each="usuario : ${usuarios}">
+                            <td th:text="${usuario.id}"></td>
+                            <td th:text="${usuario.nombre}"></td>
+                            <td th:text="${usuario.apellidos}"></td>
+                            <td th:text="${usuario.documento}"></td>
+                            <td th:text="${usuario.correo}"></td>
+                            <td th:text="${usuario.genero}"></td>
+                            <td th:text="${usuario.telefono}"></td>
+                            <td>
+                                <span th:class="${usuario.estado == 'Activo' ? 'badge bg-success' : 'badge bg-danger'}"
+                                        th:text="${usuario.estado}"></span>
+                            </td>
+                            <td th:text="${usuario.rol?.nombreRol ?: 'Sin rol'}"></td>
+                            <td>
+                                <div class="d-flex gap-1">
+                                    <a th:href="@{/usuarios/editar/{id}(id=${usuario.id})}"
+                                        class="btn btn-sm btn-warning">Editar</a>
+                                    <form th:action="@{/usuarios/eliminar/{id}(id=${usuario.id})}"
+                                            method="post"
+                                            style="display:inline;"
+                                            onsubmit="return confirm('¿Está seguro de eliminar este usuario?')">
+                                        <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
+    </main>
+</div>
 
-        <!-- TABLA DE USUARIOS -->
-        <div class="table-responsive">
-            <table class="table table-bordered table-hover align-middle">
-                <thead class="table-header-cafe">
-                <tr>
-                    <th>ID</th>
-                    <th>Nombres</th>
-                    <th>Apellidos</th>
-                    <th>Documento</th>
-                    <th>Correo</th>
-                    <th>Género</th>
-                    <th>Teléfono</th>
-                    <th>Estado</th>
-                    <th>Rol</th>
-                    <th>Acciones</th>
-                </tr>
-                </thead>
-
-                <tbody>
-                <tr th:if="${usuarios.empty}">
-                    <td colspan="10" class="text-center text-muted">No hay usuarios registrados.</td>
-                </tr>
-
-                <tr th:each="usuario : ${usuarios}">
-                    <td th:text="${usuario.id}"></td>
-                    <td th:text="${usuario.nombre}"></td>
-                    <td th:text="${usuario.apellidos}"></td>
-                    <td th:text="${usuario.documento}"></td>
-                    <td th:text="${usuario.correo}"></td>
-                    <td th:text="${usuario.genero}"></td>
-                    <td th:text="${usuario.telefono}"></td>
-
-                    <td>
-                        <span th:class="${usuario.estado == 'Activo' ? 'badge bg-success' : 'badge bg-danger'}"
-                                th:text="${usuario.estado}"></span>
-                    </td>
-
-                    <td th:text="${usuario.rol?.nombreRol ?: 'Sin rol'}"></td>
-
-                    <td>
-                        <div class="d-flex gap-1">
-                            <a th:href="@{/usuarios/editar/{id}(id=${usuario.id})}"
-                                class="btn btn-sm btn-warning">Editar</a>
-
-                            <form th:action="@{/usuarios/eliminar/{id}(id=${usuario.id})}"
-                                    method="post"
-                                    style="display:inline;"
-                                    onsubmit="return confirm('¿Está seguro de eliminar este usuario?')">
-                                <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
-                            </form>
-                        </div>
-                    </td>
-                </tr>
-
-                </tbody>
-            </table>
-        </div>
-
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

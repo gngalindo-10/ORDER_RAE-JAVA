@@ -18,16 +18,14 @@ import jakarta.servlet.http.HttpServletResponse;
 @RequestMapping("/ventas")
 public class VentaController {
 
-    @Autowired
-    private PdfGenerator pdfGenerator;
-
-    @Autowired
-    private ExcelGenerator excelGenerator;
-
     private final VentaService ventaService;
+    private final PdfGenerator pdfGenerator;
+    private final ExcelGenerator excelGenerator;
 
-    public VentaController(VentaService ventaService) {
+    public VentaController(VentaService ventaService, PdfGenerator pdfGenerator, ExcelGenerator excelGenerator) {
         this.ventaService = ventaService;
+        this.pdfGenerator = pdfGenerator;
+        this.excelGenerator = excelGenerator;
     }
 
     @GetMapping
@@ -54,7 +52,7 @@ public class VentaController {
             redirectAttrs.addFlashAttribute("error", "Error: Verifique que los IDs de Pedido y Fidelización existan.");
             return "redirect:/ventas/nuevo";
         } catch (Exception e) {
-            redirectAttrs.addFlashAttribute("error", e.getMessage());
+            redirectAttrs.addFlashAttribute("error", "Error inesperado: " + e.getMessage());
             return "redirect:/ventas/nuevo";
         }
     }
@@ -89,11 +87,7 @@ public class VentaController {
     }
 
     @PostMapping("/actualizar/{id}")
-    public String actualizar(
-            @PathVariable Integer id,
-            @ModelAttribute Venta venta,
-            RedirectAttributes redirectAttrs) {
-
+    public String actualizar(@PathVariable Integer id, @ModelAttribute Venta venta, RedirectAttributes redirectAttrs) {
         try {
             venta.setIdVenta(id);
             ventaService.actualizar(id, venta);
@@ -103,12 +97,11 @@ public class VentaController {
             redirectAttrs.addFlashAttribute("error", "Error: Verifique que los IDs de Pedido y Fidelización existan.");
             return "redirect:/ventas/editar/" + id;
         } catch (Exception e) {
-            redirectAttrs.addFlashAttribute("error", e.getMessage());
+            redirectAttrs.addFlashAttribute("error", "Error al actualizar: " + e.getMessage());
             return "redirect:/ventas/editar/" + id;
         }
     }
 
-    // Cambiado a @PostMapping
     @PostMapping("/eliminar/{id}")
     public String eliminar(@PathVariable Integer id, RedirectAttributes redirectAttrs) {
         try {

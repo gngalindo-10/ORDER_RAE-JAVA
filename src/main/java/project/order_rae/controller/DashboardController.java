@@ -12,7 +12,7 @@ import project.order_rae.service.ProductoService;
 import project.order_rae.service.UsuarioService;
 import project.order_rae.service.PedidoService;
 
-import java.util.Arrays;
+import java.util.*;
 
 @Controller
 public class DashboardController {
@@ -36,31 +36,36 @@ public class DashboardController {
             .map(GrantedAuthority::getAuthority)
             .orElse("ROLE_Cliente");
 
-        // GERENTE o ADMIN 
-        if (role.equals("ROLE_Gerente") || role.equals("ROLE_ADMIN")) {
-            model.addAttribute("totalVentas", ventaService.countVentasActivas());
-            model.addAttribute("totalProductos", productoService.contarProductos());
-            model.addAttribute("totalClientes", usuarioService.contarUsuarios());
-            model.addAttribute("totalPedidos", pedidoService.countPedidos());
-            model.addAttribute("meses", Arrays.asList("Ene", "Feb", "Mar", "Abr", "May", "Jun"));
-            model.addAttribute("ventas", Arrays.asList(1200000, 1800000, 2100000, 1900000, 2400000, 2700000));
-            model.addAttribute("ultimasVentas", ventaService.findTop5ByOrderByFechaVentaDesc());
+        if ("ROLE_Gerente".equals(role) || "ROLE_ADMIN".equals(role)) {
+            Double totalVentas = ventaService.obtenerTotalVentas();
+            Long totalProductos = productoService.contarProductos();
+            Long totalClientes = usuarioService.contarUsuarios();
+            Long totalPedidos = pedidoService.countPedidos();
+
+            Map<String, Double> ventasPorMes = ventaService.obtenerVentasPorUltimos6Meses();
+            List<String> meses = new ArrayList<>(ventasPorMes.keySet());
+            List<Double> ventas = new ArrayList<>(ventasPorMes.values());
+
+            model.addAttribute("totalVentas", totalVentas != null ? totalVentas : 0.0);
+            model.addAttribute("totalProductos", totalProductos != null ? totalProductos : 0L);
+            model.addAttribute("totalClientes", totalClientes != null ? totalClientes : 0L);
+            model.addAttribute("totalPedidos", totalPedidos != null ? totalPedidos : 0L);
+            model.addAttribute("meses", meses);
+            model.addAttribute("ventas", ventas);
+
             return "dashboard";
         }
 
-        // ASESOR COMERCIAL 
-        if (role.equals("ROLE_Asesor Comercial")) {
+        if ("ROLE_Asesor Comercial".equals(role)) {
             model.addAttribute("mensaje", "Dashboard para Asesor Comercial en desarrollo.");
             return "dashboard";
         }
 
-        // JEFE LOGÍSTICO 
-        if (role.equals("ROLE_Jefe Logistico")) {
+        if ("ROLE_Jefe Logistico".equals(role)) {
             model.addAttribute("mensaje", "Dashboard para Jefe Logístico en desarrollo.");
             return "dashboard";
         }
 
-        // CLIENTE 
         return "redirect:/";
     }
 }

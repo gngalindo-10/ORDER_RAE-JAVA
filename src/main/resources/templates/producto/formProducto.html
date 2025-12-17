@@ -1,84 +1,150 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title th:text="${producto.id == null ? 'Registrar Producto' : 'Editar Producto'}">Formulario Producto</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title th:text="${producto.id == null ? 'Registrar Producto' : 'Editar Producto'}">Producto</title>
+    
+    <!-- Fuentes -->
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    
+    <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+    
+    <!-- Estilos del dashboard -->
+    <link rel="stylesheet" th:href="@{/css/estilos_dashboard.css}">
+    
+    <style>
+        .btn-cafe {
+            background-color: #8B5E3C;
+            border-color: #8B5E3C;
+        }
+        .btn-cafe:hover {
+            background-color: #7A4B32;
+            border-color: #7A4B32;
+        }
+        .form-card {
+            background-color: var(--color-light);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-medium);
+            padding: 24px;
+            border: 1px solid var(--border-color);
+            width: 100%;
+            max-width: none;
+        }
+    </style>
 </head>
-<body class="bg-light">
-<div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
-    <div class="card p-4 shadow-sm" style="width: 100%; max-width: 500px; background-color: #FFF9F0;">
-        <div class="text-center mb-3">
-            <img th:src="@{/images/logo.png}" src="/images/logo.png" alt="Logo de ORDER RAE" style="width:120px;">
+<body>
+
+<!-- === BARRA SUPERIOR === -->
+<header id="barra_superior">
+    <div class="barra-contenido">
+        <img th:src="@{/images/Logo3-orden.png}" alt="Logo Order Rae" class="logo_principal">
+        <div class="user-info">
+            <div class="menu-usuario">
+                <img th:src="@{/images/Usuario2.png}" alt="Usuario" class="icono-img">
+                <div class="submenu">
+                    <a href="#" th:href="@{/perfil}">Mi Perfil</a>
+                    <a href="#" th:href="@{/logout}">Cerrar Sesión</a>
+                </div>
+            </div>
         </div>
-        <h2 class="text-center mb-4" th:text="${producto.id == null ? 'Registrar Producto' : 'Editar Producto'}"></h2>
-
-        <!-- Formulario sin th:object para evitar problemas con relaciones -->
-        <form th:action="@{${producto.id == null} ? '/productos/guardar' : '/productos/actualizar/' + ${producto.id}}"
-                method="post">
-
-            <input type="hidden" th:if="${producto.id != null}" th:name="id" th:value="${producto.id}" />
-
-            <div class="mb-3">
-                <label for="codigoProducto" class="form-label">Código producto:</label>
-                <input type="text" name="codigoProducto" th:value="${producto.codigoProducto}" class="form-control" required>
-            </div>
-
-            <div class="mb-3">
-                <label for="referenciaProducto" class="form-label">Referencia producto:</label>
-                <input type="text" name="referenciaProducto" th:value="${producto.referenciaProducto}" class="form-control" required>
-            </div>
-
-            <div class="mb-3">
-                <label for="color" class="form-label">Color:</label>
-                <input type="text" name="color" th:value="${producto.color}" class="form-control" required>
-            </div>
-
-            <div class="mb-3">
-                <label for="precio" class="form-label">Precio:</label>
-                <input type="number" step="0.01" name="precio" th:value="${producto.precio}" class="form-control" required>
-            </div>
-
-            <div class="mb-3">
-                <label for="estadoProducto" class="form-label">Estado:</label>
-                <select name="estadoProducto" class="form-select" required>
-                    <option value="">-- Selecciona --</option>
-                    <option value="activo" th:selected="${producto.estadoProducto == 'activo'}">Activo</option>
-                    <option value="inactivo" th:selected="${producto.estadoProducto == 'inactivo'}">Inactivo</option>
-                </select>
-            </div>
-
-            <div class="mb-3">
-                <label for="usuarioId" class="form-label">Usuario:</label>
-                <select name="usuarioId" class="form-select" required>
-                    <option th:each="u : ${usuarios}" 
-                        th:value="${u.id}" 
-                        th:text="${u.nombre + ' ' + u.apellidos}"
-                        th:selected="${u.id == producto.usuario?.id}">
-                    </option>
-                </select>
-            </div>
-
-            <div class="mb-3">
-                <label for="categoriaId" class="form-label">Categoría:</label>
-                <select name="categoriaId" class="form-select" required>
-                    <option th:each="c : ${categorias}" 
-                        th:value="${c.id}" 
-                        th:text="${c.nombreCategoria}"
-                        th:selected="${c.id == producto.categoria?.id}">
-                    </option>
-                </select>
-            </div>
-
-            <div class="d-flex justify-content-center gap-2 mt-3">
-                <a th:href="@{/productos}" class="btn btn-cafe w-100">Volver</a>
-                <button type="submit" class="btn btn-cafe w-100">Guardar</button>
-            </div>
-        </form>
     </div>
+</header>
+
+<div class="container">
+    <aside class="sidebar">
+        <div class="logo-dashboard">
+            <i class="fas fa-box-open"></i>
+            <span>Order Rae</span>
+        </div>
+        <a th:href="@{/dashboard}" class="nav-item" sec:authorize="!hasAuthority('ROLE_Cliente')">
+            <i class="fas fa-chart-line"></i>
+            <span class="nav-text">Dashboard</span>
+        </a>
+        <a th:href="@{/productos}" class="nav-item active" sec:authorize="!hasAuthority('ROLE_Cliente')">
+            <i class="fas fa-boxes"></i>
+            <span class="nav-text">Productos</span>
+        </a>
+    </aside>
+
+    <main class="main-content">
+        <div class="form-card">
+            <div class="text-center mb-3">
+                <img th:src="@{/images/logo.png}" alt="Logo" style="width:100px;">
+            </div>
+
+            <h2 class="text-center mb-4" th:text="${producto.id == null ? 'Registrar Producto' : 'Editar Producto'}"></h2>
+
+            <!-- Formulario sin th:object para evitar problemas con relaciones -->
+            <form th:action="@{${producto.id == null} ? '/productos/guardar' : '/productos/actualizar/' + ${producto.id}}"
+                    method="post">
+
+                <input type="hidden" th:if="${producto.id != null}" th:name="id" th:value="${producto.id}" />
+
+                <div class="mb-3">
+                    <label for="codigoProducto" class="form-label">Código producto:</label>
+                    <input type="text" name="codigoProducto" th:value="${producto.codigoProducto}" class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="referenciaProducto" class="form-label">Referencia producto:</label>
+                    <input type="text" name="referenciaProducto" th:value="${producto.referenciaProducto}" class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="color" class="form-label">Color:</label>
+                    <input type="text" name="color" th:value="${producto.color}" class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="precio" class="form-label">Precio:</label>
+                    <input type="number" step="0.01" name="precio" th:value="${producto.precio}" class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="estadoProducto" class="form-label">Estado:</label>
+                    <select name="estadoProducto" class="form-select" required>
+                        <option value="">-- Selecciona --</option>
+                        <option value="activo" th:selected="${producto.estadoProducto == 'activo'}">Activo</option>
+                        <option value="inactivo" th:selected="${producto.estadoProducto == 'inactivo'}">Inactivo</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="usuarioId" class="form-label">Usuario:</label>
+                    <select name="usuarioId" class="form-select" required>
+                        <option th:each="u : ${usuarios}" 
+                                th:value="${u.id}" 
+                                th:text="${u.nombre + ' ' + u.apellidos}"
+                                th:selected="${u.id == producto.usuario?.id}">
+                        </option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="categoriaId" class="form-label">Categoría:</label>
+                    <select name="categoriaId" class="form-select" required>
+                        <option th:each="c : ${categorias}" 
+                                th:value="${c.id}" 
+                                th:text="${c.nombreCategoria}"
+                                th:selected="${c.id == producto.categoria?.id}">
+                        </option>
+                    </select>
+                </div>
+
+                <div class="d-flex justify-content-between mt-4">
+                    <a th:href="@{/productos}" class="btn btn-cafe">Volver</a>
+                    <button type="submit" class="btn btn-cafe">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </main>
 </div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

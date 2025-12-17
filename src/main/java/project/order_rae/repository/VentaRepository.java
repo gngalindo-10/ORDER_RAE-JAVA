@@ -1,37 +1,29 @@
 package project.order_rae.repository;
 
-import project.order_rae.model.Venta;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDate;
+import project.order_rae.model.Venta;
+
 import java.util.List;
 
 @Repository
 public interface VentaRepository extends JpaRepository<Venta, Integer> {
 
-    long countByEstadoVenta(String estado);
+    @Query("SELECT COALESCE(SUM(v.totalVenta), 0.0) FROM Venta v WHERE v.estadoVenta = 'completada'")
+    Double sumarTotalVentas();
 
-    @Query("SELECT v FROM Venta v ORDER BY v.fechaVenta DESC")
-    List<Venta> findTop5ByOrderByFechaVentaDesc();
-
-    @Query(value = "SELECT MONTH(v.Fecha_venta) as mes, SUM(v.Total_venta) as total " +
-                    "FROM VENTA v " +
-                    "WHERE v.Fecha_venta >= :inicio AND v.Fecha_venta <= :fin " +
-                    "GROUP BY MONTH(v.Fecha_venta) " +
-                    "ORDER BY mes", nativeQuery = true)
-    List<Object[]> getVentasMensuales(@Param("inicio") LocalDate inicio, 
-                                    @Param("fin") LocalDate fin);
-
-    // Búsqueda Multicriterio                                
-    @Query("SELECT v FROM Venta v WHERE " +
-       "LOWER(CAST(v.idVenta AS string)) LIKE LOWER(CONCAT('%', :termino, '%')) OR " +
-       "LOWER(CAST(v.fechaVenta AS string)) LIKE LOWER(CONCAT('%', :termino, '%')) OR " +
-       "LOWER(CAST(v.totalVenta AS string)) LIKE LOWER(CONCAT('%', :termino, '%')) OR " +
-       "LOWER(v.estadoVenta) LIKE LOWER(CONCAT('%', :termino, '%')) OR " +
-       "LOWER(CAST(v.pedidoId AS string)) LIKE LOWER(CONCAT('%', :termino, '%')) OR " +
-       "LOWER(CAST(v.fidelizacionId AS string)) LIKE LOWER(CONCAT('%', :termino, '%'))")
-    List<Venta> buscarPorTermino(@Param("termino") String termino);                                
+    // Incluye el mes actual (hasta hoy) y los últimos 5 meses completos
+    @Query(value = """
+        SELECT 
+            SUBSTRING(UPPER(MONTHNAME(v.Fecha_venta)), 1, 3) AS mes,
+            COALESCE(SUM(v.Total_venta), 0.0) AS total
+        FROM VENTA v
+        WHERE v.Fecha_venta >= DATE_SUB(CURDATE(), INTERVAL 6 MONTH)
+          AND v.Estado_venta = 'completada'
+        GROUP BY YEAR(v.Fecha_venta), MONTH(v.Fecha_venta)
+        ORDER BY v.Fecha_venta
+        """, nativeQuery = true)
+    List<Object[]> findVentasPorMesUltimos6Meses();
 }

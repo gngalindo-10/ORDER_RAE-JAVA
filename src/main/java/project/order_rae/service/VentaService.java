@@ -1,25 +1,41 @@
 package project.order_rae.service;
 
-import project.order_rae.model.Venta;
-import project.order_rae.repository.VentaRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import project.order_rae.model.Venta;
+import project.order_rae.repository.VentaRepository;
+
 import java.math.BigDecimal;
-import java.util.List;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 @Service
+@Transactional
 public class VentaService {
 
-    private final VentaRepository ventaRepository;
+    @Autowired
+    private VentaRepository ventaRepository;
 
-    public VentaService(VentaRepository ventaRepository) {
-        this.ventaRepository = ventaRepository;
+    // === CRUD ===
+
+    public List<Venta> listarTodas() {
+        return ventaRepository.findAll();
     }
 
-    // Métodos existentes
-    public List<Venta> listar() {
-        return ventaRepository.findAll();
+    public List<Venta> buscarPorTermino(String termino) {
+        if (termino == null || termino.trim().isEmpty()) {
+            return listarTodas();
+        }
+        try {
+            Integer id = Integer.parseInt(termino.trim());
+            Venta venta = ventaRepository.findById(id).orElse(null);
+            return venta != null ? Collections.singletonList(venta) : new ArrayList<>();
+        } catch (NumberFormatException e) {
+            return new ArrayList<>();
+        }
     }
 
     public Venta obtenerPorId(Integer id) {
@@ -27,55 +43,77 @@ public class VentaService {
                 .orElseThrow(() -> new RuntimeException("Venta no encontrada con ID: " + id));
     }
 
-    public Venta insertar(Venta venta) {
-        if (venta.getFechaVenta() == null) {
-            throw new IllegalArgumentException("La fecha de venta es obligatoria.");
-        }
-        if (venta.getTotalVenta() == null || venta.getTotalVenta().compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException("El total de venta debe ser un valor positivo.");
-        }
-        return ventaRepository.save(venta);
+    public void insertar(Venta venta) {
+        ventaRepository.save(venta);
     }
 
-    public Venta actualizar(Integer id, Venta ventaActualizada) {
-        Venta ventaExistente = obtenerPorId(id);
-        if (ventaActualizada.getFechaVenta() == null) {
-            throw new IllegalArgumentException("La fecha de venta es obligatoria.");
-        }
-        if (ventaActualizada.getTotalVenta() == null || ventaActualizada.getTotalVenta().compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException("El total de venta debe ser un valor positivo.");
-        }
-
-        ventaExistente.setFechaVenta(ventaActualizada.getFechaVenta());
-        ventaExistente.setTotalVenta(ventaActualizada.getTotalVenta());
-        ventaExistente.setEstadoVenta(ventaActualizada.getEstadoVenta());
-        ventaExistente.setPedidoId(ventaActualizada.getPedidoId());
-        ventaExistente.setFidelizacionId(ventaActualizada.getFidelizacionId());
-
-        return ventaRepository.save(ventaExistente);
+    public void actualizar(Integer id, Venta ventaActualizada) {
+        Venta existente = obtenerPorId(id);
+        existente.setFechaVenta(ventaActualizada.getFechaVenta());
+        existente.setTotalVenta(ventaActualizada.getTotalVenta());
+        existente.setEstadoVenta(ventaActualizada.getEstadoVenta());
+        existente.setPedidoId(ventaActualizada.getPedidoId());
+        existente.setFidelizacionId(ventaActualizada.getFidelizacionId());
+        ventaRepository.save(existente);
     }
 
-    @Transactional
     public void eliminar(Integer id) {
-        if (!ventaRepository.existsById(id)) {
-            throw new RuntimeException("Venta no encontrada con ID: " + id);
-        }
         ventaRepository.deleteById(id);
     }
 
-    // NUEVOS MÉTODOS PARA DASHBOARD
-    public long countVentasActivas() {
-        return ventaRepository.countByEstadoVenta("Activa");
+    // === Dashboard ===
+
+    public Double obtenerTotalVentas() {
+        Double total = ventaRepository.sumarTotalVentas();
+        return total != null ? total : 0.0;
     }
 
-    public List<Venta> findTop5ByOrderByFechaVentaDesc() {
-        return ventaRepository.findTop5ByOrderByFechaVentaDesc();
-    }
+    /**
+     * Retorna ventas de los últimos 6 meses, incluyendo el mes actual (diciembre).
+     * Normaliza los nombres de los meses a minúsculas para coincidir con el formato generado en Java.
+     */
+    public Map<String, Double> obtenerVentasPorUltimos6Meses() {
+        List<Object[]> resultados = ventaRepository.findVentasPorMesUltimos6Meses();
 
-    public List<Venta> buscarPorTermino(String termino) {
-        if (termino == null || termino.trim().isEmpty()) {
-            return listar();
+        Map<String, Double> ventasMap = new LinkedHashMap<>();
+        for (Object[] fila : resultados) {
+            String mes = (String) fila[0]; // Ej: "DIC", "NOV"
+            Object totalObj = fila[1];
+
+            Double total = 0.0;
+            if (totalObj instanceof BigDecimal) {
+                total = ((BigDecimal) totalObj).doubleValue();
+            } else if (totalObj instanceof Double) {
+                total = (Double) totalObj;
+            } else if (totalObj != null) {
+                try {
+                    total = Double.parseDouble(totalObj.toString());
+                } catch (NumberFormatException e) {
+                    total = 0.0;
+                }
+            }
+
+            // 🔑 Normalizar el mes de la BD a minúsculas: "DIC" → "dic"
+            String mesNormalizado = (mes != null) ? mes.toLowerCase() : "desconocido";
+            ventasMap.put(mesNormalizado, total);
         }
-        return ventaRepository.buscarPorTermino(termino.trim());
+
+        // Generar los últimos 6 meses: [jul, ago, set, oct, nov, dic] (hoy = dic 2025)
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM", new Locale("es", "PE"));
+        LocalDate ahora = LocalDate.now();
+        List<String> ultimos6Meses = new ArrayList<>();
+        for (int i = 5; i >= 0; i--) {
+            LocalDate mes = ahora.minusMonths(i);
+            String nombreMes = mes.format(formatter).substring(0, 3).toLowerCase();
+            ultimos6Meses.add(nombreMes);
+        }
+
+        // Asegurar que todos los meses aparezcan (incluso diciembre)
+        Map<String, Double> resultadoFinal = new LinkedHashMap<>();
+        for (String mes : ultimos6Meses) {
+            resultadoFinal.put(mes, ventasMap.getOrDefault(mes, 0.0));
+        }
+
+        return resultadoFinal;
     }
 }
