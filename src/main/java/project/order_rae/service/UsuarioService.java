@@ -56,4 +56,7 @@ public class UsuarioService {
         }
         return usuarioRepository.buscarPorTermino(termino.trim());
     }
+    public Long contarPorRol(String rol) {
+        return usuarioRepository.countByNombreRol(rol);
+    }
 }

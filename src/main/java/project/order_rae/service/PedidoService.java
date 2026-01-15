@@ -57,4 +57,7 @@ public class PedidoService {
         }
         return pedidoRepository.buscarPorTermino(termino.trim());
     }
+    public Long contarPorEstado(String estado) {
+        return pedidoRepository.countByEstadoPedido(estado);
+}
 }
