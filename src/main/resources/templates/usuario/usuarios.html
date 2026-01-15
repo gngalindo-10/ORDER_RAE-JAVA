@@ -65,6 +65,13 @@
 <header id="barra_superior">
     <div class="barra-contenido">
         <img th:src="@{/images/Logo3-orden.png}" alt="Logo Order Rae" class="logo_principal">
+        
+        <!-- Botón "PAG WEB" solo para Admin y Gerente -->
+        <a th:href="@{/index.html}" 
+            class="btn-pag-web"
+            sec:authorize="hasAnyAuthority('ROLE_ADMIN','ROLE_Gerente')">
+            PAG WEB
+        </a>
         <div class="user-info">
             <div class="menu-usuario">
                 <img th:src="@{/images/Usuario2.png}" alt="Usuario" class="icono-img">
