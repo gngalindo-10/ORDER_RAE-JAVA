@@ -19,4 +19,6 @@ public interface PedidoRepository extends JpaRepository<Pedido, Integer> {
            "LOWER(CAST(p.totalDePago AS string)) LIKE LOWER(CONCAT('%', :termino, '%')) OR " +
            "LOWER(p.estadoPedido) LIKE LOWER(CONCAT('%', :termino, '%'))")
     List<Pedido> buscarPorTermino(@Param("termino") String termino);
+
+    Long countByEstadoPedido(String estadoPedido);
 }

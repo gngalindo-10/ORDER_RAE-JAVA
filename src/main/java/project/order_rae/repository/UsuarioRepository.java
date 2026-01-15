@@ -36,5 +36,9 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     // Filtro por rol 
     @Query("SELECT u FROM Usuario u JOIN FETCH u.rol WHERE LOWER(u.rol.nombreRol) = LOWER(:rol)")
     List<Usuario> findByRolNombre(@Param("rol") String rol);
+
+    @Query("SELECT COUNT(u) FROM Usuario u WHERE u.rol.nombreRol = :nombreRol")
+    Long countByNombreRol(@Param("nombreRol") String nombreRol);
 }
+
 
