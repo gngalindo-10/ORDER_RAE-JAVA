@@ -228,6 +228,24 @@ body {
   color: var(--color-secondary);
 }
 
+/* Botón "PAG WEB" en la barra superior */
+.btn-pag-web {
+    background-color: #7A4B32;
+    color: white;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: background-color 0.2s ease, transform 0.15s ease;
+}
+
+.btn-pag-web:hover {
+    background-color: #613b28;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
 /* ------------------ */
 /* TARJETAS DE ESTADÍSTICAS */
 /* ------------------ */
@@ -241,11 +259,12 @@ body {
 
 .card-dashboard {
   background-color: var(--card-bg);
-  border-radius: var(--border-radius);
+  border-radius: var(--border-radius); /* 16px → bordes redondeados */
   padding: 20px;
   box-shadow: var(--shadow-light);
   transition: var(--transition);
   border: 1px solid var(--border-color);
+  /* ❌ NO tiene overflow: hidden → permite tooltips */
 }
 
 .card-dashboard:hover {
@@ -375,4 +394,118 @@ body {
   .user-info {
     margin-top: 8px;
   }
+}
+
+/* ============================== */
+/* === TARJETAS VIBRANTES Y ANIMADAS === */
+/* ============================== */
+
+.vibrant-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  position: relative;
+  /* ❌ Sin overflow: hidden → permite tooltips */
+}
+
+.vibrant-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  opacity: 0.3;
+  transition: opacity 0.3s ease;
+}
+
+.vibrant-card:hover::before {
+  opacity: 1;
+}
+
+/* Colores temáticos por tarjeta */
+.vibrant-card:nth-child(1)::before { background: #8B5E3C; } /* Ventas */
+.vibrant-card:nth-child(2)::before { background: #A67C52; } /* Usuarios */
+.vibrant-card:nth-child(3)::before { background: #C94B4B; } /* Pedidos */
+.vibrant-card:nth-child(4)::before { background: #5D4037; } /* Productos */
+
+.icon-card {
+  font-size: 2rem;
+  color: var(--color-primary);
+  flex-shrink: 0;
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(139, 94, 60, 0.08);
+  border-radius: var(--border-radius-sm);
+}
+
+.card-content {
+  flex: 1;
+}
+
+.card-content h3 {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+.card-number {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--color-secondary);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.vibrant-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-hover);
+}
+
+.card-number {
+  transition: color 0.3s ease;
+}
+
+.vibrant-card:hover .card-number {
+  color: var(--color-primary);
+}
+
+/* === TOOLTIPS PERSONALIZADOS (AHORA ABAJO) === */
+.tooltip-content {
+  position: absolute;
+  top: 100%;  
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--color-light);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-sm);
+  padding: 12px 16px;
+  box-shadow: var(--shadow-medium);
+  z-index: 100;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s ease, visibility 0.25s;
+  width: max-content;
+  min-width: 180px;
+  font-size: 0.92rem;
+  white-space: nowrap;
+  pointer-events: none;
+  margin-top: 8px;  
+}
+
+.tooltip-content div {
+  margin: 5px 0;
+  color: var(--color-text);
+  display: flex;
+  justify-content: space-between;
+}
+
+.vibrant-card:hover .tooltip-content {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
 }

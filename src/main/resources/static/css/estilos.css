@@ -106,6 +106,22 @@ body {
   background-color: #f8f4f0;
   color: var(--color-secondary);
 }
+/* Enlace al Dashboard */
+.enlace-dashboard {
+    display: block;
+    margin-top: 8px;
+    padding: 6px 12px;
+    background-color: #f0f0f0;
+    color: #333;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    transition: background-color 0.2s;
+}
+
+.enlace-dashboard:hover {
+    background-color: #e0e0e0;
+}
 
 /* Búsqueda */
 .busqueda {
