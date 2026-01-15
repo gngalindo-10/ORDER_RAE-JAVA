@@ -12,9 +12,17 @@
 </head>
 <body>
 
+<!-- === BARRA SUPERIOR === -->
 <header id="barra_superior">
     <div class="barra-contenido">
         <img th:src="@{/images/Logo3-orden.png}" alt="Logo Order Rae" class="logo_principal">
+                
+        <!-- Botón "PAG WEB" solo para Admin y Gerente -->
+        <a th:href="@{/index.html}" 
+            class="btn-pag-web"
+            sec:authorize="hasAnyAuthority('ROLE_ADMIN','ROLE_Gerente')">
+            PAG WEB
+        </a>
         <div class="user-info">
             <div class="menu-usuario">
                 <img th:src="@{/images/Usuario2.png}" alt="Usuario" class="icono-img">
@@ -33,7 +41,8 @@
             <i class="fas fa-box-open"></i>
             <span>Order Rae</span>
         </div>
-        <a th:href="@{/dashboard}" class="nav-item" sec:authorize="!hasAuthority('ROLE_Cliente')">
+        <!-- Solo roles autorizados ven el enlace al dashboard -->
+        <a th:href="@{/dashboard}" class="nav-item" sec:authorize="hasAnyAuthority('ROLE_ADMIN','ROLE_Gerente','ROLE_Asesor Comercial','ROLE_Jefe Logistico')">
             <i class="fas fa-chart-line"></i>
             <span class="nav-text">Dashboard</span>
         </a>
@@ -41,7 +50,7 @@
             <i class="fas fa-users"></i>
             <span class="nav-text">Usuarios</span>
         </a>
-        <a th:href="@{/productos}" class="nav-item" sec:authorize="!hasAuthority('ROLE_Cliente')">
+        <a th:href="@{/productos}" class="nav-item" sec:authorize="hasAnyAuthority('ROLE_ADMIN','ROLE_Gerente','ROLE_Asesor Comercial','ROLE_Jefe Logistico')">
             <i class="fas fa-boxes"></i>
             <span class="nav-text">Productos</span>
         </a>
@@ -76,27 +85,63 @@
             <h1>Panel de Administración</h1>
         </div>
 
+        <!-- ADMIN o GERENTE -->
         <div id="admin-content" class="role-content active" sec:authorize="hasAnyAuthority('ROLE_ADMIN','ROLE_Gerente')">
             <div class="stats">
-                <div class="card-dashboard">
-                    <h3>Total Ventas</h3>
-                    <p th:text="${'S/ ' + #numbers.formatDecimal(totalVentas, 1, 'COMMA', 0, 'POINT')}">S/ 0</p>
+                <div class="card-dashboard vibrant-card" id="card-ventas">
+                    <i class="fas fa-cash-register icon-card"></i>
+                    <div class="card-content">
+                        <h3>Total Ventas</h3>
+                        <p class="card-number" data-is-currency="true">S/ 0</p>
+                    </div>
                 </div>
-                <div class="card-dashboard">
-                    <h3>Usuarios</h3>
-                    <p th:text="${totalClientes}">0</p>
+
+                <!-- Tarjeta USUARIOS con tooltip -->
+                <div class="card-dashboard vibrant-card" id="card-usuarios">
+                    <i class="fas fa-users icon-card"></i>
+                    <div class="card-content">
+                        <h3>Usuarios</h3>
+                        <p class="card-number">0</p>
+                    </div>
+                    <div class="tooltip-content">
+                        <div><strong>Clientes:</strong> <span th:text="${clientes}">0</span></div>
+                        <div><strong>Asesores:</strong> <span th:text="${asesores}">0</span></div>
+                        <div><strong>Jefes Logísticos:</strong> <span th:text="${jefesLogisticos}">0</span></div>
+                        <div><strong>Gerentes:</strong> <span th:text="${gerente}">0</span></div>
+                    </div>
                 </div>
-                <div class="card-dashboard">
-                    <h3>Pedidos</h3>
-                    <p th:text="${totalPedidos}">0</p>
+
+                <!-- Tarjeta PEDIDOS con tooltip -->
+                <div class="card-dashboard vibrant-card" id="card-pedidos">
+                    <i class="fas fa-truck icon-card"></i>
+                    <div class="card-content">
+                        <h3>Pedidos</h3>
+                        <p class="card-number">0</p>
+                    </div>
+                    <div class="tooltip-content">
+                        <div><strong>Pendientes:</strong> <span th:text="${pendientes}">0</span></div>
+                        <div><strong>En proceso:</strong> <span th:text="${enProceso}">0</span></div>
+                        <div><strong>Enviados:</strong> <span th:text="${enviados}">0</span></div>
+                        <div><strong>Entregados:</strong> <span th:text="${entregados}">0</span></div>
+                        <div><strong>Cancelados:</strong> <span th:text="${cancelados}">0</span></div>
+                    </div>
                 </div>
-                <div class="card-dashboard">
-                    <h3>Productos</h3>
-                    <p th:text="${totalProductos}">0</p>
+
+                <div class="card-dashboard vibrant-card" id="card-productos">
+                    <i class="fas fa-box icon-card"></i>
+                    <div class="card-content">
+                        <h3>Productos</h3>
+                        <p class="card-number">0</p>
+                    </div>
                 </div>
+            </div>
+
+            <div class="chart-container">
+                <canvas id="myChart"></canvas>
             </div>
         </div>
 
+        <!-- ASESOR COMERCIAL -->
         <div id="asesor-content" class="role-content" sec:authorize="hasAuthority('ROLE_Asesor Comercial')">
             <div class="stats">
                 <div class="card-dashboard full-width">
@@ -105,6 +150,7 @@
             </div>
         </div>
 
+        <!-- JEFE LOGÍSTICO -->
         <div id="logistico-content" class="role-content" sec:authorize="hasAuthority('ROLE_Jefe Logistico')">
             <div class="stats">
                 <div class="card-dashboard full-width">
@@ -112,15 +158,12 @@
                 </div>
             </div>
         </div>
-
-        <div class="chart-container" sec:authorize="hasAnyAuthority('ROLE_ADMIN','ROLE_Gerente')">
-            <canvas id="myChart"></canvas>
-        </div>
     </main>
 </div>
 
 <script th:src="@{/js/dashboard.js}"></script>
 
+<!-- Gráfico de ventas -->
 <script th:inline="javascript" sec:authorize="hasAnyAuthority('ROLE_ADMIN','ROLE_Gerente')">
     const ctx = document.getElementById('myChart').getContext('2d');
     const meses = /*[[${meses}]]*/ [];
@@ -130,22 +173,22 @@
 
     new Chart(ctx, {
         type: 'line',
-        data : {
+        data: {
             labels: meses,
             datasets: [{
                 label: 'Ventas Mensuales (S/)',
                 data: ventas,
-                borderColor: '#2E7D32',
-                backgroundColor: 'rgba(46, 125, 50, 0.1)',
+                borderColor: '#7A4B32',
+                backgroundColor: 'rgba(122, 75, 50, 0.1)',
                 borderWidth: 3,
                 fill: true,
                 tension: 0.4,
                 pointBackgroundColor: '#fff',
-                pointBorderColor: '#2E7D32',
+                pointBorderColor: '#7A4B32',
                 pointBorderWidth: 2,
                 pointRadius: 5,
                 pointHoverRadius: 8,
-                pointHoverBackgroundColor: '#2E7D32',
+                pointHoverBackgroundColor: '#7A4B32',
                 pointHoverBorderColor: '#fff',
                 pointHoverBorderWidth: 2
             }]
@@ -153,10 +196,7 @@
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            animation: {
-                duration: 1200,
-                easing: 'easeOutQuint'
-            },
+            animation: { duration: 1200, easing: 'easeOutQuint' },
             plugins: {
                 legend: {
                     position: 'top',
@@ -168,7 +208,7 @@
                 },
                 tooltip: {
                     backgroundColor: 'rgba(255, 255, 255, 0.98)',
-                    titleColor: '#1B5E20',
+                    titleColor: '#7A4B32',
                     bodyColor: '#333',
                     borderColor: '#ccc',
                     borderWidth: 1,
@@ -176,37 +216,68 @@
                     usePointStyle: true,
                     callbacks: {
                         label: function(context) {
-                            const value = context.parsed.y;
                             return new Intl.NumberFormat('es-PE', {
                                 style: 'currency',
                                 currency: 'PEN',
                                 minimumFractionDigits: 0
-                            }).format(value);
+                            }).format(context.parsed.y);
                         }
                     }
                 }
             },
             scales: {
-                x: {
-                    grid: { color: 'rgba(0,0,0,0.03)' },
-                    ticks: { color: '#444', font: { weight: '600' } }
-                },
-                y: {
-                    beginAtZero: false,
-                    grid: { color: 'rgba(0,0,0,0.05)' },
-                    ticks: {
-                        color: '#444',
-                        callback: function(value) {
-                            return 'S/ ' + value.toLocaleString('es-PE');
-                        }
-                    }
-                }
+                x: { grid: { color: 'rgba(0,0,0,0.03)' }, ticks: { color: '#444', font: { weight: '600' } } },
+                y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' }, ticks: {
+                    color: '#444',
+                    callback: function(value) { return 'S/ ' + value.toLocaleString('es-PE'); }
+                }}
             },
-            interaction: {
-                intersect: false,
-                mode: 'index'
-            }
+            interaction: { intersect: false, mode: 'index' }
         }
+    });
+</script>
+
+<!-- ✨ Animación de tarjetas KPI -->
+<script th:inline="javascript" sec:authorize="hasAnyAuthority('ROLE_ADMIN','ROLE_Gerente')">
+    document.addEventListener('DOMContentLoaded', function () {
+        const datos = {
+        totalVentas: /*[[${totalVentas}]]*/ 0.0,
+        totalClientes: /*[[${totalClientes}]]*/ 0,
+        totalPedidos: /*[[${totalPedidos}]]*/ 0,
+        totalProductos: /*[[${totalProductos}]]*/ 0
+        };
+
+        const animateValue = (element, start, end, duration, isCurrency = false) => {
+        let startTimestamp = null;
+        const step = (timestamp) => {
+            if (!startTimestamp) startTimestamp = timestamp;
+            const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+            const value = Math.floor(progress * (end - start) + start);
+            if (isCurrency) {
+            element.textContent = 'S/ ' + value.toLocaleString('es-PE');
+            } else {
+            element.textContent = value.toLocaleString('es-PE');
+            }
+            if (progress < 1) window.requestAnimationFrame(step);
+        };
+        window.requestAnimationFrame(step);
+        };
+
+        const cards = [
+        { id: 'card-ventas', value: datos.totalVentas, isCurrency: true },
+        { id: 'card-usuarios', value: datos.totalClientes, isCurrency: false },
+        { id: 'card-pedidos', value: datos.totalPedidos, isCurrency: false },
+        { id: 'card-productos', value: datos.totalProductos, isCurrency: false }
+        ];
+
+        cards.forEach(card => {
+        const el = document.getElementById(card.id);
+        if (el) {
+            const numberEl = el.querySelector('.card-number');
+            const val = typeof card.value === 'number' ? card.value : 0;
+            setTimeout(() => animateValue(numberEl, 0, val, 1500, card.isCurrency), 300);
+        }
+        });
     });
 </script>
 

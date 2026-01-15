@@ -51,8 +51,24 @@
                     <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="contador-carrito">0</span>
                 </a>
 
-                <!-- USUARIO -->
-                <div class="menu-usuario position-relative">
+                <!-- Usuario autenticado -->
+                <div class="menu-usuario position-relative" sec:authorize="isAuthenticated()">
+                    <div class="d-flex align-items-center position-relative">
+                        <img src="/images/usuario2.png" alt="Usuario" class="icono-img user-trigger">
+                        <span class="user-tooltip ms-2 text-dark" th:if="${nombreCompleto}" th:text="${nombreCompleto}"></span>
+                    </div>
+                    <div class="submenu mt-1">
+                        <a href="/perfil">Mi cuenta</a> 
+                        <a href="/logout">Cerrar sesión</a> 
+                        <!-- Enlace al Dashboard (solo para roles autorizados) -->
+                        <div sec:authorize="hasAnyAuthority('ROLE_ADMIN','ROLE_Gerente','ROLE_Asesor Comercial','ROLE_Jefe Logistico')">
+                            <a th:href="@{/dashboard}" class="enlace-dashboard">DASHBOARD</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Usuario NO autenticado -->
+                <div class="menu-usuario position-relative" sec:authorize="!isAuthenticated()">
                     <a href="#"><img src="/images/usuario2.png" alt="Usuario" class="icono-img"></a>
                     <div class="submenu mt-1">
                         <a href="/login">Iniciar sesión</a> |
