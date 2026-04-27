@@ -52,5 +52,3 @@ El sistema **ORDER_RAE** se consolida como una solución tecnológica integral o
 - Postman (Testing de APIs)
 
 ---
-
-## 🏗️ Arquitectura del Sistema
