@@ -48,7 +48,6 @@ El sistema **ORDER_RAE** se consolida como una solución tecnológica integral o
 
 ### **Herramientas**
 - Git & GitHub (Control de versiones)
-- VS Code / IntelliJ IDEA (IDE)
-- Postman (Testing de APIs)
+- VS Code 
 
 ---
